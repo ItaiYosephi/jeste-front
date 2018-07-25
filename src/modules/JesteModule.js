@@ -32,8 +32,16 @@ export default {
         // 	return [...new Set(keywords)];
         // },
         emptyJeste() {
+            // TODO: Check the fields and add/remove/edit by needs
             return {
-                // TODO: add the requierd fields
+                from_loc: '',
+                destination_loc: '',
+                req_user_id: '',
+                price: '',
+                description: '',
+                keywords: [],
+                imgs_url: [],
+                time_frame: 1,
             }
         },
     },
