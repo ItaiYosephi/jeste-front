@@ -14,9 +14,11 @@ function query({ coords = '', }) {
         });
 }
 
-function getJesteByID(jesteId) {
+function getJesteByID(jesteId) {    
     return axios.get(`${URL}/${jesteId}`)
-        .then(res => res.data)
+        .then(res => {            
+            return res.data
+        })
         .catch(err => {
             console.warn(`Had a problem to load jeste ${jesteId}:`);
             console.log(err);

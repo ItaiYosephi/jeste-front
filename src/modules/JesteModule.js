@@ -25,6 +25,9 @@ export default {
         jestesToDisplay(state) {
             return state.jestes;
         },
+        getJeste: (state) => (id) => {
+            return state.jestes.find(jeste => jeste._id === id)
+          },
         // TODO: add supoort in 2level array (array of keywords)
         // JesteKeywords(state) {
         // 	let keywords = [];
@@ -54,8 +57,8 @@ export default {
                     return jestes;
                 })
         },
-        getJesteById(context, { jesteId }) {
-            return JesteService.getJesteByID(jesteId)
+        getJesteById(context, { id }) {
+            return JesteService.getJesteByID(id)
                 .then(jeste => jeste)
         },
         saveJeste(context, { jesteToSave }) {
