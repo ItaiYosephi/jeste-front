@@ -12,6 +12,12 @@ function login(nickname) {
         });
 }
 
+function checkLogin() {
+    return axios.put(`${URL}/checklogin`)
+        .then(res => res.data)
+        .catch();
+}
+
 function logout() {
     return axios.post(`${URL}/logout`)
         .then()

@@ -8,9 +8,29 @@
   </div>
 </template>
 
+<script>
+import {USER_CHECK_LOGIN, USER_CONNECTED} from '@/modules/UserModule'
+
+export default {
+  name: "app",
+  created() {
+    console.log("--- Jeste App ---");
+    if (!this.$store.getters.USER_CONNECTED) {
+      this.loadUser();
+    }
+  },
+  methods: {
+    loadUser() {
+      this.$store.dispatch(USER_CHECK_LOGIN).then(user => console.log(`Hi ${user}`));
+    }
+  }
+};
+</script>
+
+
 <style lang="scss">
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;

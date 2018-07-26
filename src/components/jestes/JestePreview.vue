@@ -2,7 +2,7 @@
     <section class="jeste-preview">
         <img :src="jeste.imgs_url[0]" />
         <div class="text">
-            {{resUser.firstName}} {{resUser.lastName}}, {{resUser.Age}}
+            {{reqUser.firstName}} {{reqUser.lastName}}, {{reqUser.Age}}
             <br/>
             Destination: {{jeste.destination_loc}}
             <br/>
@@ -30,9 +30,6 @@ export default {
     jeste: Object
   },
   computed: {
-    resUser() {
-      return this.jeste.res_user.details;
-    },
     reqUser() {
       return this.jeste.req_user.details;
     }

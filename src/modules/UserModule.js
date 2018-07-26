@@ -6,21 +6,21 @@ import StorageService from '@/services/StorageService';
 
 const USER_KEY = 'loggedUser'
 
-export const USER_LOAD = 'toy/mutations/userLoad';
+export const USER_LOAD = 'jeste/mutatios/userLoad';
 
-export const USER_LOGOUT = 'toy/userLogout';
+export const USER_LOGOUT = 'jeste/userLogout';
 
-export const USER_LOGIN = 'toy/actions/userLogin';
+export const USER_LOGIN = 'jeste/actions/userLogin';
+export const USER_CHECK_LOGIN = 'jeste/actions/userCheckLogin';
 
-export const USER_CONNECTED = 'toy/getters/userConnected';
+export const USER_CONNECTED = 'jeste/getters/userConnected';
 
 export default {
 	state: {
 		user: null
 	},
 	mutations: {
-		[USER_LOAD](state) {
-			let user = StorageService.loadFromStorage(USER_KEY);
+		[USER_LOAD](state, { user }) {
 			if (user) state.user = user;
 		},
 		[USER_LOGOUT](state) {
@@ -34,6 +34,16 @@ export default {
 		}
 	},
 	actions: {
+		[USER_CHECK_LOGIN](context) {
+			return AuthService.checkLogin()
+				.then(user => {
+					context.commit(USER_LOAD, user );
+					return user;
+				})
+				.catch(err => {
+					console.log('No user loggedin');
+				})
+		},
 		[USER_LOGIN](context, { email }) {
 			return AuthService.login(email)
 				.then(user => {
