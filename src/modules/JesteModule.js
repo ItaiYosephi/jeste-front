@@ -11,7 +11,7 @@ export const JESTE_DELETE = 'jeste/jesteDelete';
 
 export const JESTE_GET_BY_ID = 'jeste/actions/getJesteById';
 
-export const JESTE_GET = 'jeste/getters/jestesToDisplay';
+export const JESTE_GET = 'jeste/getters/getJeste';
 export const JESTES_TO_DISPLAY = 'jeste/getters/jestesToDisplay';
 export const JESTE_EMPTY = 'jeste/getters/emptyJeste';
 
