@@ -1,11 +1,16 @@
 <template>
     <section class="login">
-        <form @submit.prevent="login">
-            <input type="text" v-model="user.email">
-            <input type="password" v-model="user.password">
-			<button>Login</button>
+        <v-form @submit.prevent="login">
+            <v-text-field 
+              v-model="user.email"
+              :rules="emailRules"
+              label="Email"
+              required>
+            </v-text-field>
+            <v-text-field type="password" v-model="user.password"></v-text-field>
+			<v-btn type="submit">Login</v-btn>
 
-        </form>
+        </v-form>
 			<button @click="logout">Logout</button>
         
 
