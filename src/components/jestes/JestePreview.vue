@@ -36,7 +36,6 @@ export default {
   },
   filters: {
       dateFormat(timestamp) {
-          console.log(timestamp);
           return moment(+timestamp).fromNow() + ', (' + moment(+timestamp).format('HH:mm:ss, DD/MM/YYYY') + ')';
       }
   }

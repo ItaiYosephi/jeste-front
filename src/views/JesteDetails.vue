@@ -7,6 +7,7 @@
 </template>
 
 <script>
+import { JESTE_GET, JESTE_GET_BY_ID} from '@/modules/JesteModule'
 export default {
   name: "jesteDetails",
   data() {
@@ -20,12 +21,10 @@ export default {
   },
   methods: {
     getJeste() {
-      var id = this.$route.params.id;
-      var jeste = this.$store.getters.getJeste(id)
-
-
+      let id = this.$route.params.id;
+      let jeste = this.$store.getters[JESTE_GET](id)
       if (!jeste) {
-        this.$store.dispatch({type: 'getJesteById', id} )
+        this.$store.dispatch({type: JESTE_GET_BY_ID, id} )
           .then(jeste => this.jeste = jeste)
       } else {
         this.jeste = jeste;

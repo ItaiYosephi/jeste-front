@@ -29,23 +29,22 @@ export default {
       this.$store
         .dispatch({ type: USER_LOGIN, user: this.user })
         .then(_ => {
-          //TODO: ADD SUCSSESS MESSAGE
+          // TODO: ADD SUCSSESS MESSAGE
           console.log(_);
-
           this.$router.push("/");
         })
-        .catch(_ => {
-          //TODO: ADD error MESSAGE
-          console.log('faild log in');
-
+        .catch(err => {
+          // TODO: ADD error MESSAGE
+          console.log(err);
         });
     },
     logout() {
-      this.$store.dispatch({ type: USER_LOGOUT });
+      this.$store.dispatch(USER_LOGOUT)
+        .then(_ => console.log("logged out successfuly"));
     }
   }
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
 </style>

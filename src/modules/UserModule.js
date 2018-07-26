@@ -2,18 +2,15 @@
 
 import UserService from '@/services/UserService';
 import AuthService from '@/services/AuthService';
-import StorageService from '@/services/StorageService';
 
-const USER_KEY = 'loggedUser'
+export const USER_LOAD = 'user/mutations/userLoad';
 
-export const USER_LOAD = 'jeste/mutatios/userLoad';
+export const USER_LOGOUT = 'user/userLogout';
 
-export const USER_LOGOUT = 'jeste/userLogout';
+export const USER_LOGIN = 'user/actions/userLogin';
+export const USER_CHECK_LOGIN = 'user/actions/userCheckLogin';
 
-export const USER_LOGIN = 'jeste/actions/userLogin';
-export const USER_CHECK_LOGIN = 'jeste/actions/userCheckLogin';
-
-export const USER_CONNECTED = 'jeste/getters/userConnected';
+export const USER_CONNECTED = 'user/getters/userConnected';
 
 export default {
 	state: {
@@ -40,7 +37,6 @@ export default {
 					context.commit(USER_LOAD, { user });
 					return user;
 				})
-				.catch(err => Promise.reject(err))
 		},
 		[USER_LOGIN](context, { user }) {
 			return AuthService.login(user)
@@ -48,15 +44,10 @@ export default {
 					context.commit({ type: USER_LOAD, user });
 					return user;
 				})
-				.catch(err => {
-					console.log(err);
-					
-				})
 		},
 		[USER_LOGOUT](context) {
 			return AuthService.logout()
 				.then(context.commit(USER_LOGOUT))
-				.catch(err => err)
 		}
 	}
 }

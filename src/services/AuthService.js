@@ -6,14 +6,10 @@ function login(user) {
     return axios.put(`${URL}/login`, { user })
         .then(res => {
             console.log('test');
-            
-            return res.data
+            return res.data;
         })
         .catch(err => {
-            console.log('testcatch');
-
             console.warn('Had a problem to log in:');
-            console.log(err);
             return Promise.reject(err);
         });
 }

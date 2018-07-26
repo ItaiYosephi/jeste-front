@@ -7,6 +7,7 @@
 
 <script>
 import JesteList from "@/components/jestes/JesteList";
+import { JESTES_LOAD, JESTES_TO_DISPLAY } from "@/modules/JesteModule";
 
 export default {
   name: "jesteApp",
@@ -18,12 +19,14 @@ export default {
   },
   computed: {
     jestesToDisplay() {
-      return this.$store.getters.jestesToDisplay;
+      console.log('jestes', this.$store.getters[JESTES_TO_DISPLAY]);
+      
+      return this.$store.getters[JESTES_TO_DISPLAY];
     }
   },
   methods: {
     loadJestes(filterBy = '') {
-      this.$store.dispatch({ type: 'loadJestes', filterBy })
+      this.$store.dispatch({ type: JESTES_LOAD, filterBy })
     }
   }
 };
