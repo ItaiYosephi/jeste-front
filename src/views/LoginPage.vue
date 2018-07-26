@@ -11,7 +11,7 @@
 			<v-btn type="submit" :disabled="!valid">Login</v-btn>
 
         </v-form>
-			<button @click="logout">Logout</button>
+			<v-btn @click="logout">Logout</v-btn>
         
 
     </section>
