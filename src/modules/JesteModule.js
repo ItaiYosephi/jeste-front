@@ -57,7 +57,8 @@ export default {
                 description: '',
                 keywords: [],
                 imgs_url: [],
-                time_frame: 1,
+                time_frame: {from: '', until: ''},
+                title: '',
             }
         },
     },

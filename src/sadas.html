@@ -1,39 +1,16 @@
 <template>
-	<section class="jeste-preview">
-		<img :src="jeste.imgs_url[0]" />
-		<div class="text">
-			{{reqUser.firstName}} {{reqUser.lastName}}, {{reqUser.Age}}
-			<br/> Destination: {{jeste.destination_loc}}
-			<br/> Starting from:
-			<br/> {{jeste.time_frame.from | dateFormat}}
-			<br/> Deadline:
-			<br/> {{jeste.time_frame.until | dateFormat}}
-			<br/> {{jeste.description}}
-			<br/> Tags:
-			<span v-for="keyword in jeste.keywords">{{keyword}}, </span>
-		</div>
+	<section class="jeste-edit">
+		<v-form ref="form" v-model="valid" lazy-validation>
+			<v-text-field v-model="name" :rules="nameRules" :counter="10" label="Name" required></v-text-field>
+			<v-text-field v-model="email" :rules="emailRules" label="E-mail" required></v-text-field>
+			<v-select v-model="select" :items="items" :rules="[v => !!v || 'Item is required']" label="Item" required></v-select>
+			<v-checkbox v-model="checkbox" :rules="[v => !!v || 'You must agree to continue!']" label="Do you agree?" required></v-checkbox>
 
+			<v-btn :disabled="!valid" @click="submit">
+				submit
+			</v-btn>
+			<v-btn @click="clear">clear</v-btn>
+		</v-form>
 
-		<v-layout>
-			<v-flex xs12 sm6 offset-sm3>
-				<v-card>
-					<v-card-media src="https://cdn.vuetifyjs.com/images/cards/desert.jpg" height="200px"></v-card-media>
-
-					<v-card-title primary-title>
-						<div>
-							<h3 class="headline mb-0">Kangaroo Valley Safari</h3>
-							<div>Located two hours south of Sydney in the
-								<br>Southern Highlands of New South Wales, ...</div>
-						</div>
-					</v-card-title>
-
-					<v-card-actions>
-						<v-btn flat color="orange">Share</v-btn>
-						<v-btn flat color="orange">Explore</v-btn>
-					</v-card-actions>
-				</v-card>
-			</v-flex>
-		</v-layout>
 	</section>
-
 </template>
