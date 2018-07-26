@@ -1,25 +1,55 @@
 <template>
   <div id="app">
     <v-app>
-    <div id="nav">
-
       <v-toolbar>
-            <v-toolbar-side-icon ></v-toolbar-side-icon>
+            <v-toolbar-side-icon 
+              class="hidden-sm-and-up"
+              @click.stop="drawer = !drawer">
+            </v-toolbar-side-icon>
             <v-toolbar-title>Jeste</v-toolbar-title>
-			<v-spacer></v-spacer>
-
+			      <v-spacer></v-spacer>
             <v-toolbar-items class="hidden-xs-only">
-				<v-btn flat>Home</v-btn>
-				<router-link to="/"><v-btn flat>Home</v-btn></router-link>
-				<router-link to="/about"><v-btn flat>About</v-btn></router-link>
-				<router-link to="/login"><v-btn flat>Login</v-btn></router-link>
-    		</v-toolbar-items>
-
-
+              <v-btn flat v-for="item in items" :key="item.title" @click="pushToLink(item.link)">
+                {{item.title}}
+              </v-btn>
+    		    </v-toolbar-items>
       </v-toolbar>
- 
-	  
-    </div>
+
+      <v-navigation-drawer
+        v-model="drawer"
+        absolute
+        temporary>
+        <v-list class="pa-1">
+          <v-list-tile avatar v-if="user">
+            <v-list-tile-avatar>
+              <img src="https://randomuser.me/api/portraits/men/85.jpg">
+            </v-list-tile-avatar>
+
+            <v-list-tile-content >
+              <v-list-tile-title v-if="user">{{user.details.firstName}} {{user.details.lastName}}</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+        </v-list>
+
+        <v-list class="pt-0" dense>
+          <v-divider></v-divider>
+
+          <v-list-tile
+            v-for="item in items"
+            :key="item.title"
+            @click="pushToLink(item.link)">
+            <v-list-tile-action @click="">
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-tile-action>
+
+            <v-list-tile-content>
+              <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+            </v-list-tile-content>
+
+          </v-list-tile>
+        </v-list>
+      </v-navigation-drawer>
+
     User is: {{user}}
     <router-view/>
     </v-app>
@@ -37,6 +67,16 @@ export default {
       this.loadUser();
     }
   },
+  data() {
+    return {
+      drawer: null,
+      items: [
+        { title: "Home", icon: "home", link: "/" },
+        { title: "Login", icon: "swap_horizontal_circle", link: "/login" },
+        { title: "About", icon: "info", link: "about" }
+      ]
+    };
+  },
   methods: {
     loadUser() {
       this.$store
@@ -45,6 +85,9 @@ export default {
           console.log(`Hi ${user.details}`);
         })
         .catch(err => console.log(err));
+    },
+    pushToLink(link) {
+      this.$router.push(link);
     }
   },
   computed: {
