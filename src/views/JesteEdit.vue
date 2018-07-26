@@ -11,7 +11,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../assets/styles/_vars.scss';
+@import "../assets/styles/_vars.scss";
 
 .jeste-edit {
   color: $mainColor;

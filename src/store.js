@@ -7,17 +7,17 @@ import UserModule from '@/modules/UserModule';
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-  modules: {
-    JesteModule,
-    UserModule
-  },
-  state: {
+	modules: {
+		JesteModule,
+		UserModule
+	},
+	state: {
 
-  },
-  mutations: {
+	},
+	mutations: {
 
-  },
-  actions: {
+	},
+	actions: {
 
-  },
+	},
 });

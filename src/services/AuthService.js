@@ -1,9 +1,9 @@
 import axios from 'axios'
 const URL = (process.env.NODE_ENV !== 'development') ? '' : '//localhost:3000';
 
-function login(nickname) {
-    console.log('nick:', nickname);
-    return axios.put(`${URL}/login`, { nickname })
+function login(user) {
+    console.log('nick:', user);
+    return axios.put(`${URL}/login`, { user })
         .then(res => res.data)
         .catch(err => {
             console.warn('Had a problem to log in:');
