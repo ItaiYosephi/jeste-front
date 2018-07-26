@@ -30,10 +30,6 @@ export default {
     jeste: Object
   },
   computed: {
-<<<<<<< HEAD
-=======
-
->>>>>>> 482f56d48df0687e3b4cd93742c7d17bced1e275
     reqUser() {
       return this.jeste.req_user.details;
     }
