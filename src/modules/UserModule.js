@@ -20,16 +20,20 @@ export default {
 		user: null
 	},
 	mutations: {
-		[USER_LOAD](state, { user }) {
+		[USER_LOAD](state, {user}) {
+			
+			
+			
 			if (user) state.user = user;
 		},
 		[USER_LOGOUT](state) {
 			state.user = null
-			StorageService.removeFromStorage(USER_KEY);
 		}
 	},
 	getters: {
 		[USER_CONNECTED](state) {
+			console.log('getter');
+			
 			return state.user;
 		}
 	},
@@ -37,18 +41,21 @@ export default {
 		[USER_CHECK_LOGIN](context) {
 			return AuthService.checkLogin()
 				.then(user => {
-					context.commit(USER_LOAD, user );
+					context.commit(USER_LOAD, {user} );
+					
+
 					return user;
 				})
 				.catch(err => {
 					console.log('No user loggedin');
 				})
 		},
-		[USER_LOGIN](context, { email }) {
-			return AuthService.login(email)
+		[USER_LOGIN](context, { user }) {
+			console.log(user);
+			
+			return AuthService.login(user)
 				.then(user => {
-					// StorageService.saveToStorage(USER_KEY, user);
-					context.commit(USER_LOAD);
+					context.commit({type: USER_LOAD, user});
 					return user;
 				})
 		},

@@ -1,10 +1,12 @@
 <template>
     <section class="login">
-        <form @submit="login">
+        <form @submit.prevent="login">
             <input type="text" v-model="user.email">
             <input type="password" v-model="user.password">
 			<button>Login</button>
+
         </form>
+			<button @click="logout">Logout</button>
         
 
     </section>
@@ -12,24 +14,26 @@
 </template>
 
 <script>
-import {USER_LOGIN} from '@/modules/UserModule'
+import { USER_LOGIN, USER_LOGOUT } from "@/modules/UserModule";
 export default {
-    data() {
-		return {
-			user: {
-				email: '',
-				password: ''
-			}
-		}
-
-	},
-	login() {
-		this.$store.dispatch({type: USER_LOGIN, user})
-	}
-
-}
+  data() {
+    return {
+      user: {
+        email: "",
+        password: ""
+      }
+    };
+  },
+  methods: {
+    login() {
+      this.$store.dispatch({ type: USER_LOGIN, user: this.user });
+    },
+    logout() {
+      this.$store.dispatch({ type: USER_LOGOUT});
+    }
+  }
+};
 </script>
 
 <style>
-
 </style>

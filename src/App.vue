@@ -4,6 +4,7 @@
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link> |
       <router-link to="/login">Login</router-link>
+	  user is: {{user}}
     </div>
     <router-view/>
   </div>
@@ -22,8 +23,15 @@ export default {
   },
   methods: {
     loadUser() {
+		console.log('load user');
+		
       this.$store.dispatch(USER_CHECK_LOGIN).then(user => console.log(`Hi ${user}`));
     }
+  },
+  computed: {
+	  user() {
+		  return this.$store.getters[USER_CONNECTED]
+	  }
   }
 };
 </script>

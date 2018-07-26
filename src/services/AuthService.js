@@ -19,7 +19,7 @@ function checkLogin() {
 }
 
 function logout() {
-    return axios.post(`${URL}/logout`)
+    return axios.put(`${URL}/logout`)
         .then()
         .catch(err => {
             console.warn('Had a problem to log out:');
@@ -30,5 +30,6 @@ function logout() {
 
 export default {
     login,
-    logout
+    logout,
+    checkLogin
 }
