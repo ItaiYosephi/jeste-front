@@ -1,13 +1,27 @@
 <template>
   <div id="app">
+    <v-app>
     <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link> |
-      <router-link to="/login">Login</router-link>
+
+      <v-toolbar>
+            <v-toolbar-side-icon ></v-toolbar-side-icon>
+            <v-toolbar-title>Jeste</v-toolbar-title>
+			<v-spacer></v-spacer>
+
+            <v-toolbar-items class="hidden-xs-and-down">
+				<v-btn flat><router-link to="/">Home</router-link></v-btn>
+				<v-btn flat><router-link to="/about">About</router-link></v-btn>
+				<v-btn flat><router-link to="/login">Login</router-link></v-btn>
+    		</v-toolbar-items>
+
+
+      </v-toolbar>
+ 
 	  
     </div>
     User is: {{user}}
     <router-view/>
+    </v-app>
   </div>
 </template>
 
@@ -24,7 +38,8 @@ export default {
   },
   methods: {
     loadUser() {
-      this.$store.dispatch(USER_CHECK_LOGIN)
+      this.$store
+        .dispatch(USER_CHECK_LOGIN)
         .then(user => {
           console.log(`Hi ${user.details}`);
         })
@@ -47,14 +62,13 @@ export default {
   text-align: center;
   color: #2c3e50;
 }
-#nav {
-  padding: 30px;
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
-}
+// #nav {
+//   a {
+//     font-weight: bold;
+//     color: #2c3e50;
+//     &.router-link-exact-active {
+//       color: #42b983;
+//     }
+//   }
+// }
 </style>
