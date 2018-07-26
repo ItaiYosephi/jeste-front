@@ -8,10 +8,11 @@
             <v-toolbar-title>Jeste</v-toolbar-title>
 			<v-spacer></v-spacer>
 
-            <v-toolbar-items class="hidden-xs-and-down">
-				<v-btn flat><router-link to="/">Home</router-link></v-btn>
-				<v-btn flat><router-link to="/about">About</router-link></v-btn>
-				<v-btn flat><router-link to="/login">Login</router-link></v-btn>
+            <v-toolbar-items class="hidden-xs-only">
+				<v-btn flat>Home</v-btn>
+				<router-link to="/"><v-btn flat>Home</v-btn></router-link>
+				<router-link to="/about"><v-btn flat>About</v-btn></router-link>
+				<router-link to="/login"><v-btn flat>Login</v-btn></router-link>
     		</v-toolbar-items>
 
 
