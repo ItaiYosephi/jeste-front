@@ -50,7 +50,6 @@
         </v-list>
       </v-navigation-drawer>
 
-    User is: {{user}}
     <router-view/>
     </v-app>
   </div>

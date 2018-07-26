@@ -1,0 +1,39 @@
+<template>
+	<section class="jeste-preview">
+		<img :src="jeste.imgs_url[0]" />
+		<div class="text">
+			{{reqUser.firstName}} {{reqUser.lastName}}, {{reqUser.Age}}
+			<br/> Destination: {{jeste.destination_loc}}
+			<br/> Starting from:
+			<br/> {{jeste.time_frame.from | dateFormat}}
+			<br/> Deadline:
+			<br/> {{jeste.time_frame.until | dateFormat}}
+			<br/> {{jeste.description}}
+			<br/> Tags:
+			<span v-for="keyword in jeste.keywords">{{keyword}}, </span>
+		</div>
+
+
+		<v-layout>
+			<v-flex xs12 sm6 offset-sm3>
+				<v-card>
+					<v-card-media src="https://cdn.vuetifyjs.com/images/cards/desert.jpg" height="200px"></v-card-media>
+
+					<v-card-title primary-title>
+						<div>
+							<h3 class="headline mb-0">Kangaroo Valley Safari</h3>
+							<div>Located two hours south of Sydney in the
+								<br>Southern Highlands of New South Wales, ...</div>
+						</div>
+					</v-card-title>
+
+					<v-card-actions>
+						<v-btn flat color="orange">Share</v-btn>
+						<v-btn flat color="orange">Explore</v-btn>
+					</v-card-actions>
+				</v-card>
+			</v-flex>
+		</v-layout>
+	</section>
+
+</template>

@@ -1,11 +1,14 @@
 <template>
+
     <ul class="jeste-list clean-list flex">
-        <router-link tag="li"
-                    v-for="jeste in jestes" 
-                    :key="jeste._id"
-                    :to="'/jeste/' + jeste._id">
-            <JestePreview :jeste="jeste" />
-        </router-link>
+		<v-layout>
+            <router-link tag="li"
+                        v-for="jeste in jestes" 
+                        :key="jeste._id"
+                        :to="'/jeste/' + jeste._id">
+                <JestePreview :jeste="jeste" />
+            </router-link>
+		</v-layout>
     </ul>
 </template>
 
@@ -27,11 +30,11 @@ export default {
 @import '../../assets/styles/_vars.scss';
 @import '../../assets/styles/_helpers.scss';
 
-.jeste-list > li {
-    width: 300px;
-    margin: 10px;
-    border: 1px solid $mainColor;
-    background: $bgColor;
-}
+// .jeste-list > li {
+//     width: 300px;
+//     margin: 10px;
+//     border: 1px solid $mainColor;
+//     background: $bgColor;
+// }
 
 </style>

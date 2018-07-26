@@ -1,24 +1,38 @@
 <template>
-    <section class="jeste-preview">
-        <img :src="jeste.imgs_url[0]" />
-        <div class="text">
-            {{reqUser.firstName}} {{reqUser.lastName}}, {{reqUser.Age}}
-            <br/>
-            Destination: {{jeste.destination_loc}}
-            <br/>
-            Starting from:
-            <br/>
-            {{jeste.time_frame.from | dateFormat}}
-            <br/>
-            Deadline:
-            <br/>
-            {{jeste.time_frame.until | dateFormat}}
-            <br/>
-            {{jeste.description}}
-            <br/>
-            Tags: <span v-for="keyword in jeste.keywords">{{keyword}}, </span>
-        </div>
-    </section>
+	<section class="jeste-preview">
+		<!-- <img :src="jeste.imgs_url[0]" />
+		<div class="text">
+			{{reqUser.firstName}} {{reqUser.lastName}}, {{reqUser.Age}}
+			<br/> Destination: {{jeste.destination_loc}}
+			<br/> Starting from:
+			<br/> {{jeste.time_frame.from | dateFormat}}
+			<br/> Deadline:
+			<br/> {{jeste.time_frame.until | dateFormat}}
+			<br/> {{jeste.description}}
+			<br/> Tags:
+			<span v-for="keyword in jeste.keywords">{{keyword}}, </span>
+		</div> -->
+
+
+			<v-flex>
+				<v-card>
+					<v-card-media :src="jeste.imgs_url[0]" height="200px"></v-card-media>
+
+					<v-card-title primary-title>
+						<div>
+							<h3 class="headline mb-0">{{jeste.title}}</h3>
+							<div>{{jeste.description}}</div>
+						</div>
+					</v-card-title>
+
+					<v-card-actions>
+						<v-btn flat color="orange">Share</v-btn>
+						<v-btn flat color="orange">Explore</v-btn>
+					</v-card-actions>
+				</v-card>
+			</v-flex>
+	</section>
+
 </template>
 
 <script>
@@ -45,18 +59,18 @@ export default {
 <style lang="scss" scoped>
 @import "../../assets/styles/_vars.scss";
 
-.jeste-preview {
-  padding: 0;
-  color: $mainColor;
-}
+// .jeste-preview {
+//   padding: 0;
+//   color: $mainColor;
+// }
 
-.jeste-preview.text {
-    padding: 5px;
-}
+// .jeste-preview.text {
+//     padding: 5px;
+// }
 
-img {
-  display: block;
-  max-width: 100%;
-  height: auto;
-}
+// img {
+//   display: block;
+//   max-width: 100%;
+//   height: auto;
+// }
 </style>

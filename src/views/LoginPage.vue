@@ -1,6 +1,6 @@
 <template>
     <section class="login">
-        <v-form @submit.prevent="login">
+        <v-form @submit.prevent="login" v-model="valid" ref="form">
             <v-text-field 
               v-model="user.email"
               :rules="emailRules"
@@ -8,7 +8,7 @@
               required>
             </v-text-field>
             <v-text-field type="password" v-model="user.password"></v-text-field>
-			<v-btn type="submit">Login</v-btn>
+			<v-btn type="submit" :disabled="!valid">Login</v-btn>
 
         </v-form>
 			<button @click="logout">Logout</button>
@@ -23,15 +23,22 @@ import { USER_LOGIN, USER_LOGOUT } from "@/modules/UserModule";
 export default {
   data() {
     return {
+      valid: true,
       user: {
         email: "",
         password: ""
-      }
+      },
+      emailRules: [
+        v => !!v || 'E-mail is required',
+        v => /.+@.+/.test(v) || 'E-mail must be valid'
+      ],
     };
   },
   methods: {
     login() {
-      this.$store
+      if (this.$refs.form.validate()) {
+
+        this.$store
         .dispatch({ type: USER_LOGIN, user: this.user })
         .then(_ => {
           // TODO: ADD SUCSSESS MESSAGE
@@ -42,6 +49,7 @@ export default {
           // TODO: ADD error MESSAGE
           console.log(err);
         });
+      }
     },
     logout() {
       this.$store.dispatch(USER_LOGOUT)
