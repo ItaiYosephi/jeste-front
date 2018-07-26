@@ -20,10 +20,7 @@ export default {
 		user: null
 	},
 	mutations: {
-		[USER_LOAD](state, {user}) {
-			
-			
-			
+		[USER_LOAD](state, { user }) {
 			if (user) state.user = user;
 		},
 		[USER_LOGOUT](state) {
@@ -32,8 +29,6 @@ export default {
 	},
 	getters: {
 		[USER_CONNECTED](state) {
-			console.log('getter');
-			
 			return state.user;
 		}
 	},
@@ -41,21 +36,16 @@ export default {
 		[USER_CHECK_LOGIN](context) {
 			return AuthService.checkLogin()
 				.then(user => {
-					context.commit(USER_LOAD, {user} );
-					
-
+					if (!user._id) throw 'Not Logged';
+					context.commit(USER_LOAD, { user });
 					return user;
 				})
-				.catch(err => {
-					console.log('No user loggedin');
-				})
+				.catch(err => Promise.reject(err))
 		},
 		[USER_LOGIN](context, { user }) {
-			console.log(user);
-			
 			return AuthService.login(user)
 				.then(user => {
-					context.commit({type: USER_LOAD, user});
+					context.commit({ type: USER_LOAD, user });
 					return user;
 				})
 		},

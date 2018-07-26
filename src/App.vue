@@ -4,14 +4,15 @@
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link> |
       <router-link to="/login">Login</router-link>
-	  user is: {{user}}
+	  
     </div>
+    User is: {{user}}
     <router-view/>
   </div>
 </template>
 
 <script>
-import {USER_CHECK_LOGIN, USER_CONNECTED} from '@/modules/UserModule'
+import { USER_CHECK_LOGIN, USER_CONNECTED } from "@/modules/UserModule";
 
 export default {
   name: "app",
@@ -23,19 +24,20 @@ export default {
   },
   methods: {
     loadUser() {
-		console.log('load user');
-		
-      this.$store.dispatch(USER_CHECK_LOGIN).then(user => console.log(`Hi ${user}`));
+      this.$store.dispatch(USER_CHECK_LOGIN)
+        .then(user => {
+          console.log(`Hi ${user.details}`);
+        })
+        .catch(err => console.log(err));
     }
   },
   computed: {
-	  user() {
-		  return this.$store.getters[USER_CONNECTED]
-	  }
+    user() {
+      return this.$store.getters[USER_CONNECTED];
+    }
   }
 };
 </script>
-
 
 <style lang="scss">
 #app {
