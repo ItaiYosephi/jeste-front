@@ -14,7 +14,7 @@ function login(user) {
 
             console.warn('Had a problem to log in:');
             console.log(err);
-            return err;
+            return Promise.reject(err);
         });
 }
 

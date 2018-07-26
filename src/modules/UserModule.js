@@ -48,6 +48,10 @@ export default {
 					context.commit({ type: USER_LOAD, user });
 					return user;
 				})
+				.catch(err => {
+					console.log(err);
+					
+				})
 		},
 		[USER_LOGOUT](context) {
 			return AuthService.logout()

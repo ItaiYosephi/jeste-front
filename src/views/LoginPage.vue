@@ -26,10 +26,22 @@ export default {
   },
   methods: {
     login() {
-      this.$store.dispatch({ type: USER_LOGIN, user: this.user });
+      this.$store
+        .dispatch({ type: USER_LOGIN, user: this.user })
+        .then(_ => {
+          //TODO: ADD SUCSSESS MESSAGE
+          console.log(_);
+
+          this.$router.push("/");
+        })
+        .catch(_ => {
+          //TODO: ADD error MESSAGE
+          console.log('faild log in');
+
+        });
     },
     logout() {
-      this.$store.dispatch({ type: USER_LOGOUT});
+      this.$store.dispatch({ type: USER_LOGOUT });
     }
   }
 };
