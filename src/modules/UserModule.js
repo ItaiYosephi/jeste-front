@@ -47,7 +47,7 @@ export default {
 		[USER_LOGIN](context, { email }) {
 			return AuthService.login(email)
 				.then(user => {
-					StorageService.saveToStorage(USER_KEY, user);
+					// StorageService.saveToStorage(USER_KEY, user);
 					context.commit(USER_LOAD);
 					return user;
 				})
