@@ -1,8 +1,10 @@
 <template>
-    <section class="jeste-app">
-      jeste-app
-      <JesteList :jestes="jestesToDisplay" />
-    </section>
+    <v-slide-x-transition>
+        <section class="jeste-app">
+          jeste-app
+          <JesteList :jestes="jestesToDisplay" />
+        </section>
+    </v-slide-x-transition>
 </template>
 
 <script>

@@ -1,21 +1,22 @@
 <template>
-    <section class="login">
-        <v-form @submit.prevent="login" v-model="valid" ref="form">
-            <v-text-field 
-              v-model="user.email"
-              :rules="emailRules"
-              label="Email"
-              required>
-            </v-text-field>
-            <v-text-field type="password" v-model="user.password"></v-text-field>
-			<v-btn type="submit" :disabled="!valid">Login</v-btn>
+    <v-slide-x-transition>
+        <section class="login">
+            <v-form @submit.prevent="login" v-model="valid" ref="form">
+                <v-text-field 
+                  v-model="user.email"
+                  :rules="emailRules"
+                  label="Email"
+                  required>
+                </v-text-field>
+                <v-text-field type="password" v-model="user.password"></v-text-field>
+          <v-btn type="submit" :disabled="!valid">Login</v-btn>
 
-        </v-form>
-			<v-btn @click="logout">Logout</v-btn>
-        
+            </v-form>
+          <v-btn @click="logout">Logout</v-btn>
+            
 
-    </section>
-
+        </section>
+    </v-slide-x-transition>
 </template>
 
 <script>

@@ -1,100 +1,77 @@
 <template>
-  <div id="app">
-    <v-app>
-      <v-toolbar>
-            <v-toolbar-side-icon 
-              class="hidden-sm-and-up"
-              @click.stop="drawer = !drawer">
-            </v-toolbar-side-icon>
-            <v-toolbar-title>Jeste</v-toolbar-title>
-			      <v-spacer class="hidden-xs-only"></v-spacer>
-            <v-flex mx-1>
-              <v-text-field
-                @keyup.enter.native="search"
-                hide-details
-                append-icon="search"
-                @click:append="search"
-                placeholder="Search">
-              </v-text-field>
-            </v-flex>
-              <!-- Top Menu -->
-            <v-toolbar-items class="hidden-xs-only">
-              <v-menu open-on-hover bottom offset-y v-for="(item, index) in menuItems" :key="index">
-                <v-btn flat slot="activator" :to="(item.link)">
-                  {{ item.title }}
-                </v-btn>
-                <v-list v-if="index === 1 && user" >
-                  <v-list-tile
-                    v-for="(subItem, index) in userSubItems"
-                    :key="index"
-                    @click="subItem.link">
-                    <v-list-tile-title>{{subItem.title}}</v-list-tile-title>
-                  </v-list-tile>
-                </v-list>
-              </v-menu>
-    		    </v-toolbar-items>
-      </v-toolbar>
-      <v-navigation-drawer
-        v-model="drawer"
-        absolute
-        temporary>
-        <v-list class="pa-1">
-          <v-list-tile avatar v-if="user">
-            <v-list-tile-avatar>
-              <img src="https://randomuser.me/api/portraits/men/85.jpg">
-            </v-list-tile-avatar>
+	<div id="app">
+		<v-app>
+      
+      <!-- Side Menu (Mobile) -->
+			<v-navigation-drawer v-model="drawer" clipped absolute temporary>
 
-            <v-list-tile-content >
-              <v-list-tile-title v-if="user">{{user.details.firstName}} {{user.details.lastName}}</v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
-        </v-list>
+				<v-list class="pa-1">
+					<v-list-tile avatar v-if="user">
+						<v-list-tile-avatar>
+							<img src="https://randomuser.me/api/portraits/men/85.jpg">
+						</v-list-tile-avatar>
+						<v-list-tile-content>
+							<v-list-tile-title v-if="user">{{user.details.firstName}} {{user.details.lastName}}</v-list-tile-title>
+						</v-list-tile-content>
+					</v-list-tile>
+				</v-list>
 
-        <v-list class="pt-0" dense>
-          <v-divider></v-divider>
+				<v-list class="pt-0" >
+					<v-divider></v-divider>
 
-          <v-list-tile
-            v-for="(item, index) in menuItems"
-            :key="item.title"
-            :to="(item.link)">
-            <v-list-tile-action>
-              <v-icon>{{ item.icon }}</v-icon>
-            </v-list-tile-action>
+					<v-list-tile v-for="(item, index) in menuItems" :key="item.title" v-if="user && index !== 1" :to="(item.link)" exact>
+						<v-list-tile-action>
+							<v-icon>{{ item.icon }}</v-icon>
+						</v-list-tile-action>
+						<v-list-tile-content>
+							<v-list-tile-title>{{ item.title }}</v-list-tile-title>
+						</v-list-tile-content>
+					</v-list-tile>
 
-            <v-list-tile-content >
-              <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-            </v-list-tile-content>
-
-            <!-- <v-list-tile v-if="user && index === 1" slot="activator">
-              <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-            </v-list-tile> -->
-
-            <!-- <v-list-group
-              no-action
-              sub-group
-              value="true">
-
-              <v-list-tile
-                v-for="(crud, i) in cruds"
-                :key="i"
-                @click="">
-                <v-list-tile-title v-text="Test"></v-list-tile-title>
+          <v-list-group v-if="user" prepend-icon="account_circle" value="true">
+							<v-list-tile slot="activator">
+								<v-list-tile-title>{{user.details.firstName}} {{user.details.lastName}}</v-list-tile-title>
+							</v-list-tile>
+              <v-list-tile v-for="(subItem, idx) in userSubItems" :key="idx" :to="subItem.link" exact>
+                <v-list-tile-title v-text="subItem.title"></v-list-tile-title>
                 <v-list-tile-action>
-                  <v-icon v-text="Test1"></v-icon>
+                  <v-icon v-text="subItem.icon"></v-icon>
                 </v-list-tile-action>
               </v-list-tile>
+						</v-list-group>
 
-            </v-list-group> -->
+				</v-list>
+			</v-navigation-drawer>
 
-          </v-list-tile>
+      <!-- Top Menu Toolbar -->
+			<v-toolbar>
+				<v-toolbar-side-icon class="hidden-sm-and-up" @click.stop="drawer = !drawer">
+				</v-toolbar-side-icon>
+				<v-toolbar-title>Jeste</v-toolbar-title>
+				<v-spacer class="hidden-xs-only"></v-spacer>
+				<v-flex mx-1>
+					<v-text-field @keyup.enter.native="search" hide-details append-icon="search" @click:append="search" placeholder="Search">
+					</v-text-field>
+				</v-flex>
+				<!-- Top Menu Links -->
+				<v-toolbar-items class="hidden-xs-only">
+					<v-menu open-on-hover bottom offset-y v-for="(item, index) in menuItems" :key="index">
+						<v-btn flat slot="activator" :to="(item.link)">
+							{{ item.title }}
+						</v-btn>
+						<v-list v-if="user && index === 1">
+							<v-list-tile v-for="(subItem, index) in userSubItems" :key="index" :to="subItem.link" exact>
+								<v-list-tile-title>{{subItem.title}}</v-list-tile-title>
+							</v-list-tile>
+						</v-list>
+					</v-menu>
+				</v-toolbar-items>
+			</v-toolbar>
 
-        </v-list>
-      </v-navigation-drawer>
+			<router-view/>
 
-      <router-view/>
-
-    </v-app>
-  </div>
+		</v-app>
+	</div>
 </template>
 
 <script>
