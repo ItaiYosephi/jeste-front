@@ -7,14 +7,33 @@
               @click.stop="drawer = !drawer">
             </v-toolbar-side-icon>
             <v-toolbar-title>Jeste</v-toolbar-title>
-			      <v-spacer></v-spacer>
+			      <v-spacer class="hidden-xs-only"></v-spacer>
+            <v-flex mx-1>
+              <v-text-field
+                @keyup.enter.native="search"
+                hide-details
+                append-icon="search"
+                @click:append="search"
+                placeholder="Search">
+              </v-text-field>
+            </v-flex>
+              <!-- Top Menu -->
             <v-toolbar-items class="hidden-xs-only">
-              <v-btn flat v-for="item in items" :key="item.title" @click="pushToLink(item.link)">
-                {{item.title}}
-              </v-btn>
+              <v-menu open-on-hover bottom offset-y v-for="(item, index) in menuItems" :key="index">
+                <v-btn flat slot="activator" :to="(item.link)">
+                  {{ item.title }}
+                </v-btn>
+                <v-list v-if="index === 1 && user" >
+                  <v-list-tile
+                    v-for="(subItem, index) in userSubItems"
+                    :key="index"
+                    @click="subItem.link">
+                    <v-list-tile-title>{{subItem.title}}</v-list-tile-title>
+                  </v-list-tile>
+                </v-list>
+              </v-menu>
     		    </v-toolbar-items>
       </v-toolbar>
-
       <v-navigation-drawer
         v-model="drawer"
         absolute
@@ -35,22 +54,45 @@
           <v-divider></v-divider>
 
           <v-list-tile
-            v-for="item in items"
+            v-for="(item, index) in menuItems"
             :key="item.title"
-            @click="pushToLink(item.link)">
-            <v-list-tile-action @click="">
+            :to="(item.link)">
+            <v-list-tile-action>
               <v-icon>{{ item.icon }}</v-icon>
             </v-list-tile-action>
 
-            <v-list-tile-content>
+            <v-list-tile-content >
               <v-list-tile-title>{{ item.title }}</v-list-tile-title>
             </v-list-tile-content>
 
+            <!-- <v-list-tile v-if="user && index === 1" slot="activator">
+              <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+            </v-list-tile> -->
+
+            <!-- <v-list-group
+              no-action
+              sub-group
+              value="true">
+
+              <v-list-tile
+                v-for="(crud, i) in cruds"
+                :key="i"
+                @click="">
+                <v-list-tile-title v-text="Test"></v-list-tile-title>
+                <v-list-tile-action>
+                  <v-icon v-text="Test1"></v-icon>
+                </v-list-tile-action>
+              </v-list-tile>
+
+            </v-list-group> -->
+
           </v-list-tile>
+
         </v-list>
       </v-navigation-drawer>
 
-    <router-view/>
+      <router-view/>
+
     </v-app>
   </div>
 </template>
@@ -69,42 +111,60 @@ export default {
   data() {
     return {
       drawer: null,
-      items: [
+      menuItems: [
         { title: "Home", icon: "home", link: "/" },
         { title: "Login", icon: "swap_horizontal_circle", link: "/login" },
         { title: "About", icon: "info", link: "about" }
+      ],
+      userSubItems: [
+        { title: "Profile", icon: "account_circle", link: "/user/" },
+        { title: "Settings", icon: "settings", link: "/user/settings" },
+        { title: "Logout", icon: "exit_to_app", link: "/login" }
       ]
     };
-  },
-  methods: {
-    loadUser() {
-      this.$store
-        .dispatch(USER_CHECK_LOGIN)
-        .then(user => {
-          console.log(`Hi ${user.details}`);
-        })
-        .catch(err => console.log(err));
-    },
-    pushToLink(link) {
-      this.$router.push(link);
-    }
   },
   computed: {
     user() {
       return this.$store.getters[USER_CONNECTED];
+    }
+  },
+  methods: {
+    loadUser() {
+      this.$store.dispatch(USER_CHECK_LOGIN).catch(err => console.log(err));
+    },
+    pushToLink(link) {
+      this.$router.push(link);
+    },
+    search() {
+      console.log("search");
+    }
+  },
+  watch: {
+    user() {
+      if (this.user) {
+        this.menuItems[1].title =
+          this.user.details.firstName + " " + this.user.details.lastName;
+        this.menuItems[1].icon = "account_circle";
+      } else {
+        this.menuItems[1].title = "Login";
+        this.menuItems[1].icon = "swap_horizontal_circle";
+      }
     }
   }
 };
 </script>
 
 <style lang="scss">
-#app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+.v-toolbar__title:not(:first-child) {
+  margin: 0 5px !important;
 }
+// #app {
+//   font-family: "Avenir", Helvetica, Arial, sans-serif;
+//   -webkit-font-smoothing: antialiased;
+//   -moz-osx-font-smoothing: grayscale;
+//   text-align: center;
+//   color: #2c3e50;
+// }
 // #nav {
 //   a {
 //     font-weight: bold;
