@@ -18,43 +18,43 @@
 </template>
 
 <script>
-import { USER_LOGIN, USER_LOGOUT } from "@/modules/UserModule";
+import { USER_LOGIN, USER_LOGOUT } from '@/modules/UserModule';
 export default {
-  data() {
-    return {
-      valid: true,
-      user: {
-        email: "",
-        password: ""
-      },
-      emailRules: [
-        v => !!v || 'E-mail is required',
-        v => /.+@.+/.test(v) || 'E-mail must be valid'
-      ],
-    };
-  },
-  methods: {
-    login() {
-      if (this.$refs.form.validate()) {
-
-        this.$store
-        .dispatch({ type: USER_LOGIN, user: this.user })
-        .then(_ => {
-          // TODO: ADD SUCSSESS MESSAGE
-          console.log(_);
-          this.$router.push("/");
-        })
-        .catch(err => {
-          // TODO: ADD error MESSAGE
-          console.log(err);
-        });
-      }
-    },
-    logout() {
-      this.$store.dispatch(USER_LOGOUT)
-        .then(_ => console.log("logged out successfuly"));
-    }
-  }
+	data() {
+		return {
+			valid: true,
+			user: {
+				email: '',
+				password: ''
+			},
+			emailRules: [
+				v => !!v || 'E-mail is required',
+				v => /.+@.+/.test(v) || 'E-mail must be valid'
+			]
+		};
+	},
+	methods: {
+		login() {
+			if (this.$refs.form.validate()) {
+				this.$store
+					.dispatch({ type: USER_LOGIN, user: this.user })
+					.then(_ => {
+						// TODO: ADD SUCSSESS MESSAGE
+						console.log(_);
+						this.$router.push('/');
+					})
+					.catch(err => {
+						// TODO: ADD error MESSAGE
+						console.log(err);
+					});
+			}
+		},
+		logout() {
+			this.$store
+				.dispatch(USER_LOGOUT)
+				.then(_ => console.log('logged out successfuly'));
+		}
+	}
 };
 </script>
 
