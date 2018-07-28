@@ -27,7 +27,7 @@
 							<v-list-tile-title>{{ item.title }}</v-list-tile-title>
 						</v-list-tile-content>
 					</v-list-tile>
-          
+
 					<v-list-group v-if="user" prepend-icon="account_circle" value="true">
 						<v-list-tile slot="activator">
 							<v-list-tile-title>{{user.details.firstName}} {{user.details.lastName}}</v-list-tile-title>
@@ -50,7 +50,7 @@
 				<v-toolbar-title>Jeste</v-toolbar-title>
 				<v-spacer class="hidden-xs-only"></v-spacer>
 				<v-flex mx-1>
-					<v-text-field @keyup.enter.native="search" hide-details append-icon="search" @click:append="search" placeholder="Search">
+					<v-text-field v-model="searchValue" @keyup.enter.native="search" hide-details append-icon="search" @click:append="search" placeholder="Search" clearable>
 					</v-text-field>
 				</v-flex>
 				<!-- Top Menu Links -->
@@ -71,7 +71,6 @@
 			<transition name="moveInUp">
 				<router-view/>
 			</transition>
-
 
 		</v-app>
 	</div>
@@ -100,7 +99,8 @@ export default {
         { title: "Profile", icon: "account_circle", link: "/user/" },
         { title: "Settings", icon: "settings", link: "/user/settings" },
         { title: "Logout", icon: "exit_to_app", link: "/login" }
-      ]
+      ],
+      searchValue: ''
     };
   },
   computed: {
@@ -116,7 +116,7 @@ export default {
       this.$router.push(link);
     },
     search() {
-      console.log("search");
+      console.log("search", this.searchValue);
     }
   },
   watch: {
@@ -157,11 +157,10 @@ export default {
 
 .moveInUp-enter-active {
   // transition: all 0.4s ease;
-  transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+  transition: all .6s cubic-bezier(1.0, 0.5, 0.8, 1.0);
 }
 .moveInUp-leave-active {
-  transition: all 0.4s ease;
-
+  transition: all 0.3s ease;
   // transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
 }
 
@@ -171,13 +170,11 @@ export default {
   top: 64px;
 }
 .moveInUp-enter {
-  transform: translateX(1000px);
+  transform: translateX(100%);
 }
 .moveInUp-leave-to {
-  transform: translateY(1000px);
+  transform: translateY(100%);
   // transform: translateX(-1000px);
-
   opacity: 0;
 }
 </style>
-
