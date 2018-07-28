@@ -1,8 +1,8 @@
 <template>
 	<div id="app">
 		<v-app>
-      
-      <!-- Side Menu (Mobile) -->
+
+			<!-- Side Menu (Mobile) -->
 			<v-navigation-drawer v-model="drawer" clipped absolute temporary>
 
 				<v-list class="pa-1">
@@ -16,7 +16,7 @@
 					</v-list-tile>
 				</v-list>
 
-				<v-list class="pt-0" >
+				<v-list class="pt-0">
 					<v-divider></v-divider>
 
 					<v-list-tile v-for="(item, index) in menuItems" :key="item.title" v-if="user && index !== 1" :to="(item.link)" exact>
@@ -28,22 +28,22 @@
 						</v-list-tile-content>
 					</v-list-tile>
 
-          <v-list-group v-if="user" prepend-icon="account_circle" value="true">
-							<v-list-tile slot="activator">
-								<v-list-tile-title>{{user.details.firstName}} {{user.details.lastName}}</v-list-tile-title>
-							</v-list-tile>
-              <v-list-tile v-for="(subItem, idx) in userSubItems" :key="idx" :to="subItem.link" exact>
-                <v-list-tile-title v-text="subItem.title"></v-list-tile-title>
-                <v-list-tile-action>
-                  <v-icon v-text="subItem.icon"></v-icon>
-                </v-list-tile-action>
-              </v-list-tile>
-						</v-list-group>
+					<v-list-group v-if="user" prepend-icon="account_circle" value="true">
+						<v-list-tile slot="activator">
+							<v-list-tile-title>{{user.details.firstName}} {{user.details.lastName}}</v-list-tile-title>
+						</v-list-tile>
+						<v-list-tile v-for="(subItem, idx) in userSubItems" :key="idx" :to="subItem.link" exact>
+							<v-list-tile-title v-text="subItem.title"></v-list-tile-title>
+							<v-list-tile-action>
+								<v-icon v-text="subItem.icon"></v-icon>
+							</v-list-tile-action>
+						</v-list-tile>
+					</v-list-group>
 
 				</v-list>
 			</v-navigation-drawer>
 
-      <!-- Top Menu Toolbar -->
+			<!-- Top Menu Toolbar -->
 			<v-toolbar>
 				<v-toolbar-side-icon class="hidden-sm-and-up" @click.stop="drawer = !drawer">
 				</v-toolbar-side-icon>
@@ -68,7 +68,10 @@
 				</v-toolbar-items>
 			</v-toolbar>
 
-			<router-view/>
+			<transition name="moveInUp">
+				<router-view/>
+			</transition>
+
 
 		</v-app>
 	</div>
@@ -151,4 +154,30 @@ export default {
 //     }
 //   }
 // }
+
+.moveInUp-enter-active {
+  // transition: all 0.4s ease;
+  transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+.moveInUp-leave-active {
+  transition: all 0.4s ease;
+
+  // transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+
+.moveInUp-enter,
+.moveInUp-leave-to {
+  position: absolute;
+  top: 64px;
+}
+.moveInUp-enter {
+  transform: translateX(1000px);
+}
+.moveInUp-leave-to {
+  transform: translateY(1000px);
+  // transform: translateX(-1000px);
+
+  opacity: 0;
+}
 </style>
+

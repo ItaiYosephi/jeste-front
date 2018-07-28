@@ -1,5 +1,4 @@
 <template>
-    <v-slide-x-transition>
         <section class="login">
             <v-form @submit.prevent="login" v-model="valid" ref="form">
                 <v-text-field 
@@ -16,7 +15,6 @@
             
 
         </section>
-    </v-slide-x-transition>
 </template>
 
 <script>
