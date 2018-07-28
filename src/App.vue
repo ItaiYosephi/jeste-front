@@ -19,11 +19,11 @@
 				<v-list class="pt-0" >
 					<v-divider></v-divider>
 
-					<v-list-tile v-for="(item, index) in menuItems" :key="item.title" v-if="user && index !== 1" :to="(item.link)" exact>
+					<v-list-tile v-for="(item, index) in menuItems" :key="item.title" v-if="(index === 1 && !user) || index !== 1" :to="(item.link)" exact>
 						<v-list-tile-action>
 							<v-icon>{{ item.icon }}</v-icon>
 						</v-list-tile-action>
-						<v-list-tile-content>
+						<v-list-tile-content >
 							<v-list-tile-title>{{ item.title }}</v-list-tile-title>
 						</v-list-tile-content>
 					</v-list-tile>
@@ -38,7 +38,7 @@
                   <v-icon v-text="subItem.icon"></v-icon>
                 </v-list-tile-action>
               </v-list-tile>
-						</v-list-group>
+					</v-list-group>
 
 				</v-list>
 			</v-navigation-drawer>
