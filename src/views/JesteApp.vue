@@ -1,8 +1,7 @@
 <template>
-        <section class="jeste-app">
-          jeste-app
-          <JesteList :jestes="jestesToDisplay" />
-        </section>
+    <section class="jeste-app">
+        <JesteList :jestes="jestesToDisplay" />
+    </section>
 </template>
 
 <script>
@@ -19,8 +18,7 @@ export default {
   },
   computed: {
     jestesToDisplay() {
-      console.log("jestes", this.$store.getters[JESTES_TO_DISPLAY]);
-
+      // console.log("jestes", this.$store.getters[JESTES_TO_DISPLAY]);
       return this.$store.getters[JESTES_TO_DISPLAY];
     }
   },

@@ -3,7 +3,7 @@
 		<v-app>
 
 			<!-- Side Menu (Mobile) -->
-			<v-navigation-drawer v-model="drawer" clipped absolute temporary>
+			<v-navigation-drawer app v-model="drawer" fixed temporary>
 
 				<v-list class="pa-1">
 					<v-list-tile avatar v-if="user">
@@ -44,7 +44,7 @@
 			</v-navigation-drawer>
 
 			<!-- Top Menu Toolbar -->
-			<v-toolbar>
+			<v-toolbar app>
 				<v-toolbar-side-icon class="hidden-sm-and-up" @click.stop="drawer = !drawer">
 				</v-toolbar-side-icon>
 				<v-toolbar-title>Jeste</v-toolbar-title>
@@ -56,7 +56,7 @@
 				<!-- Top Menu Links -->
 				<v-toolbar-items class="hidden-xs-only">
 					<v-menu open-on-hover bottom offset-y v-for="(item, index) in menuItems" :key="index">
-						<v-btn flat slot="activator" :to="(item.link)">
+						<v-btn flat slot="activator" :to="(item.link)" exact>
 							{{ item.title }}
 						</v-btn>
 						<v-list v-if="user && index === 1">
@@ -68,16 +68,20 @@
 				</v-toolbar-items>
 			</v-toolbar>
 
-			<transition name="moveInUp">
-				<router-view/>
-			</transition>
-
+			<v-content>
+				<v-container fluid>
+				<transition name="moveInUp">
+					<router-view/>
+					</transition>
+				</v-container>
+			</v-content>
+			
 		</v-app>
 	</div>
 </template>
 
 <script>
-import { USER_CHECK_LOGIN, USER_CONNECTED } from '@/modules/UserModule';
+import { USER_CHECK_LOGIN, USER_CONNECTED } from "@/modules/UserModule";
 
 export default {
   name: "app",
@@ -100,7 +104,7 @@ export default {
         { title: "Settings", icon: "settings", link: "/user/settings" },
         { title: "Logout", icon: "exit_to_app", link: "/login" }
       ],
-      searchValue: ''
+      searchValue: ""
     };
   },
   computed: {
@@ -136,7 +140,7 @@ export default {
 
 <style lang="scss">
 .v-toolbar__title:not(:first-child) {
-	margin: 0 5px !important;
+  margin: 0 5px !important;
 }
 // #app {
 //   font-family: "Avenir", Helvetica, Arial, sans-serif;
@@ -157,7 +161,7 @@ export default {
 
 .moveInUp-enter-active {
   // transition: all 0.4s ease;
-  transition: all .6s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+  transition: all 0.6s cubic-bezier(1, 0.5, 0.8, 1);
 }
 .moveInUp-leave-active {
   transition: all 0.3s ease;
@@ -166,8 +170,8 @@ export default {
 
 .moveInUp-enter,
 .moveInUp-leave-to {
-	position: absolute;
-	top: 64px;
+  position: absolute;
+  top: 64px;
 }
 .moveInUp-enter {
   transform: translateX(100%);
