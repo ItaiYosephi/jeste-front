@@ -6,9 +6,13 @@ import './registerServiceWorker';
 import axios from 'axios'
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
+import VuetifyGoogleAutocomplete from 'vuetify-google-autocomplete';
+
  
 Vue.use(Vuetify)
-
+Vue.use(VuetifyGoogleAutocomplete, {
+  apiKey: 'AIzaSyB1XEp2JKq8CAO8EbBSDGEvjrVC264DLPA' 
+});
 axios.defaults.withCredentials = true
 Vue.config.productionTip = false;
 

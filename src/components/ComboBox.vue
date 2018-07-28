@@ -1,6 +1,6 @@
 <template>
 	<v-combobox v-model="model" :filter="filter" :hide-no-data="!search" :items="items" :search-input.sync="search" hide-selected
-	 label="Search for an option" multiple small-chips solo>
+	 label="Enter Keywords" multiple small-chips solo>
 		<template slot="no-data">
 			<v-list-tile>
 				<span class="subheading">Create</span>
@@ -49,7 +49,7 @@ export default {
       editing: null,
       index: -1,
       items: [
-        { header: "Select an option or create one" },
+        { header: "Select a keyword or create one" },
         {
           text: "Foo",
           color: "blue"

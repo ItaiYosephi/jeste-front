@@ -77,7 +77,7 @@
 </template>
 
 <script>
-import { USER_CHECK_LOGIN, USER_CONNECTED } from "@/modules/UserModule";
+import { USER_CHECK_LOGIN, USER_CONNECTED } from '@/modules/UserModule';
 
 export default {
   name: "app",
@@ -136,7 +136,7 @@ export default {
 
 <style lang="scss">
 .v-toolbar__title:not(:first-child) {
-  margin: 0 5px !important;
+	margin: 0 5px !important;
 }
 // #app {
 //   font-family: "Avenir", Helvetica, Arial, sans-serif;
@@ -166,8 +166,8 @@ export default {
 
 .moveInUp-enter,
 .moveInUp-leave-to {
-  position: absolute;
-  top: 64px;
+	position: absolute;
+	top: 64px;
 }
 .moveInUp-enter {
   transform: translateX(100%);
