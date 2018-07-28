@@ -1,16 +1,36 @@
 <template>
-	<section class="jeste-edit">
-		<v-form ref="form" v-model="valid" lazy-validation>
-			<v-text-field v-model="name" :rules="nameRules" :counter="10" label="Name" required></v-text-field>
-			<v-text-field v-model="email" :rules="emailRules" label="E-mail" required></v-text-field>
-			<v-select v-model="select" :items="items" :rules="[v => !!v || 'Item is required']" label="Item" required></v-select>
-			<v-checkbox v-model="checkbox" :rules="[v => !!v || 'You must agree to continue!']" label="Do you agree?" required></v-checkbox>
-
-			<v-btn :disabled="!valid" @click="submit">
-				submit
-			</v-btn>
-			<v-btn @click="clear">clear</v-btn>
-		</v-form>
-
-	</section>
+	<v-combobox v-model="model" :filter="filter" :hide-no-data="!search" :items="items" :search-input.sync="search" hide-selected
+	 label="Search for an option" multiple small-chips solo>
+		<template slot="no-data">
+			<v-list-tile>
+				<span class="subheading">Create</span>
+				<v-chip :color="`${colors[nonce - 1]} lighten-3`" label small>
+					{{ search }}
+				</v-chip>
+			</v-list-tile>
+		</template>
+		<template v-if="item === Object(item)" slot="selection" slot-scope="{ item, parent, selected }">
+			<v-chip :color="`${item.color} lighten-3`" :selected="selected" label small>
+				<span class="pr-2">
+					{{ item.text }}
+				</span>
+				<v-icon small @click="parent.selectItem(item)">close</v-icon>
+			</v-chip>
+		</template>
+		<template slot="item" slot-scope="{ index, item, parent }">
+			<v-list-tile-content>
+				<v-text-field v-if="editing === item" v-model="editing.text" autofocus flat background-color="transparent" hide-details solo
+				 @keyup.enter="edit(index, item)"></v-text-field>
+				<v-chip v-else :color="`${item.color} lighten-3`" dark label small>
+					{{ item.text }}
+				</v-chip>
+			</v-list-tile-content>
+			<v-spacer></v-spacer>
+			<v-list-tile-action @click.stop>
+				<v-btn icon @click.stop.prevent="edit(index, item)">
+					<v-icon>{{ editing !== item ? 'edit' : 'check' }}</v-icon>
+				</v-btn>
+			</v-list-tile-action>
+		</template>
+	</v-combobox>
 </template>
