@@ -15,7 +15,7 @@
 						</v-card-title>
 					</v-flex>
 				</v-layout>
-				<v-card-text>
+        <v-card-text>
 					<v-list two-line>
 						<v-list-tile-content>
 							<v-list-tile-title>{{user.details.age}}</v-list-tile-title>
@@ -29,7 +29,6 @@
 							<v-list-tile-title>{{user.email}}</v-list-tile-title>
 							<v-list-tile-sub-title>e-mail</v-list-tile-sub-title>
 						</v-list-tile-content>
-
 					</v-list>
 					<div class="sub-headline">Some words about you</div>
 					I'm a thing. But, like most politicians, he promised more than he could deliver. You won't have time for sleeping, soldier,
@@ -39,7 +38,7 @@
 			</v-card>
 		</v-flex>
 
-		<v-flex my-2 class="tabs-wrapper">
+		<v-flex my-2 class="tabs-wrapper" v-if="reqJestes || resJestes">
 			<v-tabs grow class="elevation-1 ">
 				<v-tab v-for="item in tabs" :key="item" ripple>
 					{{item.name}}
@@ -68,10 +67,11 @@ import { JESTE_GET_BY_ID } from "@/modules/JesteModule";
 
 export default {
   name: "userDetails",
-  created() {},
   data() {
     return {
       userId: this.$route.params.id,
+      reqJestes: null,
+      resJestes: null,
       tabs: [
         { name: "asked jestes", jestes: this.reqJestes },
         { name: "made jestes", jestes: this.resJestes }
@@ -80,25 +80,39 @@ export default {
   },
   computed: {
     user() {
-      console.log('user', this.$store.getters[USER_CONNECTED]);
-      
+      console.log("user", this.$store.getters[USER_CONNECTED]);
       return this.$store.getters[USER_CONNECTED];
-    },
-    reqJeste() {
-      let reqJestes = [{}];
-      this.user.jestes.req.forEach(jesteId => {
+    }
+  },
+  methods: {
+    loadReqJestes() {
+      let jestes = [{}];
+      this.user.jestes_req.forEach(jesteId => {
         this.$store.dispatch({ type: JESTE_GET_BY_ID, id: jesteId })
-          .then(jeste => reqJestes.push(jeste));
+          .then(jeste => {
+            console.log('jeste', jeste);
+            jestes.push(jeste)
+          });
       });
-      return reqJestes;
+      console.log("test", jestes);
+      this.reqJestes = jestes;
     },
-    resJeste() {
-      let resJestes = [{}];
-      this.user.jestes.res.forEach(jesteId => {
+    loadResJestes() {
+      let jestes = [{}];
+      this.user.jestes_res.forEach(jesteId => {
         this.$store.dispatch({ type: JESTE_GET_BY_ID, id: jesteId })
-          .then(jeste => resJestes.push(jeste));
+          .then(jeste => jestes.push(jeste));
       });
-      return resJestes;
+      console.log("test", jestes);
+      this.resJestes = jestes;
+    }
+  },
+  watch: {
+    user() {
+      if (this.user) {
+        this.loadReqJestes();
+        this.loadResJestes();
+      }
     }
   }
 };

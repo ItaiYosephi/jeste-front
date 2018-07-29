@@ -4,10 +4,7 @@ const URL = (process.env.NODE_ENV !== 'development') ? '' : '//localhost:3000';
 function login(user) {
     console.log('nick:', user);
     return axios.put(`${URL}/login`, { user })
-        .then(res => {
-            console.log('test');
-            return res.data;
-        })
+        .then(res => res.data)
         .catch(err => {
             console.warn('Had a problem to log in:');
             return Promise.reject(err);
@@ -17,7 +14,6 @@ function login(user) {
 function checkLogin() {
     return axios.put(`${URL}/checklogin`)
         .then(res => res.data)
-        .catch();
 }
 
 function logout() {
