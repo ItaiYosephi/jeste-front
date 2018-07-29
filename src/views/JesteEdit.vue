@@ -19,7 +19,7 @@
 
 			address:{{address}}
 
-			<v-btn :disabled="!valid" @click="submit">
+			<v-btn :disabled="!valid" @click.prevent="submit">
 				submit
 			</v-btn>
 			<v-btn @click="clear">clear</v-btn>
@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import { JESTE_EMPTY, JESTE_GET_BY_ID, JESTE_GET } from '@/modules/JesteModule';
+import { JESTE_EMPTY, JESTE_GET_BY_ID, JESTE_GET , JESTE_SAVE} from '@/modules/JesteModule';
 import ComboBox from '@/components/ComboBox';
 
 export default {
@@ -43,13 +43,11 @@ export default {
 			jesteToSave: {},
 
 			addressRules: [
-				v => {
-					console.log(v.length);
-					
+				v => {				
 					return !!v || 'Address is required'},
-				v =>
-					(v && this.address) ||
-					'Please type a valid address'
+				v =>{
+					return (!!v && !!this.address) ||'Please type a valid address'
+				}
 			],
 
 			address: {},
@@ -64,7 +62,7 @@ export default {
 		if (id) {
 			this.getJeste(id);
 		} else {
-			this.jesteToSave = this.$store.getters[JESTE_EMPTY];
+			this.jesteToSave = JSON.parse(JSON.stringify(this.$store.getters[JESTE_EMPTY]));
 		}
 	},
 	methods: {
@@ -85,8 +83,13 @@ export default {
 		},
 		submit() {
 			if (this.$refs.form.validate()) {
+				this.jesteToSave.destination_loc.coordinates.splice(0, 1 ,+this.address.latitude)
+				this.jesteToSave.destination_loc.coordinates.splice(1, 1, this.address.longitude)
+				
 				// Native form submission is not yet supported
-				console.log('valid');
+				this.$store.dispatch({type: JESTE_SAVE, jesteToSave: this.jesteToSave})
+			
+				
 			}
 		},
 		clear() {
