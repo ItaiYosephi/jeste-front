@@ -67,28 +67,28 @@ import { JESTE_GET_BY_ID } from "@/modules/JesteModule";
 
 export default {
   name: "userDetails",
+  created() {
+		this.loadJestes();
+	},
   data() {
     return {
       userId: this.$route.params.id,
+      user: this.$store.getters[USER_CONNECTED],
       reqJestes: null,
       resJestes: null,
       tabs: [
-        { name: "asked jestes", jestesList: '' },
-        { name: "made jestes", jestesList: '' }
-			],
-			displayTabs: false
+        { name: "asked jestes", jestesList: "" },
+        { name: "made jestes", jestesList: "" }
+      ],
+      displayTabs: false
     };
-  },
-  computed: {
-    user() {
-      return this.$store.getters[USER_CONNECTED];
-    }
   },
   methods: {
     loadReqJestes() {
       let jestes = [];
       this.user.jestes_req.forEach(jesteId => {
-        this.$store.dispatch({ type: JESTE_GET_BY_ID, id: jesteId })
+        this.$store
+          .dispatch({ type: JESTE_GET_BY_ID, id: jesteId })
           .then(jeste => jestes.push(jeste));
       });
       this.reqJestes = jestes;
@@ -96,21 +96,25 @@ export default {
     loadResJestes() {
       let jestes = [];
       this.user.jestes_res.forEach(jesteId => {
-        this.$store.dispatch({ type: JESTE_GET_BY_ID, id: jesteId })
+        this.$store
+          .dispatch({ type: JESTE_GET_BY_ID, id: jesteId })
           .then(jeste => jestes.push(jeste));
       });
       this.resJestes = jestes;
+    },
+    loadJestes() {
+      this.loadReqJestes();
+      this.loadResJestes();
+      this.tabs[0].jestesList = this.reqJestes;
+      this.tabs[1].jestesList = this.resJestes;
+      this.displayTabs = true;
     }
   },
   watch: {
     user() {
       if (this.user) {
-        this.loadReqJestes();
-				this.loadResJestes();
-				this.tabs[0].jestesList = this.reqJestes;
-				this.tabs[1].jestesList = this.resJestes;
-				this.displayTabs = true;
-			}
+				this.loadJestes();
+      }
     }
   }
 };
