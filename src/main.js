@@ -12,13 +12,13 @@ const GOOGLE_API_KEY = 'AIzaSyB1XEp2JKq8CAO8EbBSDGEvjrVC264DLPA';
 
 Vue.use(VueGoogleMaps, {
 	load: {
-		key: 'GOOGLE_API_KEY',
+		key: GOOGLE_API_KEY,
 		libraries: 'places' // This is required if you use the Autocomplete plugin
 	}
 });
 
 Vue.use(VuetifyGoogleAutocomplete, {
-	apiKey: 'AIzaSyB1XEp2JKq8CAO8EbBSDGEvjrVC264DLPA'
+	apiKey: GOOGLE_API_KEY
 });
 Vue.use(Vuetify);
 
