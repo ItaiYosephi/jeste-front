@@ -57,15 +57,18 @@ export default {
                   0,
                   0
                 ]},
-                req_user_id: '',
+                ended_at: null,
+                req_user_id: null,
+                res_user_id: null,
+                created_at: null,
                 price: '',
                 description: '',
                 keywords: [],
                 imgs_url: [],
                 time_frame: {from: '', until: ''},
                 title: '',
-                address: {},
-                address_str: ''
+                address_components: null,
+                formatted_address: ''
             }
         },
     },
