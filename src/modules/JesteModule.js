@@ -14,6 +14,7 @@ export const JESTE_GET_BY_ID = 'jeste/actions/getJesteById';
 export const JESTE_GET = 'jeste/getters/getJeste';
 export const JESTES_TO_DISPLAY = 'jeste/getters/jestesToDisplay';
 export const JESTE_EMPTY = 'jeste/getters/emptyJeste';
+import {USER_CONNECTED} from './UserModule'
 
 export default {
     state: {
@@ -51,7 +52,11 @@ export default {
             // TODO: Check the fields and add/remove/edit by needs
             return {
                 from_loc: '',
-                destination_loc: '',
+                destination_loc:  {"type": "Point",
+                coordinates: [
+                  0,
+                  0
+                ]},
                 req_user_id: '',
                 price: '',
                 description: '',
@@ -76,8 +81,13 @@ export default {
                 .then(jeste => jeste)
         },
         [JESTE_SAVE](context, { jesteToSave }) {
+            console.log();
+            
             // if (!context.getters[IS_ADMIN]) return Promise.reject('No Permissions');
             const isEdit = !!jesteToSave._id;
+            if (!isEdit) jesteToSave.req_user_id =  context.getters[USER_CONNECTED]._id
+            console.log(jesteToSave);
+            
             return JesteService.saveJeste(jesteToSave)
                 .then(jeste => {
                     if (isEdit) context.commit({ type: JESTE_UPDATE, jeste })

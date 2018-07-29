@@ -1,6 +1,5 @@
 <template>
-	<v-combobox v-model="model" :filter="filter" :hide-no-data="!search" :items="items" :search-input.sync="search" hide-selected
-	 label="Enter Keywords" multiple small-chips solo>
+	<v-combobox v-model="model" :filter="filter" :hide-no-data="!search" :items="items" :search-input.sync="search" hide-selected label="Enter Keywords" multiple small-chips solo>
 		<template slot="no-data">
 			<v-list-tile>
 				<span class="subheading">Create</span>
@@ -19,8 +18,7 @@
 		</template>
 		<template slot="item" slot-scope="{ index, item, parent }">
 			<v-list-tile-content>
-				<v-text-field v-if="editing === item" v-model="editing.text" autofocus flat background-color="transparent" hide-details solo
-				 @keyup.enter="edit(index, item)"></v-text-field>
+				<v-text-field v-if="editing === item" v-model="editing.text" autofocus flat background-color="transparent" hide-details solo @keyup.enter="edit(index, item)"></v-text-field>
 				<v-chip v-else :color="`${item.color} lighten-3`" dark label small>
 					{{ item.text }}
 				</v-chip>
@@ -37,106 +35,100 @@
 
 <script>
 export default {
-  props: ["value"],
-  created() {
-  },
+	props: ['value'],
+	created() {},
 
-  data() {
-    return {
-      activator: null,
-      attach: null,
-      colors: ["green", "purple", "indigo", "cyan", "teal", "orange"],
-      editing: null,
-      index: -1,
-      items: [
-        { header: "Select a keyword or create one" },
-        {
-          text: "Foo",
-          color: "blue"
-        },
-        {
-          text: "Bar",
-          color: "red"
-        }
-      ],
-      nonce: 1,
-      menu: false,
-      model: [],
-      x: 0,
-      search: null,
-      y: 0
-    };
-  },
-  methods: {
-    edit(index, item) {
-      if (!this.editing) {
-        this.editing = item;
-        this.index = index;
-      } else {
-        this.editing = null;
-        this.index = -1;
-      }
-    },
-    filter(item, queryText, itemText) {
-      if (item.header) return false;
+	data() {
+		return {
+			activator: null,
+			attach: null,
+			colors: ['green', 'purple', 'indigo', 'cyan', 'teal', 'orange'],
+			editing: null,
+			index: -1,
+			items: [
+				{ header: 'Select a keyword or create one' },
+				{
+					text: 'Foo',
+					color: 'blue'
+				},
+				{
+					text: 'Bar',
+					color: 'red'
+				}
+			],
+			nonce: 1,
+			menu: false,
+			model: [],
+			x: 0,
+			search: null,
+			y: 0
+		};
+	},
+	methods: {
+		edit(index, item) {
+			if (!this.editing) {
+				this.editing = item;
+				this.index = index;
+			} else {
+				this.editing = null;
+				this.index = -1;
+			}
+		},
+		filter(item, queryText, itemText) {
+			if (item.header) return false;
 
-      const hasValue = val => (val != null ? val : "");
+			const hasValue = val => (val != null ? val : '');
 
-      const text = hasValue(itemText);
-      const query = hasValue(queryText);
+			const text = hasValue(itemText);
+			const query = hasValue(queryText);
 
-      return (
-        text
-          .toString()
-          .toLowerCase()
-          .indexOf(query.toString().toLowerCase()) > -1
-      );
-    },
+			return (
+				text
+					.toString()
+					.toLowerCase()
+					.indexOf(query.toString().toLowerCase()) > -1
+			);
+		}
+	},
+	watch: {
+		nonce(num) {
+			if (num > this.colors.length) this.nonce = 1;
+		},
+		value(items) {
+			if (!items || this.model.length > 0) return;
 
-  },
-  watch: {
-    nonce(num) {
-      if (num > this.colors.length) this.nonce = 1;
+			this.model = items.map(item => {
+				return {
+					text: item,
+					color: this.colors[this.nonce - 1]
+				};
+			});
+			this.nonce++;
+		},
+		model(val, prev) {
+			if (val.length === prev.length) return;
 
-    },
-    value(items) {
-            console.log(items);
+			this.model = val.map(v => {
+				if (typeof v === 'string') {
+					v = {
+						text: v,
+						color: this.colors[this.nonce - 1]
+					};
+					this.nonce++;
+					this.items.push(v);
+				}
 
-      if (!items) return;
-      
-      this.model = items.map(item => {
-        return {
-          text: item,
-          color: this.colors[this.nonce - 1]
-          
-        };
-      });
-       this.nonce++
-    },
-    model(val, prev) {
-      if (val.length === prev.length) return;
-
-      this.model = val.map(v => {
-        if (typeof v === "string") {
-          v = {
-            text: v,
-            color: this.colors[this.nonce - 1]
-          };
-
-          this.items.push(v);
-
-          this.nonce++;
-        }
-
-        return v;
-      });
-    }
-  },
-  computed: {
-    isEdit() {
-      return !!this.jesteToSave && !!this.jesteToSave.id;
-    }
-  }
+				return v;
+			});
+			var txts = this.model.map(item => item.text);
+			this.$emit('input', txts);
+		}
+	},
+	computed: {
+		isEdit() {
+			return !!this.jesteToSave && !!this.jesteToSave.id;
+		}
+	}
 };
 </script>
 

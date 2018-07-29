@@ -33,9 +33,15 @@ function deleteJeste(jesteId) {
 }
 
 function saveJeste(jeste) {
+    
     if (jeste._id) {
+        delete jeste.req_user
         return axios.put(`${URL}/${jeste}`, jeste)
-            .then(res => res.data)
+            .then(res => {
+                    console.log('got data', res.data);
+                    
+                return res.data
+            })
             .catch(err => {
                 console.warn('Failed to update jeste');
                 console.log(err);
