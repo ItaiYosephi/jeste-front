@@ -18,7 +18,9 @@
 </template>
 
 <script>
-import { USER_LOGIN, USER_LOGOUT } from '@/modules/UserModule';
+import { EventBus, SNACK_MSG} from '@/services/EventBusService'
+import { USER_LOGIN, USER_LOGOUT, USER_CONNECTED } from '@/modules/UserModule';
+
 export default {
 	data() {
 		return {
@@ -36,11 +38,9 @@ export default {
 	methods: {
 		login() {
 			if (this.$refs.form.validate()) {
-				this.$store
-					.dispatch({ type: USER_LOGIN, user: this.user })
-					.then(_ => {
-						// TODO: ADD SUCSSESS MESSAGE
-						console.log(_);
+				this.$store.dispatch({ type: USER_LOGIN, user: this.user })
+					.then(user => {
+						EventBus.$emit(SNACK_MSG, {text: `Welcome back ${user.details.firstName}`, bgColor: 'success'})
 						this.$router.push('/');
 					})
 					.catch(err => {
@@ -50,9 +50,12 @@ export default {
 			}
 		},
 		logout() {
-			this.$store
-				.dispatch(USER_LOGOUT)
-				.then(_ => console.log('logged out successfuly'));
+			let fName = this.$store.getters[USER_CONNECTED].details.firstName;
+			this.$store.dispatch(USER_LOGOUT)
+				.then(_ => {
+					EventBus.$emit(SNACK_MSG, {text: `Bey ${fName}`, bgColor: 'info'})
+					console.log('Logged out successfuly')
+				});
 		}
 	}
 };

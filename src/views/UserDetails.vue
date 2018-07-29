@@ -38,16 +38,16 @@
 			</v-card>
 		</v-flex>
 
-		<v-flex my-2 class="tabs-wrapper" v-if="reqJestes || resJestes">
-			<v-tabs grow class="elevation-1 ">
-				<v-tab v-for="item in tabs" :key="item" ripple>
-					{{item.name}}
+		<v-flex my-2 class="tabs-wrapper" >
+			<v-tabs grow class="elevation-1" >
+				<v-tab v-for="(tab, i) in tabs" :key="i">
+					{{tab.name}}
 				</v-tab>
-				<v-tab-item v-for="item in tabs">
+				<v-tab-item v-for="(list, i) in tabs" :key="i">
 					<v-card flat>
 						<v-expansion-panel>
-							<v-expansion-panel-content v-for="(jeste, idx) in item.jestes" :key="idx">
-								<div slot="header">{{jeste}}</div>
+							<v-expansion-panel-content v-for="(jeste, idx) in list.jestesList" :key="idx">
+								<div slot="header">{{jeste.title}}</div>
 								<v-card>
 									<v-card-text>{{jeste.description}}</v-card-text>
 								</v-card>
@@ -73,37 +73,32 @@ export default {
       reqJestes: null,
       resJestes: null,
       tabs: [
-        { name: "asked jestes", jestes: this.reqJestes },
-        { name: "made jestes", jestes: this.resJestes }
-      ]
+        { name: "asked jestes", jestesList: '' },
+        { name: "made jestes", jestesList: '' }
+			],
+			displayTabs: false
     };
   },
   computed: {
     user() {
-      console.log("user", this.$store.getters[USER_CONNECTED]);
       return this.$store.getters[USER_CONNECTED];
     }
   },
   methods: {
     loadReqJestes() {
-      let jestes = [{}];
+      let jestes = [];
       this.user.jestes_req.forEach(jesteId => {
         this.$store.dispatch({ type: JESTE_GET_BY_ID, id: jesteId })
-          .then(jeste => {
-            console.log('jeste', jeste);
-            jestes.push(jeste)
-          });
+          .then(jeste => jestes.push(jeste));
       });
-      console.log("test", jestes);
       this.reqJestes = jestes;
     },
     loadResJestes() {
-      let jestes = [{}];
+      let jestes = [];
       this.user.jestes_res.forEach(jesteId => {
         this.$store.dispatch({ type: JESTE_GET_BY_ID, id: jesteId })
           .then(jeste => jestes.push(jeste));
       });
-      console.log("test", jestes);
       this.resJestes = jestes;
     }
   },
@@ -111,8 +106,11 @@ export default {
     user() {
       if (this.user) {
         this.loadReqJestes();
-        this.loadResJestes();
-      }
+				this.loadResJestes();
+				this.tabs[0].jestesList = this.reqJestes;
+				this.tabs[1].jestesList = this.resJestes;
+				this.displayTabs = true;
+			}
     }
   }
 };

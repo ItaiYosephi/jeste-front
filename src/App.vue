@@ -75,12 +75,32 @@
 					</transition>
 				</v-container>
 			</v-content>
+
+			<v-snackbar
+				v-model="snackbarDisplay"
+				:top="snackbarProps.y === 'top'"
+				:bottom="snackbarProps.y === 'bottom'"
+				:left="snackbarProps.x === 'left'"
+				:right="snackbarProps.x === 'right'"
+				:multi-line="snackbarProps.mode === 'multi-line'"
+				:vertical="snackbarProps.mode === 'vertical'"
+				:timeout="snackbarProps.timeout"
+				:color="snackbarProps.bgColor">
+				{{ snackbarProps.text }}
+				<v-btn
+					flat
+					:color="snackbarProps.btnColor"
+					@click="snackbarDisplay = false">
+					Close
+				</v-btn>
+    	</v-snackbar>
 			
 		</v-app>
 	</div>
 </template>
 
 <script>
+import { EventBus, SNACK_MSG } from "@/services/EventBusService";
 import { USER_CHECK_LOGIN, USER_CONNECTED } from "@/modules/UserModule";
 
 export default {
@@ -90,6 +110,9 @@ export default {
     if (!this.$store.getters.USER_CONNECTED) {
       this.loadUser();
     }
+  },
+  mounted() {
+    EventBus.$on(SNACK_MSG, msg => this.toggleSnackbar(msg));
   },
   data() {
     return {
@@ -104,14 +127,24 @@ export default {
         { title: "Settings", icon: "settings", link: "/user/settings" },
         { title: "Logout", icon: "exit_to_app", link: "/login" }
       ],
-			searchValue: "",
-			userId: ''
+      searchValue: "",
+      userId: "",
+
+      snackbarDisplay: false,
+      snackbarProps: {
+        y: "top",
+        x: null,
+        mode: "multi-line",
+        timeout: 3000,
+        text: "",
+        type: "black"
+      }
     };
   },
   computed: {
     user() {
       return this.$store.getters[USER_CONNECTED];
-		}
+    }
   },
   methods: {
     loadUser() {
@@ -122,20 +155,32 @@ export default {
     },
     search() {
       console.log("search", this.searchValue);
+    },
+    toggleSnackbar(msg) {
+      this.snackbarProps.text = msg.text;
+      this.snackbarProps.bgColor = (msg.bgColor) ? msg.bgColor : this.snackbarProps.bgColor;
+      this.snackbarDisplay = true;
     }
   },
   watch: {
     user() {
       if (this.user) {
-        this.menuItems[1].title = this.user.details.firstName + " " + this.user.details.lastName;
-				this.menuItems[1].icon = "account_circle";
-				this.userSubItems[0].link += this.user._id;
+        this.menuItems[1].title =
+          this.user.details.firstName + " " + this.user.details.lastName;
+        this.menuItems[1].icon = "account_circle";
+        this.userSubItems[0].link += this.user._id;
       } else {
         this.menuItems[1].title = "Login";
-				this.menuItems[1].icon = "swap_horizontal_circle";
-				this.userSubItems[0].link += '/user';		
+        this.menuItems[1].icon = "swap_horizontal_circle";
+        this.userSubItems[0].link += "/user";
       }
-    }
+		},
+		snackbarDisplay() {
+			if (!this.snackbarDisplay) {
+				this.snackbarProps.bgColor = 'black';
+				this.snackbarProps.btnColor = 'white';
+			}
+		}
   }
 };
 </script>
@@ -173,17 +218,16 @@ export default {
 .moveInUp-enter,
 .moveInUp-leave-to {
   position: absolute;
-	top: 64px;
-	
+  top: 64px;
 }
 .moveInUp-enter {
   transform: translateX(100%);
 }
 .moveInUp-leave-to {
-	// transform: translateY(100%);
-	  position: fixed;
-	top: 64px;
-	
+  // transform: translateY(100%);
+  position: fixed;
+  top: 64px;
+
   transform: translateX(-100%);
   opacity: 0;
 }
