@@ -64,6 +64,8 @@ export default {
                 imgs_url: [],
                 time_frame: {from: '', until: ''},
                 title: '',
+                address: {},
+                address_str: ''
             }
         },
     },
