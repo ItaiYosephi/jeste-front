@@ -12,7 +12,7 @@
 				:enable-geolocation="true"
 				placeholder="Street Address"
 				required			
-				:rules="nameRules"
+				:rules="addressRules"
 				v-on:placechanged="getAddressData">
 			</vuetify-google-autocomplete>
 			<ComboBox v-model="jesteToSave.keywords"></ComboBox>
@@ -42,7 +42,7 @@ export default {
 
 			jesteToSave: {},
 
-			nameRules: [
+			addressRules: [
 				v => {
 					console.log(v.length);
 					
