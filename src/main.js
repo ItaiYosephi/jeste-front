@@ -2,7 +2,6 @@ import Vue from 'vue';
 import App from './App.vue';
 import router from './router';
 import store from './store';
-import VuetifyGoogleAutocomplete from 'vuetify-google-autocomplete';
 import './registerServiceWorker';
 import axios from 'axios';
 import Vuetify from 'vuetify';
@@ -17,9 +16,6 @@ Vue.use(VueGoogleMaps, {
 	}
 });
 
-Vue.use(VuetifyGoogleAutocomplete, {
-	apiKey: GOOGLE_API_KEY
-});
 Vue.use(Vuetify);
 
 axios.defaults.withCredentials = true;

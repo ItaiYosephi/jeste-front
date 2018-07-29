@@ -1,6 +1,6 @@
 <template>
 	<section class="jeste-details">
-		{{jeste}}
+		{{jeste}} {{position}}
 		<v-card>
 			<v-card-media :src="imgUrl" height="200px">
 			</v-card-media>
@@ -23,7 +23,9 @@
 
 			<v-slide-y-transition>
 				<v-card-text v-show="show">
-					I'm a thing. But, like most politicians, he promised more than he could deliver. You won't have time for sleeping, soldier, not with all the bed making you'll be doing. Then we'll go with that data file! Hey, you add a one and two zeros to that or we walk! You're going to do his laundry? I've got to find a way to escape.
+					<GmapMap :center="position"  v-if="jeste.destination_loc" :zoom="15" map-type-id="terrain" style="width: 100%; height: 300px">
+						<GmapMarker :position="position" :clickable="true" :draggable="true" @click="center=position" />
+					</GmapMap>
 				</v-card-text>
 			</v-slide-y-transition>
 		</v-card>
@@ -37,7 +39,7 @@ export default {
 	data() {
 		return {
 			jeste: {},
-			show: false
+			show: true
 		};
 	},
 	created() {
@@ -58,11 +60,19 @@ export default {
 	},
 	computed: {
 		imgUrl() {
-			if (this.jeste && this.jeste.imgs_url && this.jeste.imgs_url[0]) return this.jeste.imgs_url[0];
-			else return ''
+			if (this.jeste && this.jeste.imgs_url && this.jeste.imgs_url[0])
+				return this.jeste.imgs_url[0];
+			else return '';
+		},
+		position() {
+			if (this.jeste.destination_loc) {
 
+				return {
+					lat: +this.jeste.destination_loc.coordinates[0],
+					lng: +this.jeste.destination_loc.coordinates[1]
+				};
+			}
 		}
-
 	}
 };
 </script>
