@@ -104,13 +104,14 @@ export default {
         { title: "Settings", icon: "settings", link: "/user/settings" },
         { title: "Logout", icon: "exit_to_app", link: "/login" }
       ],
-      searchValue: ""
+			searchValue: "",
+			userId: ''
     };
   },
   computed: {
     user() {
       return this.$store.getters[USER_CONNECTED];
-    }
+		}
   },
   methods: {
     loadUser() {
@@ -126,12 +127,13 @@ export default {
   watch: {
     user() {
       if (this.user) {
-        this.menuItems[1].title =
-          this.user.details.firstName + " " + this.user.details.lastName;
-        this.menuItems[1].icon = "account_circle";
+        this.menuItems[1].title = this.user.details.firstName + " " + this.user.details.lastName;
+				this.menuItems[1].icon = "account_circle";
+				this.userSubItems[0].link += this.user._id;
       } else {
         this.menuItems[1].title = "Login";
-        this.menuItems[1].icon = "swap_horizontal_circle";
+				this.menuItems[1].icon = "swap_horizontal_circle";
+				this.userSubItems[0].link += '/user';		
       }
     }
   }
