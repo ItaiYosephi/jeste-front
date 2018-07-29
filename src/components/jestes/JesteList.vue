@@ -1,11 +1,13 @@
 <template>
-    <v-layout row wrap justify-center>
+  <v-container grid-list-md>
+    <v-layout row wrap fill-height>
         <JestePreview
             v-for="jeste in jestes"
             :key="jeste._id"
             :to="'/jeste/' + jeste._id"
             :jeste="jeste" />
     </v-layout>
+  </v-container>
 </template>
 
 <script>

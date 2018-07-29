@@ -97,7 +97,7 @@ export default {
       menuItems: [
         { title: "Home", icon: "home", link: "/" },
         { title: "Login", icon: "swap_horizontal_circle", link: "/login" },
-        { title: "About", icon: "info", link: "about" }
+        { title: "About", icon: "info", link: "/about" }
       ],
       userSubItems: [
         { title: "Profile", icon: "account_circle", link: "/user/" },
@@ -171,14 +171,18 @@ export default {
 .moveInUp-enter,
 .moveInUp-leave-to {
   position: absolute;
-  top: 64px;
+	top: 64px;
+	
 }
 .moveInUp-enter {
   transform: translateX(100%);
 }
 .moveInUp-leave-to {
-  transform: translateY(100%);
-  // transform: translateX(-1000px);
+	// transform: translateY(100%);
+	  position: fixed;
+	top: 64px;
+	
+  transform: translateX(-100%);
   opacity: 0;
 }
 </style>
