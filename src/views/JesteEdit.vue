@@ -5,15 +5,7 @@
 		<v-form ref="form" v-model="valid" lazy-validation>
 			<v-text-field v-model="jesteToSave.title" label="title" required></v-text-field>
 			<v-text-field v-model="jesteToSave.description" label="description" required></v-text-field>
-			<vuetify-google-autocomplete
-				:id="id"
-				append-icon="search"
-				:disabled="false"
-				:enable-geolocation="true"
-				placeholder="Street Address"
-				required			
-				:rules="addressRules"
-				v-on:placechanged="getAddressData">
+			<vuetify-google-autocomplete :id="id" append-icon="search" :disabled="false" :enable-geolocation="true" placeholder="Street Address" required :rules="addressRules" v-on:placechanged="getAddressData">
 			</vuetify-google-autocomplete>
 			<ComboBox v-model="jesteToSave.keywords"></ComboBox>
 
@@ -31,7 +23,12 @@
 </template>
 
 <script>
-import { JESTE_EMPTY, JESTE_GET_BY_ID, JESTE_GET , JESTE_SAVE} from '@/modules/JesteModule';
+import {
+	JESTE_EMPTY,
+	JESTE_GET_BY_ID,
+	JESTE_GET,
+	JESTE_SAVE
+} from '@/modules/JesteModule';
 import ComboBox from '@/components/ComboBox';
 
 export default {
@@ -43,15 +40,18 @@ export default {
 			jesteToSave: {},
 
 			addressRules: [
-				v => {				
-					return !!v || 'Address is required'},
-				v =>{
-					return (!!v && !!this.address) ||'Please type a valid address'
+				v => {
+					return !!v || 'Address is required';
+				},
+				v => {
+					return (
+						(!!v && !!this.address) || 'Please type a valid address'
+					);
 				}
 			],
 
 			address: {},
-			id: 'map',
+			id: 'maps',
 			labelText: 'Search Address',
 			placeholderText: '',
 			types: ['address']
@@ -62,34 +62,35 @@ export default {
 		if (id) {
 			this.getJeste(id);
 		} else {
-			this.jesteToSave = JSON.parse(JSON.stringify(this.$store.getters[JESTE_EMPTY]));
+			this.jesteToSave = JSON.parse(
+				JSON.stringify(this.$store.getters[JESTE_EMPTY])
+			);
 		}
 	},
 	methods: {
 		getJeste(id) {
-			let jeste = this.$store.getters[JESTE_GET](id);
-			if (!jeste) {
-				this.$store
-					.dispatch({ type: JESTE_GET_BY_ID, id })
-					.then(
-						jeste =>
-							(this.jesteToSave = JSON.parse(
-								JSON.stringify(jeste)
-							))
-					);
-			} else {
+			this.$store.dispatch({ type: JESTE_GET_BY_ID, id }).then(jeste => {
 				this.jesteToSave = JSON.parse(JSON.stringify(jeste));
-			}
+			});
 		},
 		submit() {
 			if (this.$refs.form.validate()) {
-				this.jesteToSave.destination_loc.coordinates.splice(0, 1 ,+this.address.latitude)
-				this.jesteToSave.destination_loc.coordinates.splice(1, 1, this.address.longitude)
-				
+				this.jesteToSave.destination_loc.coordinates.splice(
+					0,
+					1,
+					+this.address.latitude
+				);
+				this.jesteToSave.destination_loc.coordinates.splice(
+					1,
+					1,
+					this.address.longitude
+				);
+
 				// Native form submission is not yet supported
-				this.$store.dispatch({type: JESTE_SAVE, jesteToSave: this.jesteToSave})
-			
-				
+				this.$store.dispatch({
+					type: JESTE_SAVE,
+					jesteToSave: this.jesteToSave
+				});
 			}
 		},
 		clear() {
