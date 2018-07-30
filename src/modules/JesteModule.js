@@ -4,6 +4,7 @@ import JesteService from '@/services/JesteService';
 
 export const JESTE_ADD = 'jeste/mutations/addJeste';
 export const JESTE_UPDATE = 'jeste/mutations/updateJeste';
+export const FILTER_UPDATE = 'jeste/mutations/updateFilter';
 
 export const JESTES_LOAD = 'jeste/jestesLoad';
 export const JESTE_SAVE = 'jeste/jesteSave';
@@ -19,6 +20,13 @@ import {USER_CONNECTED} from './UserModule'
 export default {
     state: {
         jestes: [],
+        filterBy: {
+            coords: '',
+            txt: '',
+            maxDistance: 100000,
+            
+
+        }
     },
     mutations: {
         [JESTES_LOAD](state, { jestes }) {
@@ -33,6 +41,13 @@ export default {
         },
         [JESTE_DELETE](state, { jesteId }) {
             state.jestes = state.jestes.filter(jeste => jeste._id !== jesteId);
+        },
+        [FILTER_UPDATE](state, { filter }) {
+            if (filter.coords) {
+                console.log(filter.coords);
+                
+                state.filterBy.coords = `${filter.coords.lat},${filter.coords.lng}`
+            }
         }
     },
     getters: {
@@ -73,9 +88,10 @@ export default {
         },
     },
     actions: {
-        [JESTES_LOAD](context, { filterBy }) {
-            // filterBy = { coords: [32.0852, 34.781768] };
-            return JesteService.query(filterBy)
+        [JESTES_LOAD](context) {
+            
+            // filterBy.coords = context.rootState.UserModule.state.currLocation
+            return JesteService.query(context.state.filterBy)
                 .then(jestes => {
                     context.commit({ type: JESTES_LOAD, jestes })
                     return jestes;

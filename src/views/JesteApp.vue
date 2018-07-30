@@ -24,19 +24,11 @@ export default {
   components: {
     JesteList
   },
-  created() {
-    this.loadJestes();
-  },
   computed: {
     jestesToDisplay() {
       // console.log("jestes", this.$store.getters[JESTES_TO_DISPLAY]);
       return this.$store.getters[JESTES_TO_DISPLAY];
-    }
-  },
-  methods: {
-    loadJestes(filterBy = "") {
-      this.$store.dispatch({ type: JESTES_LOAD, filterBy });
-    }
+    },
   }
 };
 </script>

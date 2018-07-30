@@ -5,7 +5,7 @@
       <v-card-title primary-title>
         <div>
           <h3 class="headline mb-0">{{jeste.title}}</h3>
-          <span class="grey--text">{{jeste.formatted_address}}</span>
+          <span class="grey--text">{{distance}}</span>
           <div class="block-with-text" ref="desc">{{jeste.description}}</div>
         </div>
       </v-card-title>
@@ -28,6 +28,10 @@ export default {
   computed: {
     reqUser() {
       return this.jeste.req_user.details;
+    },
+    distance() {
+      let distance = (this.jeste.destination_loc.calculated / 1000).toFixed(2)
+      return `${distance} km away from you`
     }
   },
   filters: {

@@ -125,15 +125,12 @@
 			
 		</v-app>
 			location {{location}}
-			location {{location}}
-			location {{location}}
-			location {{location}}
-
 	</div>
 </template>
 
 <script>
 import { EventBus, SNACK_MSG } from "@/services/EventBusService";
+import { JESTES_LOAD, FILTER_UPDATE } from "@/modules/JesteModule";
 import { USER_CHECK_LOGIN, USER_CONNECTED, USER_LOGOUT, GET_USER_LOCATION } from "@/modules/UserModule";
 
 export default {
@@ -144,7 +141,12 @@ export default {
       this.loadUser();
 		}
 		this.$store.dispatch(GET_USER_LOCATION)
-		
+			.then(coords => {
+				this.$store.commit({type:FILTER_UPDATE, filter: {coords}})
+
+				
+				this.loadJestes()
+			});
   },
   mounted() {
     EventBus.$on(SNACK_MSG, msg => this.toggleSnackbar(msg));
@@ -181,6 +183,9 @@ export default {
   methods: {
     loadUser() {
       this.$store.dispatch(USER_CHECK_LOGIN).catch(err => console.log(err));
+		},
+		loadJestes(filterBy = {}) {
+      this.$store.dispatch({ type: JESTES_LOAD });
     },
     pushToLink(link) {
       this.$router.push(link);

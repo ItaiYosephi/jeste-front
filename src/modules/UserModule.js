@@ -3,6 +3,7 @@
 import UserService from '@/services/UserService';
 import AuthService from '@/services/AuthService';
 import LocationService from '@/services/LocationService';
+import { resolve } from 'url';
 
 export const USER_LOAD = 'user/mutations/userLoad';
 export const SET_LOCATION = 'user/mutation/setLocation';
@@ -31,6 +32,7 @@ export default {
 		},
 		[SET_LOCATION](state, {loc}) {
 			state.currLocation = loc;
+			
 		}
 
 	},
@@ -69,9 +71,12 @@ export default {
 
 		},
 		[GET_USER_LOCATION](context) {
-			 LocationService.getUserLocation()
+			return LocationService.getUserLocation()
 			 .then(loc => {
 				context.commit({type: SET_LOCATION, loc})
+				console.log('first',loc);
+				
+				return loc
 		   })
 			
 		}

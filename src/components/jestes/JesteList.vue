@@ -1,6 +1,6 @@
 <template>
   <v-container grid-list-md>
-    <v-layout row wrap fill-height>
+    <v-layout row wrap fill-height v-if="jestes">
         <JestePreview
             v-for="jeste in jestes"
             :key="jeste._id"
@@ -18,9 +18,7 @@ export default {
   components: {
     JestePreview
   },
-  props: {
-    jestes: Array
-  }
+  props: ['jestes']
 };
 </script>
 

@@ -3,8 +3,8 @@ import axios from 'axios'
 
 const URL = (process.env.NODE_ENV !== 'development') ? '/jeste' : '//localhost:3000/jeste';
 
-function query({ coords = '', }) {
-    const query = `?coords=${coords}`;
+function query({ coords = '', q= '' }) {
+    const query = `?coords=${coords}&q=${q}`;
     return axios.get(`${URL}/${query}`)
         .then(res => res.data)
         .catch(err => {
