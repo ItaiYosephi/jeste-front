@@ -145,14 +145,17 @@ export default {
 
 <style lang="scss" scoped>
 @import "../assets/styles/_vars.scss";
+
 .user-details {
   max-width: 780px;
   margin: 0 auto;
 }
+
 .v-avatar,
 .v-title {
   margin: 5px;
 }
+
 .v-card__text {
   font-size: 1.1em;
 }
@@ -160,6 +163,7 @@ export default {
 .sub-headline {
   font-size: 1.1em;
 }
+
 .tabs-wrapper {
   align-self: stretch;
 }

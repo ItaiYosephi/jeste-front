@@ -44,26 +44,39 @@
 			</v-navigation-drawer>
 
 			<!-- Top Menu Toolbar -->
-			<v-toolbar app color="primary">
+			<v-toolbar app color="primary" class="white--text">
 				<v-toolbar-side-icon class="hidden-sm-and-up" @click.stop="drawer = !drawer">
 				</v-toolbar-side-icon>
-				<v-toolbar-title>Jeste</v-toolbar-title>
+				<v-toolbar-title class="title-logo">Jeste</v-toolbar-title>
 				<v-spacer class="hidden-xs-only"></v-spacer>
 				<v-flex mx-1>
 					<v-text-field
-					color="accent"
-					v-model="searchValue"
+						v-model="searchValue"
+						dark
+						flat
+						solo-inverted
+						hide-details
+						clearable
+						prepend-inner-icon="search"
+						label="Search"
+						hide-details
+						@keyup.enter.native="search"
+						@click:prepend-inner="search">
+					</v-text-field>
+					<!-- <v-text-field
+					dark
+					color="white"
 					hide-details append-icon="search"
 					@keyup.enter.native="search"
 					@click:append="search"
 					placeholder="Search"
 					clearable>
-					</v-text-field>
+					</v-text-field> -->
 				</v-flex>
 				<!-- Top Menu Links -->
 				<v-toolbar-items class="hidden-xs-only">
 					<v-menu open-on-hover bottom offset-y v-for="(item, index) in menuItems" :key="index">
-						<v-btn flat slot="activator" :to="(item.link)" exact>
+						<v-btn flat slot="activator" :to="(item.link)" exact class="bg--text">
 							{{ item.title }}
 						</v-btn>
 						<v-list v-if="user && index === 1">
@@ -194,7 +207,8 @@ export default {
 
 <style lang="scss">
 .v-toolbar__title:not(:first-child) {
-  margin: 0 5px !important;
+	margin: 0 5px !important;
+	min-width: 55px;
 }
 // #app {
 //   font-family: "Avenir", Helvetica, Arial, sans-serif;
