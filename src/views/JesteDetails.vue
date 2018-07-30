@@ -4,14 +4,14 @@
 
 		<v-container fluid grid-list-md>
 			<v-layout row wrap fill-height>
-
+				
 				<v-flex xs12 sm6>
 					<v-card height="100%" class="jeste-details-card" hover>
 						<v-card-title primary-title>
 							<div>
-								<div class="headline mb-2">{{jeste.title}}</div>
+								<div class="headline mb-2" >{{jeste.title}}</div>
 								<div class="grey--text mb-2">{{jeste.formatted_address}}</div>
-								<div>{{jeste.description}}</div>
+								<div >{{jeste.description}}</div>
 							</div>
 						</v-card-title>
 
@@ -102,12 +102,9 @@ export default {
 			}
 		},
 		canEdit() {
-			return (
-				!this.jeste.ended_at &&
-				this.$store.getters[USER_CONNECTED] &&
-				this.$store.getters[USER_CONNECTED]._id ===
-					this.jeste.req_user_id
-			);
+			return !this.jeste.ended_at && 
+			this.$store.getters[USER_CONNECTED] && this.$store.getters[USER_CONNECTED]._id === this.jeste.req_user_id
+
 		}
 	}
 };

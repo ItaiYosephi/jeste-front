@@ -1,7 +1,6 @@
 <template>
 	<div id="app">
 		<v-app>
-
 			<!-- Side Menu (Mobile) -->
 			<v-navigation-drawer app v-model="drawer" fixed temporary>
 
@@ -116,12 +115,17 @@
     	</v-snackbar>
 			
 		</v-app>
+			location {{location}}
+			location {{location}}
+			location {{location}}
+			location {{location}}
+
 	</div>
 </template>
 
 <script>
 import { EventBus, SNACK_MSG } from "@/services/EventBusService";
-import { USER_CHECK_LOGIN, USER_CONNECTED } from "@/modules/UserModule";
+import { USER_CHECK_LOGIN, USER_CONNECTED, GET_USER_LOCATION } from "@/modules/UserModule";
 
 export default {
   name: "app",
@@ -129,7 +133,9 @@ export default {
     console.log("--- Jeste App ---");
     if (!this.$store.getters.USER_CONNECTED) {
       this.loadUser();
-    }
+		}
+		this.$store.dispatch(GET_USER_LOCATION)
+		
   },
   mounted() {
     EventBus.$on(SNACK_MSG, msg => this.toggleSnackbar(msg));
@@ -164,7 +170,10 @@ export default {
   computed: {
     user() {
       return this.$store.getters[USER_CONNECTED];
-    }
+		},
+		location() {
+			return this.$store.getters[GET_USER_LOCATION]
+		}
   },
   methods: {
     loadUser() {

@@ -25,12 +25,6 @@ export default {
 	props: {
 		jeste: Object
   },
-  mounted() {
-    console.log(this.$refs.desc.scrollHeight);
-    console.log(this.$refs.desc.offsetHeight);
-    
-
-  },
 	computed: {
 		reqUser() {
 			return this.jeste.req_user.details;

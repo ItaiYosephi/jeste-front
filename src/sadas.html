@@ -1,36 +1,104 @@
-<template>
-	<v-combobox v-model="model" :filter="filter" :hide-no-data="!search" :items="items" :search-input.sync="search" hide-selected
-	 label="Search for an option" multiple small-chips solo>
-		<template slot="no-data">
-			<v-list-tile>
-				<span class="subheading">Create</span>
-				<v-chip :color="`${colors[nonce - 1]} lighten-3`" label small>
-					{{ search }}
-				</v-chip>
-			</v-list-tile>
-		</template>
-		<template v-if="item === Object(item)" slot="selection" slot-scope="{ item, parent, selected }">
-			<v-chip :color="`${item.color} lighten-3`" :selected="selected" label small>
-				<span class="pr-2">
-					{{ item.text }}
-				</span>
-				<v-icon small @click="parent.selectItem(item)">close</v-icon>
-			</v-chip>
-		</template>
-		<template slot="item" slot-scope="{ index, item, parent }">
-			<v-list-tile-content>
-				<v-text-field v-if="editing === item" v-model="editing.text" autofocus flat background-color="transparent" hide-details solo
-				 @keyup.enter="edit(index, item)"></v-text-field>
-				<v-chip v-else :color="`${item.color} lighten-3`" dark label small>
-					{{ item.text }}
-				</v-chip>
-			</v-list-tile-content>
-			<v-spacer></v-spacer>
-			<v-list-tile-action @click.stop>
-				<v-btn icon @click.stop.prevent="edit(index, item)">
-					<v-icon>{{ editing !== item ? 'edit' : 'check' }}</v-icon>
+<v-layout column>
+
+	<v-card>
+		<v-container fluid grid-list-md>
+			<v-layout row wrap>
+				<v-flex xs6>
+					<v-card>
+						<v-card-media :src="card.src" height="200px">
+							<v-container fill-height fluid pa-2>
+								<v-layout fill-height>
+									<v-flex xs12 align-end flexbox>
+										<span class="headline white--text" v-text="card.title"></span>
+									</v-flex>
+								</v-layout>
+							</v-container>
+						</v-card-media>
+
+					</v-card>
+				</v-flex>
+				<v-flex xs6>
+					<v-card>
+						<v-card-title primary-title>
+							<div>
+								<div class="headline">{{jeste.title}}</div>
+								<span class="grey--text">{{jeste.description}}</span>
+							</div>
+						</v-card-title>
+
+						<v-card-actions>
+							<v-btn flat color="blue" @click.prevent="">Jeste It!</v-btn>
+							<v-btn flat>Share</v-btn>
+							<v-spacer></v-spacer>
+							<v-btn icon @click="show = !show">
+								<v-icon>{{ show ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon>
+							</v-btn>
+						</v-card-actions>
+
+					</v-card>
+				</v-flex>
+			</v-layout>
+		</v-container>
+	</v-card>
+</v-layout>
+
+
+
+
+
+
+
+
+
+
+
+
+{{jeste}} {{position}}
+	<v-flex xs6>
+		<v-card>
+			<v-card-media src="https://cdn.vuetifyjs.com/images/cards/desert.jpg" height="200px"></v-card-media>
+
+			<v-card-title primary-title>
+				<div>
+					<h3 class="headline mb-0">Kangaroo Valley Safari</h3>
+					<div>Located two hours south of Sydney in the <br>Southern Highlands of New South Wales, ...</div>
+				</div>
+			</v-card-title>
+
+			<v-card-actions>
+				<v-btn flat color="orange">Share</v-btn>
+				<v-btn flat color="orange">Explore</v-btn>
+			</v-card-actions>
+		</v-card>
+	</v-flex>
+	<v-flex xs6>
+
+		<v-card>
+			<v-card-media :src="imgUrl" height="200px">
+			</v-card-media>
+
+			<v-card-title primary-title>
+				<div>
+					<div class="headline">{{jeste.title}}</div>
+					<span class="grey--text">{{jeste.description}}</span>
+				</div>
+			</v-card-title>
+
+			<v-card-actions>
+				<v-btn flat color="blue" @click.prevent="">Jeste It!</v-btn>
+				<v-btn flat>Share</v-btn>
+				<v-spacer></v-spacer>
+				<v-btn icon @click="show = !show">
+					<v-icon>{{ show ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon>
 				</v-btn>
-			</v-list-tile-action>
-		</template>
-	</v-combobox>
-</template>
+			</v-card-actions>
+
+			<v-slide-y-transition>
+				<v-card-text v-show="show">
+					<GmapMap :center="position" v-if="jeste.destination_loc" :zoom="15" map-type-id="terrain" style="width: 100%; height: 300px">
+						<GmapMarker :position="position" :clickable="true" :draggable="true" @click="center=position" />
+					</GmapMap>
+				</v-card-text>
+			</v-slide-y-transition>
+		</v-card>
+	</v-flex>
