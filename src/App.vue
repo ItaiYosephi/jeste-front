@@ -78,7 +78,7 @@
 				<!-- Top Menu Links -->
 				<v-toolbar-items class="hidden-xs-only">
 					<v-menu open-on-hover bottom offset-y v-for="(item, index) in menuItems" :key="index">
-						<v-btn flat slot="activator" :to="(item.link)" exact class="bg--text">
+						<v-btn flat slot="activator" :to="(item.link)" exact class="white--text">
 							{{ item.title }}
 						</v-btn>
 						<v-list v-if="user && index === 1">
