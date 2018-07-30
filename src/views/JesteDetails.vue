@@ -1,39 +1,68 @@
 <template>
-	<section class="jeste-details">
-		{{jeste}} {{position}}
-		<v-card>
-			<v-card-media :src="imgUrl" height="200px">
-			</v-card-media>
+	<v-layout column>
+		<h1 class="text-xs-center">Jeste Details</h1>
 
-			<v-card-title primary-title>
-				<div>
-					<div class="headline">{{jeste.title}}</div>
-					<span class="grey--text">{{jeste.description}}</span>
-				</div>
-			</v-card-title>
+		<v-container fluid grid-list-md>
+			<v-layout row wrap fill-height>
 
-			<v-card-actions>
-				<v-btn flat color="blue" @click.prevent="">Jeste It!</v-btn>
-				<v-btn flat>Share</v-btn>
-				<v-spacer></v-spacer>
-				<v-btn icon @click="show = !show">
-					<v-icon>{{ show ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon>
-				</v-btn>
-			</v-card-actions>
+				<v-flex xs12 sm6>
+					<v-card height="100%" class="jeste-details-card" hover>
+						<v-card-title primary-title>
+							<div>
+								<div class="headline mb-2">{{jeste.title}}</div>
+								<div class="grey--text mb-2">{{jeste.formatted_address}}</div>
+								<div>{{jeste.description}}</div>
+							</div>
+						</v-card-title>
 
-			<v-slide-y-transition>
-				<v-card-text v-show="show">
-					<GmapMap :center="position"  v-if="jeste.destination_loc" :zoom="15" map-type-id="terrain" style="width: 100%; height: 300px">
-						<GmapMarker :position="position" :clickable="true" :draggable="true" @click="center=position" />
-					</GmapMap>
-				</v-card-text>
-			</v-slide-y-transition>
-		</v-card>
-	</section>
+						<v-card-actions>
+							<v-btn flat color="blue" @click.prevent="">Jeste It!</v-btn>
+							<v-btn v-if="canEdit" flat :to="`/jeste/${jeste._id}/edit`">Edit</v-btn>
+							<v-spacer></v-spacer>
+							<v-btn icon @click="show = !show">
+								<v-icon>{{ show ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon>
+							</v-btn>
+						</v-card-actions>
+
+					</v-card>
+				</v-flex>
+				<v-flex xs12 sm6>
+					<v-card hover height="100%">
+						<v-card-media :src="imgUrl" height="400px">
+							<v-container fill-height fluid pa-2>
+								<v-layout fill-height>
+									<v-flex xs12 align-end flexbox>
+										<!-- <span class="headline white--text" v-text="jeste.title"></span> -->
+									</v-flex>
+								</v-layout>
+							</v-container>
+						</v-card-media>
+
+					</v-card>
+				</v-flex>
+				<v-flex xs12>
+					<v-card hover>
+
+						<v-slide-y-transition>
+							<v-card-text v-show="show">
+								<GmapMap :center="position" v-if="jeste.destination_loc" :zoom="15" map-type-id="terrain" style="width: 100%; height: 300px">
+									<GmapMarker :position="position" :clickable="false" :draggable="true" @click="center=position" />
+								</GmapMap>
+							</v-card-text>
+						</v-slide-y-transition>
+					</v-card>
+
+				</v-flex>
+			</v-layout>
+		</v-container>
+		<!-- </v-card> -->
+	</v-layout>
+
 </template>
 
 <script>
 import { JESTE_GET, JESTE_GET_BY_ID } from '@/modules/JesteModule';
+import { USER_CONNECTED } from '@/modules/UserModule';
 export default {
 	name: 'jesteDetails',
 	data() {
@@ -66,12 +95,19 @@ export default {
 		},
 		position() {
 			if (this.jeste.destination_loc) {
-
 				return {
 					lat: +this.jeste.destination_loc.coordinates[0],
 					lng: +this.jeste.destination_loc.coordinates[1]
 				};
 			}
+		},
+		canEdit() {
+			return (
+				!this.jeste.ended_at &&
+				this.$store.getters[USER_CONNECTED] &&
+				this.$store.getters[USER_CONNECTED]._id ===
+					this.jeste.req_user_id
+			);
 		}
 	}
 };
@@ -79,6 +115,11 @@ export default {
 
 <style lang="scss" scoped>
 @import '../assets/styles/_vars.scss';
+.jeste-details-card {
+	justify-content: space-between;
+	flex-direction: column;
+	display: flex;
+}
 
 .jeste-details {
 	color: $mainColor;

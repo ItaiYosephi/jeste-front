@@ -47,7 +47,6 @@ function saveJeste(jeste) {
                 console.log(err);
             });
     } else {
-        jeste.created_at = Date.now()
         return axios.post(`${URL}`, jeste)
             .then(res => res.data);
     }
