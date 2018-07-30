@@ -113,33 +113,7 @@ export default {
 					this.tabs[1].jestesList = user.res_jestes
 				});
 		},
-		// loadReqJestes() {
-		// 	let jestes = [];
-		// 	this.user.jestes_req.forEach(jesteId => {
-		// 		this.$store
-		// 			.dispatch({ type: JESTE_GET_BY_ID, id: jesteId })
-		// 			.then(jeste => jestes.push(jeste));
-		// 	});
-		// 	this.reqJestes = jestes;
-		// },
-		// loadResJestes() {
-		// 	let jestes = [];
-		// 	this.user.jestes_res.forEach(jesteId => {
-		// 		this.$store
-		// 			.dispatch({ type: JESTE_GET_BY_ID, id: jesteId })
-		// 			.then(jeste => jestes.push(jeste));
-		// 	});
-		// 	this.resJestes = jestes;
-		// },
-		// loadJestes() {
-		// 	this.loadReqJestes();
-		// 	this.loadResJestes();
-		// 	console.log('Res', this.tabs);
 
-		// 	this.tabs[0].jestesList = this.reqJestes;
-		// 	this.tabs[1].jestesList = this.resJestes;
-		// 	this.displayTabs = true;
-		// }
 	},
 };
 </script>
