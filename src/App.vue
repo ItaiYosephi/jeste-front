@@ -32,10 +32,22 @@
 						<v-list-tile slot="activator">
 							<v-list-tile-title>{{user.details.firstName}} {{user.details.lastName}}</v-list-tile-title>
 						</v-list-tile>
-						<v-list-tile v-for="(subItem, idx) in userSubItems" :key="idx" :to="subItem.link" exact>
-							<v-list-tile-title v-text="subItem.title"></v-list-tile-title>
+						<v-list-tile :to="`/user/${user._id}`" excat>
+							<v-list-tile-title>Profile</v-list-tile-title>
 							<v-list-tile-action>
-								<v-icon v-text="subItem.icon"></v-icon>
+								<v-icon>account_circle</v-icon>
+							</v-list-tile-action>
+						</v-list-tile>
+						<v-list-tile to="/user/settings" excat>
+							<v-list-tile-title>Settings</v-list-tile-title>
+							<v-list-tile-action>
+								<v-icon>settings</v-icon>
+							</v-list-tile-action>
+						</v-list-tile>
+						<v-list-tile @click="logout">
+							<v-list-tile-title>Logout</v-list-tile-title>
+							<v-list-tile-action>
+								<v-icon>exit_to_app</v-icon>
 							</v-list-tile-action>
 						</v-list-tile>
 					</v-list-group>
@@ -63,15 +75,6 @@
 						@keyup.enter.native="search"
 						@click:prepend-inner="search">
 					</v-text-field>
-					<!-- <v-text-field
-					dark
-					color="white"
-					hide-details append-icon="search"
-					@keyup.enter.native="search"
-					@click:append="search"
-					placeholder="Search"
-					clearable>
-					</v-text-field> -->
 				</v-flex>
 				<!-- Top Menu Links -->
 				<v-toolbar-items class="hidden-xs-only">
@@ -80,8 +83,14 @@
 							{{ item.title }}
 						</v-btn>
 						<v-list v-if="user && index === 1">
-							<v-list-tile v-for="(subItem, index) in userSubItems" :key="index" :to="subItem.link" exact>
-								<v-list-tile-title>{{subItem.title}}</v-list-tile-title>
+							<v-list-tile :to="`/user/${user._id}`" excat>
+								<v-list-tile-title>Profile</v-list-tile-title>
+							</v-list-tile>
+							<v-list-tile to="/user/settings" excat>
+								<v-list-tile-title>Settings</v-list-tile-title>
+							</v-list-tile>
+							<v-list-tile @click="logout" excat>
+								<v-list-tile-title>Logout</v-list-tile-title>
 							</v-list-tile>
 						</v-list>
 					</v-menu>
@@ -121,7 +130,7 @@
 
 <script>
 import { EventBus, SNACK_MSG } from "@/services/EventBusService";
-import { USER_CHECK_LOGIN, USER_CONNECTED } from "@/modules/UserModule";
+import { USER_CHECK_LOGIN, USER_CONNECTED, USER_LOGOUT } from "@/modules/UserModule";
 
 export default {
   name: "app",
@@ -142,14 +151,8 @@ export default {
         { title: "Login", icon: "swap_horizontal_circle", link: "/login" },
         { title: "About", icon: "info", link: "/about" }
       ],
-      userSubItems: [
-        { title: "Profile", icon: "account_circle", link: "/user/" },
-        { title: "Settings", icon: "settings", link: "/user/settings" },
-        { title: "Logout", icon: "exit_to_app", link: "/login" }
-      ],
       searchValue: "",
-      userId: "",
-
+			
       snackbarDisplay: false,
       snackbarProps: {
         y: "top",
@@ -180,19 +183,30 @@ export default {
       this.snackbarProps.text = msg.text;
       this.snackbarProps.bgColor = (msg.bgColor) ? msg.bgColor : this.snackbarProps.bgColor;
       this.snackbarDisplay = true;
+		},
+		logout() {
+      let fName = this.$store.getters[USER_CONNECTED].details.firstName;
+      this.$store.dispatch(USER_LOGOUT).then(_ => {
+        EventBus.$emit(SNACK_MSG, { text: `Bey ${fName}`, bgColor: "info" });
+				console.log("Logged out successfuly");
+				this.$router.push('/');
+      });
     }
   },
   watch: {
     user() {
       if (this.user) {
-        this.menuItems[1].title =
-          this.user.details.firstName + " " + this.user.details.lastName;
-        this.menuItems[1].icon = "account_circle";
-        this.userSubItems[0].link += this.user._id;
+        this.menuItems[1] = {
+					title: this.user.details.firstName + " " + this.user.details.lastName,
+					link: '#',
+					icon: "account_circle"
+				};
       } else {
-        this.menuItems[1].title = "Login";
-        this.menuItems[1].icon = "swap_horizontal_circle";
-        this.userSubItems[0].link += "/user";
+				this.menuItems[1] = {
+					title: "Login",
+					link: '/login',
+					icon: "swap_horizontal_circle"
+				};
       }
 		},
 		snackbarDisplay() {
@@ -210,23 +224,6 @@ export default {
 	margin: 0 5px !important;
 	min-width: 55px;
 }
-// #app {
-//   font-family: "Avenir", Helvetica, Arial, sans-serif;
-//   -webkit-font-smoothing: antialiased;
-//   -moz-osx-font-smoothing: grayscale;
-//   text-align: center;
-//   color: #2c3e50;
-// }
-// #nav {
-//   a {
-//     font-weight: bold;
-//     color: #2c3e50;
-//     &.router-link-exact-active {
-//       color: #42b983;
-//     }
-//   }
-// }
-
 .moveInUp-enter-active {
   // transition: all 0.4s ease;
   transition: all 0.6s cubic-bezier(1, 0.5, 0.8, 1);

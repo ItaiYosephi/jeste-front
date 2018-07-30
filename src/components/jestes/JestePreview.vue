@@ -18,66 +18,55 @@
 </template>
 
 <script>
-import moment from 'moment';
+import moment from "moment";
 
 export default {
-	name: 'jestePreview',
-	props: {
-		jeste: Object
+  name: "jestePreview",
+  props: {
+    jeste: Object
   },
   mounted() {
     console.log(this.$refs.desc.scrollHeight);
     console.log(this.$refs.desc.offsetHeight);
-    
-
   },
-	computed: {
-		reqUser() {
-			return this.jeste.req_user.details;
-		}
-	},
-	filters: {
-		dateFormat(timestamp) {
-			return (
-				moment(+timestamp).fromNow() +
-				', (' +
-				moment(+timestamp).format('HH:mm:ss, DD/MM/YYYY') +
-				')'
-			);
-		}
-	}
+  computed: {
+    reqUser() {
+      return this.jeste.req_user.details;
+    }
+  },
+  filters: {
+    dateFormat(timestamp) {
+      return (
+        moment(+timestamp).fromNow() +", (" +moment(+timestamp).format("HH:mm:ss, DD/MM/YYYY") +")"
+      );
+    }
+  }
 };
 </script>
 
 <style lang="scss" scoped>
-@import '../../assets/styles/_vars.scss';
+@import "../../assets/styles/_vars.scss";
 
 .jeste-card-wrapper {
-	max-width: 400px;
+  max-width: 400px;
 }
-.jeste-card-wrapper .description {
-  //  white-space: no-wrap; 
-  //   overflow: hidden;
-  //   text-overflow: ellipsis;
-  //   height: 150px;
-  
-}
-@mixin multiLineEllipsis($lineHeight: 1.2em, $lineCount: 1, $bgColor: white){
+
+@mixin multiLineEllipsis($lineHeight: 1.2em, $lineCount: 1, $bgColor: white) {
   overflow: hidden;
   position: relative;
   line-height: $lineHeight;
-  max-height: $lineHeight * $lineCount; 
+  max-height: $lineHeight * $lineCount;
   text-align: justify;
   margin-right: -1em;
   padding-right: 1em;
   &:before {
-    content: '...';
+    content: "...";
     position: absolute;
     right: 0;
     bottom: 0;
   }
   &:after {
-    content: '';
+    content: "";
     position: absolute;
     right: 0;
     width: 1em;
@@ -88,13 +77,18 @@ export default {
 }
 
 .block-with-text {
-  @include multiLineEllipsis($lineHeight: 1.2em, $lineCount: 5, $bgColor: white);  
-  }
-  
-  .jeste-card {
-	flex-direction: column;
-	display: flex;
+  @include multiLineEllipsis(
+    $lineHeight: 1.2em,
+    $lineCount: 5,
+    $bgColor: white
+  );
 }
+
+.jeste-card {
+  display: flex;
+  flex-direction: column;
+}
+
 .actions {
   margin-top: auto;
 }
