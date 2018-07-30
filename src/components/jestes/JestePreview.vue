@@ -1,6 +1,6 @@
 <template>
-		<v-flex xl3 class="jeste-card-wrapper" >
-        <v-card class="jeste-card" tile hover :to="'/jeste/' + jeste._id">
+		<v-flex xl3 class="jeste-card-wrapper">
+        <v-card class="jeste-card" tile hover :to="'/jeste/' + jeste._id" height="100%">
             <v-card-media :src="jeste.imgs_url[0]" height="200px"></v-card-media>
 			<v-card-title primary-title>
 				<div>

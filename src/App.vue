@@ -44,13 +44,20 @@
 			</v-navigation-drawer>
 
 			<!-- Top Menu Toolbar -->
-			<v-toolbar app>
+			<v-toolbar app color="primary">
 				<v-toolbar-side-icon class="hidden-sm-and-up" @click.stop="drawer = !drawer">
 				</v-toolbar-side-icon>
 				<v-toolbar-title>Jeste</v-toolbar-title>
 				<v-spacer class="hidden-xs-only"></v-spacer>
 				<v-flex mx-1>
-					<v-text-field v-model="searchValue" @keyup.enter.native="search" hide-details append-icon="search" @click:append="search" placeholder="Search" clearable>
+					<v-text-field
+					color="accent"
+					v-model="searchValue"
+					hide-details append-icon="search"
+					@keyup.enter.native="search"
+					@click:append="search"
+					placeholder="Search"
+					clearable>
 					</v-text-field>
 				</v-flex>
 				<!-- Top Menu Links -->

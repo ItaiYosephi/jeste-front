@@ -16,7 +16,17 @@ Vue.use(VueGoogleMaps, {
 	}
 });
 
-Vue.use(Vuetify);
+Vue.use(Vuetify, {
+	theme: {
+		primary: "#2979FF",
+		secondary: "#F57C00",
+		accent: "#0D47A1",
+		error: "#f44336",
+		warning: "#ffeb3b",
+		info: "#2196f3",
+		success: "#4caf50"
+	}
+})
 
 axios.defaults.withCredentials = true;
 Vue.config.productionTip = false;

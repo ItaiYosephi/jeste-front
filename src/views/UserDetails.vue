@@ -44,15 +44,34 @@
 					{{tab.name}}
 				</v-tab>
 				<v-tab-item v-for="(list, i) in tabs" :key="i">
-					<v-card flat>
-						<v-expansion-panel>
+					<v-card flat v-if="list.jestesList.length">
+						<v-expansion-panel popout >
 							<v-expansion-panel-content v-for="(jeste, idx) in list.jestesList" :key="idx">
-								<div slot="header">{{jeste.title}}</div>
+								<div slot="header" class="jeste-title">{{jeste.title}}</div>
 								<v-card>
-									<v-card-text>{{jeste.description}}</v-card-text>
+									<v-card-title>
+										<div>
+											Address: <div>{{jeste.formatted_address}}</div>
+										</div>
+									</v-card-title>
+									<v-card-text>
+										Description: {{jeste.description}}
+										<br/>
+										Keywords:
+										<v-chip label outline v-for="keyword in jeste.keywords" :key="keyword" color="info">{{keyword}}</v-chip>
+									</v-card-text>
+									<v-card-actions>
+										<v-spacer></v-spacer>
+          					<v-btn flat color="blue" :to="`/jeste/${jeste._id}`">more details</v-btn>
+        					</v-card-actions>
 								</v-card>
 							</v-expansion-panel-content>
 						</v-expansion-panel>
+					</v-card>
+					<v-card flat v-else>
+							<v-card-text>
+								No Relevant Jestes
+							</v-card-text>
 					</v-card>
 				</v-tab-item>
 			</v-tabs>
@@ -67,28 +86,31 @@ import { JESTE_GET_BY_ID } from "@/modules/JesteModule";
 
 export default {
   name: "userDetails",
-  created() {
-		this.loadJestes();
-	},
+  mounted() {
+    if (this.user) this.loadJestes();
+  },
   data() {
     return {
       userId: this.$route.params.id,
-      user: this.$store.getters[USER_CONNECTED],
       reqJestes: null,
       resJestes: null,
       tabs: [
-        { name: "asked jestes", jestesList: "" },
-        { name: "made jestes", jestesList: "" }
+        { name: "asked jestes", jestesList: [] },
+        { name: "made jestes", jestesList: [] }
       ],
       displayTabs: false
     };
-  },
+	},
+	computed: {
+		user() {
+			return this.$store.getters[USER_CONNECTED];
+		}
+	},
   methods: {
     loadReqJestes() {
       let jestes = [];
       this.user.jestes_req.forEach(jesteId => {
-        this.$store
-          .dispatch({ type: JESTE_GET_BY_ID, id: jesteId })
+        this.$store.dispatch({ type: JESTE_GET_BY_ID, id: jesteId })
           .then(jeste => jestes.push(jeste));
       });
       this.reqJestes = jestes;
@@ -96,15 +118,16 @@ export default {
     loadResJestes() {
       let jestes = [];
       this.user.jestes_res.forEach(jesteId => {
-        this.$store
-          .dispatch({ type: JESTE_GET_BY_ID, id: jesteId })
+        this.$store.dispatch({ type: JESTE_GET_BY_ID, id: jesteId })
           .then(jeste => jestes.push(jeste));
       });
       this.resJestes = jestes;
     },
     loadJestes() {
       this.loadReqJestes();
-      this.loadResJestes();
+			this.loadResJestes();
+			console.log('Res', this.tabs);
+			
       this.tabs[0].jestesList = this.reqJestes;
       this.tabs[1].jestesList = this.resJestes;
       this.displayTabs = true;
@@ -113,7 +136,7 @@ export default {
   watch: {
     user() {
       if (this.user) {
-				this.loadJestes();
+        this.loadJestes();
       }
     }
   }
@@ -139,5 +162,10 @@ export default {
 }
 .tabs-wrapper {
   align-self: stretch;
+}
+
+.jeste-title {
+	text-transform: capitalize;
+	font-size: 1.35em;
 }
 </style>
