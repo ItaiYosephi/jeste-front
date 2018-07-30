@@ -4,17 +4,10 @@
 		<v-form ref="form" v-model="valid" lazy-validation>
 			<v-text-field v-model="jesteToSave.title" label="title" required></v-text-field>
 			<v-text-field v-model="jesteToSave.description" label="description" required></v-text-field>
-			<v-text-field class="autocomplete" label="goomaps test" required ref="autocomplete" v-model="jesteToSave.address_str"></v-text-field>
-			<!-- <vuetify-google-autocomplete :id="id" append-icon="search" v-model="jesteToSave.address_str" :disabled="false" :enable-geolocation="true" placeholder="Street Address" required :rules="addressRules" v-on:placechanged="getAddressData">
-			</vuetify-google-autocomplete> -->
-			<!-- <input ref="autocomplete" 
-				placeholder="Search" 
-				class="search-location"
-				onfocus="value = ''" 
-				type="text" /> -->
+			<v-text-field @keyup.enter.prevent="" label="goomaps test" required ref="autocomplete" append-icon="search" v-model="jesteToSave.formatted_address" :rules="addressRules"></v-text-field>
+
 			<ComboBox v-model="jesteToSave.keywords"></ComboBox>
 
-			address:{{address}}
 
 			<v-btn :disabled="!valid" @click.prevent="submit">
 				submit
@@ -45,19 +38,18 @@ export default {
 			valid: true,
 
 			jesteToSave: {},
-
+			currPlace: null,
 			addressRules: [
 				v => {
 					return !!v || 'Address is required';
 				},
 				v => {
 					return (
-						(!!v && !!this.address) || 'Please type a valid address'
+						(!!v && this.currPlace && this.currPlace.formatted_address === this.$refs.autocomplete.value) || 'Please type a valid address'
 					);
 				}
 			],
 
-			address: {},
 			id: 'maps',
 			labelText: 'Search Address',
 			placeholderText: '',
@@ -83,15 +75,14 @@ export default {
 		});
 
 		if (navigator.geolocation) {
-			let _this = this
-			
-			
+			let _this = this;
+
 			navigator.geolocation.getCurrentPosition(function(position) {
 				var geolocation = {
 					lat: position.coords.latitude,
 					lng: position.coords.longitude
 				};
-				
+
 				var circle = new window.google.maps.Circle({
 					center: geolocation,
 					radius: position.coords.accuracy
@@ -100,26 +91,26 @@ export default {
 				_this.autocomplete.setBounds(circle.getBounds());
 			});
 		}
+		this.autocomplete.addListener('place_changed', () => {
+			this.currPlace = this.autocomplete.getPlace();
+			this.jesteToSave.address_components = this.currPlace.address_components;
+			this.jesteToSave.formatted_address = this.currPlace.formatted_address;
+			this.jesteToSave.destination_loc.coordinates.splice(0,1,+this.currPlace.geometry.location.lat());
+			this.jesteToSave.destination_loc.coordinates.splice(1,1,+this.currPlace.geometry.location.lng())
+			console.log(this.jesteToSave)
+			})
 	},
 	methods: {
 		getJeste(id) {
 			this.$store.dispatch({ type: JESTE_GET_BY_ID, id }).then(jeste => {
 				this.jesteToSave = JSON.parse(JSON.stringify(jeste));
+				this.currPlace = {
+					formatted_address: jeste.formatted_address
+				}
 			});
 		},
 		submit() {
 			if (this.$refs.form.validate()) {
-				this.jesteToSave.destination_loc.coordinates.splice(
-					0,
-					1,
-					+this.address.latitude
-				);
-				this.jesteToSave.destination_loc.coordinates.splice(
-					1,
-					1,
-					this.address.longitude
-				);
-				this.jesteToSave.address = this.address;
 
 				// Native form submission is not yet supported
 				this.$store.dispatch({
@@ -131,9 +122,6 @@ export default {
 		clear() {
 			this.$refs.form.reset();
 		},
-		getAddressData(addressData, placeResultData) {
-			this.address = addressData;
-		}
 	},
 
 	computed: {
