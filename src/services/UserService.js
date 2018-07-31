@@ -28,21 +28,26 @@ function getUserByID(userId) {
 //         .catch(err => err);
 // }
 
-// function saveUser(user) {
-//     if (user._id) {
-//         return axios.put(`${URL}/${user}`, user)
-//             .then(res => res.data)
-//             .catch(err => {
-//                 console.warn('Failed to update user');
-//                 console.log(err);
-//             });
-//     } else {
-//         return axios.post(`${URL}`, user)
-//             .then(res => res.data);
-//     }
-// }
+function saveUser(user) {
+    if (user._id) {
+        return axios.put(`${URL}/${user}`, user)
+            .then(res => res.data)
+            .catch(err => {
+                console.warn('Failed to update user');
+                console.log(err);
+            });
+    } else {
+        return axios.post(`${URL}`, user)
+            .then(res => res.data)
+            .catch(err => {
+                console.warn('Failed to add user');
+                console.log(err);
+            });
+    }
+}
 
 export default {
     query,
-    getUserByID
+    getUserByID,
+    saveUser
 }

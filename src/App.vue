@@ -156,7 +156,7 @@ export default {
       drawer: null,
       menuItems: [
         { title: "Home", icon: "home", link: "/" },
-        { title: "Login", icon: "swap_horizontal_circle", link: "/login" },
+				{ title: "Signup \\ Login", icon: "swap_horizontal_circle", link: "/login" },
         { title: "About", icon: "info", link: "/about" }
       ],
       searchValue: "",
