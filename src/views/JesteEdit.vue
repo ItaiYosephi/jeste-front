@@ -21,7 +21,16 @@
 						</v-text-field>
 
 						<ComboBox v-model="jesteToSave.keywords"></ComboBox>
-						{{position}}
+						<v-flex xs12 class="text-xs-center text-sm-center text-md-center text-lg-center">
+					    <img :src="imageUrl" height="150" v-if="imageUrl"/>
+					    <v-text-field box label="Select Image" @click='pickFile' v-model='imageName' append-icon='attach_file' @focus="pickFile" @click:append="pickFile"></v-text-field>
+					    <input
+						    type="file"
+						    style="display: none"
+						    ref="image"
+						    accept="image/*"
+						    @change="onFilePicked">
+				    </v-flex>
 						<v-card-text v-show="show">
 							<GmapMap :center="position" v-if="jesteToSave" :zoom="15" map-type-id="terrain" style="width: 100%; height: 300px">
 								<GmapMarker :position="position" :clickable="false" :draggable="true" @click="center=position" />
@@ -32,9 +41,7 @@
 						<v-btn @click="$router.go(-1)" color="secondary">cancel</v-btn>
 						<v-btn @click="clear" color="secondary">clear</v-btn>
 						<v-spacer></v-spacer>
-						<v-btn :disabled="!valid" @click.prevent="submit" color="primary">
-							submit
-						</v-btn>
+						<v-btn :disabled="!valid" @click.prevent="submit" color="primary">submit</v-btn>
 					</v-card-actions>
 				</v-form>
 			</v-card>
@@ -45,7 +52,13 @@
 
 <script>
 import { EventBus, SNACK_MSG } from "@/services/EventBusService";
-import { JESTE_EMPTY, JESTE_GET_BY_ID, JESTE_GET, JESTE_SAVE } from "@/modules/JesteModule";
+import {
+  JESTE_EMPTY,
+  JESTE_GET_BY_ID,
+  JESTE_GET,
+  JESTE_SAVE,
+  JESTE_UPLOAD_IMG
+} from "@/modules/JesteModule";
 import ComboBox from "@/components/ComboBox";
 // import {google} from 'vue2-google-maps'
 
@@ -90,7 +103,11 @@ export default {
       id: "maps",
       labelText: "Search Address",
       placeholderText: "",
-      types: ["address"]
+      types: ["address"],
+      // Image upload
+      imageName: "",
+      imageUrl: "",
+      imageFile: ""
     };
   },
   computed: {
@@ -98,10 +115,13 @@ export default {
       return !!this.jesteToSave && !!this.jesteToSave._id;
     },
     position() {
-      if (!this.jesteToSave ||
+      if (
+        !this.jesteToSave ||
         !this.jesteToSave.destination_loc ||
         !this.jesteToSave ||
-        !this.jesteToSave.destination_loc) return { lat: 0, lng: 0 };
+        !this.jesteToSave.destination_loc
+      )
+        return { lat: 0, lng: 0 };
       return {
         lat: +this.jesteToSave.destination_loc.coordinates[0],
         lng: +this.jesteToSave.destination_loc.coordinates[1]
@@ -115,28 +135,63 @@ export default {
     getJeste(id) {
       this.$store.dispatch({ type: JESTE_GET_BY_ID, id }).then(jeste => {
         this.jesteToSave = JSON.parse(JSON.stringify(jeste));
-        this.currPlace = {formatted_address: jeste.formatted_address};
+        this.currPlace = { formatted_address: jeste.formatted_address };
       });
+    },
+    pickFile() {
+      this.$refs.image.click();
+    },
+    onFilePicked(e) {
+      const files = e.target.files;
+      if (files[0] !== undefined) {
+        this.imageName = files[0].name;
+        if (this.imageName.lastIndexOf(".") <= 0) {
+          return;
+        }
+        const fr = new FileReader();
+        fr.readAsDataURL(files[0]);
+        fr.addEventListener("load", () => {
+          this.imageUrl = fr.result;
+          this.imageFile = files[0]; // this is an image file that can be sent to server...
+        });
+      } else {
+        this.imageName = "";
+        this.imageFile = "";
+        this.imageUrl = "";
+      }
     },
     submit() {
       if (this.$refs.form.validate()) {
         // Native form submission is not yet supported
-		this.$store.dispatch({ type: JESTE_SAVE, jesteToSave: this.jesteToSave })
-			.then(_ => {
-				EventBus.$emit(SNACK_MSG, { text: `Jeste Saved Successfuly`, bgColor: "success" });
-				this.$router.push('/jeste');
-			})
-			.catch(err => {
-            	EventBus.$emit(SNACK_MSG, { text: `Error, Couldn't Save Jeste`, bgColor: "error" });
-			})
+        this.$store.dispatch({ type: JESTE_UPLOAD_IMG, image: this.imageFile })
+          .then(img => {
+            if (img) this.jesteToSave.img = img;
+            this.$store.dispatch({ type: JESTE_SAVE, jesteToSave: this.jesteToSave })
+              .then(_ => {
+                EventBus.$emit(SNACK_MSG, {
+                  text: `Jeste Saved Successfuly`,
+                  bgColor: "success"
+                });
+                this.$router.push("/jeste");
+              })
+              .catch(err => {
+                EventBus.$emit(SNACK_MSG, {
+                  text: `Error, Couldn't Save Jeste`,
+                  bgColor: "error"
+                });
+              });
+          });
       }
     },
     clear() {
       this.$refs.form.reset();
-	},
+    },
     initGoogle() {
-      var el = this.$refs.autocomplete.$el.children[0].children[0].children[0].children[1];
-      this.autocomplete = new this.google.maps.places.Autocomplete(el, {types: ["geocode"]});
+      var el = this.$refs.autocomplete.$el.children[0].children[0].children[0]
+        .children[1];
+      this.autocomplete = new this.google.maps.places.Autocomplete(el, {
+        types: ["geocode"]
+      });
       //   console.log("auto", this.autocomplete);
       //   console.log(google);
       if (navigator.geolocation) {
@@ -157,8 +212,16 @@ export default {
         this.currPlace = this.autocomplete.getPlace();
         this.jesteToSave.address_components = this.currPlace.address_components;
         this.jesteToSave.formatted_address = this.currPlace.formatted_address;
-        this.jesteToSave.destination_loc.coordinates.splice(0, 1, +this.currPlace.geometry.location.lat());
-        this.jesteToSave.destination_loc.coordinates.splice(1, 1, +this.currPlace.geometry.location.lng());
+        this.jesteToSave.destination_loc.coordinates.splice(
+          0,
+          1,
+          +this.currPlace.geometry.location.lat()
+        );
+        this.jesteToSave.destination_loc.coordinates.splice(
+          1,
+          1,
+          +this.currPlace.geometry.location.lng()
+        );
         // console.log(this.jesteToSave);
       });
     }
@@ -168,5 +231,4 @@ export default {
 
 <style lang="scss" scoped>
 @import "../assets/styles/_helpers.scss";
-
 </style>

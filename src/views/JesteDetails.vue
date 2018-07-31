@@ -1,6 +1,6 @@
 <template>
 	<v-container fluid grid-list-md>
-		<v-layout row wrap fill-height>
+		<v-layout row wrap fill-height v-if="jeste">
 
 			<v-flex xs12 sm6>
 				<v-card height="100%" class="jeste-details-card" hover>
@@ -24,14 +24,14 @@
 
 			<v-flex xs12 sm6>
 				<v-card hover height="100%">
-					<v-card-media :src="imgUrl" height="400px">
-						<v-container fill-height fluid pa-2>
+					<v-card-media v-if="jeste.img" :src="jeste.img.url" height="400px">
+						<!-- <v-container fill-height fluid pa-2>
 							<v-layout fill-height>
 								<v-flex xs12 align-end flexbox>
-									<!-- <span class="headline white--text" v-text="jeste.title"></span> -->
+									<span class="headline white--text" v-text="jeste.title"></span>
 								</v-flex>
 							</v-layout>
-						</v-container>
+						</v-container> -->
 					</v-card-media>
 				</v-card>
 			</v-flex>
@@ -54,7 +54,6 @@
 					</v-card-text>
 					<v-divider></v-divider>
 					<v-card-actions>
-
 						<v-btn color="green darken-1" flat="flat" @click="dialog = false">
 							Cancel
 						</v-btn>
@@ -73,82 +72,67 @@
 </template>
 
 <script>
-import {
-	JESTE_GET,
-	JESTE_GET_BY_ID,
-	JESTE_DELETE
-} from '@/modules/JesteModule';
-import { USER_CONNECTED } from '@/modules/UserModule';
-import { EventBus, SNACK_MSG } from '@/services/EventBusService';
+import { EventBus, SNACK_MSG } from "@/services/EventBusService";
+import { JESTE_GET, JESTE_GET_BY_ID, JESTE_DELETE } from "@/modules/JesteModule";
+import { USER_CONNECTED } from "@/modules/UserModule";
 
 export default {
-	name: 'jesteDetails',
-	data() {
-		return {
-			jeste: {},
-			dialog: false
-		};
-	},
-	created() {
-		this.getJeste();
-	},
-	methods: {
-		getJeste() {
-			let id = this.$route.params.id;
-			let jeste = this.$store.getters[JESTE_GET](id);
-			if (!jeste) {
-				this.$store
-					.dispatch({ type: JESTE_GET_BY_ID, id })
-					.then(jeste => (this.jeste = jeste));
-			} else {
-				this.jeste = jeste;
-			}
-		},
-		deleteJeste() {
-			this.dialog = false;
-			this.$store
-				.dispatch({ type: JESTE_DELETE, id: this.jeste._id })
-				.then(_ => {
-					EventBus.$emit(SNACK_MSG, {
-						text: `Jeste Deleted Successfully`,
-						bgColor: 'success'
-					});
-					this.$router.push('/');
-				});
-		}
-	},
-	computed: {
-		imgUrl() {
-			if (this.jeste && this.jeste.imgs_url && this.jeste.imgs_url[0])
-				return this.jeste.imgs_url[0];
-			else return '';
-		},
-		position() {
-			if (this.jeste.destination_loc) {
-				return {
-					lat: +this.jeste.destination_loc.coordinates[0],
-					lng: +this.jeste.destination_loc.coordinates[1]
-				};
-			}
-		},
-		canEdit() {
-			return (
-				!this.jeste.ended_at &&
-				this.$store.getters[USER_CONNECTED] &&
-				this.$store.getters[USER_CONNECTED]._id ===
-					this.jeste.req_user_id
-			);
-		}
-	}
+  name: "jesteDetails",
+  data() {
+    return {
+      jeste: {},
+      dialog: false
+    };
+  },
+  created() {
+    this.getJeste();
+  },
+  methods: {
+    getJeste() {
+      let id = this.$route.params.id;
+      let jeste = this.$store.getters[JESTE_GET](id);
+      if (!jeste) {
+        this.$store.dispatch({ type: JESTE_GET_BY_ID, id })
+          .then(jeste => (this.jeste = jeste));
+      } else {
+        this.jeste = jeste;
+      }
+    },
+    deleteJeste() {
+      this.dialog = false;
+      this.$store
+        .dispatch({ type: JESTE_DELETE, id: this.jeste._id })
+        .then(_ => {
+          EventBus.$emit(SNACK_MSG, { text: `Jeste Deleted Successfully`, bgColor: "success" });
+          this.$router.push("/");
+        });
+    }
+  },
+  computed: {
+    position() {
+      if (this.jeste.destination_loc) {
+        return {
+          lat: +this.jeste.destination_loc.coordinates[0],
+          lng: +this.jeste.destination_loc.coordinates[1]
+        };
+      }
+    },
+    canEdit() {
+      return ( !this.jeste.ended_at &&
+        this.$store.getters[USER_CONNECTED] &&
+        this.$store.getters[USER_CONNECTED]._id === this.jeste.req_user_id );
+    }
+  }
 };
 </script>
 
 <style lang="scss" scoped>
-@import '../assets/styles/_vars.scss';
+@import "../assets/styles/_vars.scss";
 
 .jeste-details-card {
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
+
 </style>

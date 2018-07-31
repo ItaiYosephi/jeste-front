@@ -1,6 +1,7 @@
 'use strict';
 
 import JesteService from '@/services/JesteService';
+import ImgUploadService from '@/services/ImgUploadService';
 
 export const JESTE_ADD = 'jeste/mutations/addJeste';
 export const JESTE_UPDATE = 'jeste/mutations/updateJeste';
@@ -11,11 +12,14 @@ export const JESTE_SAVE = 'jeste/jesteSave';
 export const JESTE_DELETE = 'jeste/jesteDelete';
 
 export const JESTE_GET_BY_ID = 'jeste/actions/getJesteById';
+export const JESTE_UPLOAD_IMG = 'jeste/actions/uploadJesteImg';
 
 export const JESTE_GET = 'jeste/getters/getJeste';
 export const JESTES_TO_DISPLAY = 'jeste/getters/jestesToDisplay';
 export const JESTE_EMPTY = 'jeste/getters/emptyJeste';
-import {USER_CONNECTED} from './UserModule'
+
+import { USER_CONNECTED } from './UserModule'
+import { rejects } from 'assert';
 
 export default {
     state: {
@@ -24,8 +28,6 @@ export default {
             coords: '',
             txt: '',
             maxDistance: 100000,
-            
-
         }
     },
     mutations: {
@@ -66,30 +68,31 @@ export default {
             // TODO: Check the fields and add/remove/edit by needs
             return {
                 from_loc: '',
-                destination_loc:  {"type": "Point",
-                coordinates: [
-                  0,
-                  0
-                ]},
+                destination_loc: {
+                    "type": "Point",
+                    coordinates: [
+                        0,
+                        0
+                    ]
+                },
                 ended_at: null,
                 req_user_id: null,
                 res_user_id: null,
                 created_at: null,
-                price: '',
-                description: '',
-                keywords: [],
-                imgs_url: [],
-                time_frame: {from: '', until: ''},
                 title: '',
+                description: '',
+                price: '',
                 address_components: null,
                 formatted_address: '',
+                time_frame: { from: '', until: '' },
+                keywords: [],
                 status: 0,
             }
         },
     },
     actions: {
         [JESTES_LOAD](context) {
-            
+
             // filterBy.coords = context.rootState.UserModule.state.currLocation
             return JesteService.query(context.state.filterBy)
                 .then(jestes => {
@@ -101,17 +104,21 @@ export default {
             return JesteService.getJesteByID(id)
                 .then(jeste => jeste)
         },
+        [JESTE_UPLOAD_IMG](context, { image }) {
+            if (!image) return '';
+            return ImgUploadService.uploadImg(image)
+                .then(image => image)
+        },
         [JESTE_SAVE](context, { jesteToSave }) {
             // if (!context.getters[IS_ADMIN]) return Promise.reject('No Permissions');
             const isEdit = !!jesteToSave._id;
-            if (!isEdit) jesteToSave.req_user_id =  context.getters[USER_CONNECTED]._id;
+            if (!isEdit) jesteToSave.req_user_id = context.getters[USER_CONNECTED]._id
             return JesteService.saveJeste(jesteToSave)
                 .then(jeste => {
                     if (isEdit) context.commit({ type: JESTE_UPDATE, jeste })
                     else context.commit({ type: JESTE_ADD, jeste })
                     return jeste;
                 })
-                .catch(err => err)
         },
         [JESTE_DELETE](context, { id }) {
             // if (!context.getters[IS_ADMIN]) return Promise.reject('No Permissions');
