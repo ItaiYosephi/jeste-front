@@ -68,8 +68,8 @@ export default {
                 from_loc: '',
                 destination_loc:  {"type": "Point",
                 coordinates: [
-                  0,
-                  0
+                  null,
+                  null
                 ]},
                 ended_at: null,
                 req_user_id: null,
