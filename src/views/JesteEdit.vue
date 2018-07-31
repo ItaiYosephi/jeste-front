@@ -1,24 +1,16 @@
 <template>
-	<v-layout align-center justify-center>
-		<v-flex class="container-wrapper">
-			<v-card grow>
-				<v-toolbar color="primary" class="white--text" flat>
-					<v-toolbar-title>{{isEdit? 'Edit': 'Add'}} Jeste</v-toolbar-title>
-				</v-toolbar>
-				<v-form ref="form" v-model="valid" lazy-validation>
-					<v-card-text>
-						<v-text-field box v-model="jesteToSave.title" label="Title" required></v-text-field>
-						<v-textarea box v-model="jesteToSave.description" label="Description" hint="Few words about the jeste" required></v-textarea>
-						<v-text-field
-              box
-							v-model="jesteToSave.formatted_address"
-							ref="autocomplete"
-							label="Street"
-							@keyup.enter.prevent
-							append-icon="search" 
-							:rules="addressRules"
-							required>
-						</v-text-field>
+  <v-layout align-center justify-center>
+    <v-flex class="container-wrapper">
+      <v-card grow>
+        <v-toolbar color="primary" class="white--text" flat>
+          <v-toolbar-title>{{isEdit? 'Edit': 'Add'}} Jeste</v-toolbar-title>
+        </v-toolbar>
+        <v-form ref="form" v-model="valid" lazy-validation>
+          <v-card-text>
+            <v-text-field box v-model="jesteToSave.title" label="Title" required></v-text-field>
+            <v-textarea box v-model="jesteToSave.description" label="Description" hint="Few words about the jeste" required></v-textarea>
+            <v-text-field box v-model="jesteToSave.formatted_address" ref="autocomplete" label="Street" @keyup.enter.prevent append-icon="search" :rules="addressRules" required>
+            </v-text-field>
 
 						<ComboBox v-model="jesteToSave.keywords"></ComboBox>
 						<v-flex xs12 class="text-xs-center text-sm-center text-md-center text-lg-center">
@@ -52,13 +44,8 @@
 
 <script>
 import { EventBus, SNACK_MSG } from "@/services/EventBusService";
-import {
-  JESTE_EMPTY,
-  JESTE_GET_BY_ID,
-  JESTE_GET,
-  JESTE_SAVE,
-  JESTE_UPLOAD_IMG
-} from "@/modules/JesteModule";
+import { JESTE_EMPTY, JESTE_GET_BY_ID, JESTE_GET, JESTE_SAVE, JESTE_UPLOAD_IMG } from "@/modules/JesteModule";
+import { GET_USER_LOCATION } from "@/modules/UserModule";
 import ComboBox from "@/components/ComboBox";
 // import {google} from 'vue2-google-maps'
 
@@ -115,17 +102,17 @@ export default {
       return !!this.jesteToSave && !!this.jesteToSave._id;
     },
     position() {
-      if (
-        !this.jesteToSave ||
-        !this.jesteToSave.destination_loc ||
-        !this.jesteToSave ||
-        !this.jesteToSave.destination_loc
-      )
-        return { lat: 0, lng: 0 };
-      return {
-        lat: +this.jesteToSave.destination_loc.coordinates[0],
-        lng: +this.jesteToSave.destination_loc.coordinates[1]
-      };
+      let position = { lat: 0, lng: 0 };
+      if (!this.isEdit && this.$store.getters[GET_USER_LOCATION].lat) {
+        position = this.$store.getters[GET_USER_LOCATION];
+      }
+      if (!!this.jesteToSave.destination_loc.coordinates[0]) {
+        position = {
+          lat: +this.jesteToSave.destination_loc.coordinates[0],
+          lng: +this.jesteToSave.destination_loc.coordinates[1]
+        };
+      }
+      return position;
     },
     show() {
       return !!this.jesteToSave;
@@ -163,10 +150,12 @@ export default {
     submit() {
       if (this.$refs.form.validate()) {
         // Native form submission is not yet supported
-        this.$store.dispatch({ type: JESTE_UPLOAD_IMG, image: this.imageFile })
+        this.$store
+          .dispatch({ type: JESTE_UPLOAD_IMG, image: this.imageFile })
           .then(img => {
             if (img) this.jesteToSave.img = img;
-            this.$store.dispatch({ type: JESTE_SAVE, jesteToSave: this.jesteToSave })
+            this.$store
+              .dispatch({ type: JESTE_SAVE, jesteToSave: this.jesteToSave })
               .then(_ => {
                 EventBus.$emit(SNACK_MSG, {
                   text: `Jeste Saved Successfuly`,

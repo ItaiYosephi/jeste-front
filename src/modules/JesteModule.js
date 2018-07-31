@@ -68,13 +68,7 @@ export default {
             // TODO: Check the fields and add/remove/edit by needs
             return {
                 from_loc: '',
-                destination_loc: {
-                    "type": "Point",
-                    coordinates: [
-                        0,
-                        0
-                    ]
-                },
+                destination_loc: { "type": "Point", coordinates: [null, null] },
                 ended_at: null,
                 req_user_id: null,
                 res_user_id: null,
