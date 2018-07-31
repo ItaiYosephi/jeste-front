@@ -60,7 +60,7 @@
 				</v-toolbar-side-icon>
 				<v-toolbar-title class="title-logo" @click="$router.push('/')">Jeste</v-toolbar-title>
 				<v-spacer class="hidden-xs-only"></v-spacer>
-				<v-flex>
+				<v-flex class="search-wrapper">
 					<v-text-field
 						v-model="searchValue"
 						dark
@@ -76,7 +76,7 @@
 					</v-text-field>
 				</v-flex>
 				<!-- Top Menu Links -->
-				<v-toolbar-items  class="hidden-xs-only">
+				<v-toolbar-items class="hidden-xs-only btns-wrapper">
 					<v-menu mx-2 open-on-hover bottom offset-y v-for="(item, index) in menuItems" :key="index">
 						<v-btn flat slot="activator" :to="(item.link)" exact class="white--text">
 							{{ item.title }}
@@ -243,6 +243,10 @@ export default {
 	margin: 0 5px !important;
 	cursor: pointer;
 }
+.btns-wrapper {
+	margin-left: 8px;
+}
+
 .moveInUp-enter-active {
   // transition: all 0.4s ease;
   transition: all 0.6s cubic-bezier(1, 0.5, 0.8, 1);
