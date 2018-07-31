@@ -39,8 +39,8 @@ export default {
             const jesteIdx = state.jestes.findIndex(currJeste => currJeste._id === jeste._id);
             state.jestes.splice(jesteIdx, 1, jeste);
         },
-        [JESTE_DELETE](state, { jesteId }) {
-            state.jestes = state.jestes.filter(jeste => jeste._id !== jesteId);
+        [JESTE_DELETE](state, { id }) {
+            state.jestes = state.jestes.filter(jeste => jeste._id !== id);
         },
         [FILTER_UPDATE](state, { filter }) {
             if (filter.coords) {
@@ -82,7 +82,8 @@ export default {
                 time_frame: {from: '', until: ''},
                 title: '',
                 address_components: null,
-                formatted_address: ''
+                formatted_address: '',
+                status: 0,
             }
         },
     },
@@ -112,10 +113,10 @@ export default {
                 })
                 .catch(err => err)
         },
-        [JESTE_DELETE](context, { jesteId }) {
+        [JESTE_DELETE](context, { id }) {
             // if (!context.getters[IS_ADMIN]) return Promise.reject('No Permissions');
-            return JesteService.deleteJeste(jesteId)
-                .then(() => context.commit({ type: JESTE_DELETE, jesteId }))
+            return JesteService.deleteJeste(id)
+                .then(() => context.commit({ type: JESTE_DELETE, id }))
                 .catch(err => err)
         }
     }

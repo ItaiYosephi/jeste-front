@@ -6,18 +6,18 @@
 				<v-card height="100%" class="jeste-details-card" hover>
 					<v-card-title primary-title>
 						<div>
-							<div class="headline mb-2" >{{jeste.title}}</div>
+							<div class="headline mb-2">{{jeste.title}}</div>
 							<div class="grey--text mb-2">{{jeste.formatted_address}}</div>
-							<div >{{jeste.description}}</div>
+							<div>{{jeste.description}}</div>
 						</div>
 					</v-card-title>
 					<v-card-actions>
 						<v-btn flat color="blue" @click.prevent="">Jeste It!</v-btn>
 						<v-btn v-if="canEdit" flat :to="`/jeste/${jeste._id}/edit`">Edit</v-btn>
+						<v-btn v-if="canEdit" flat @click.stop="dialog = true">Delete</v-btn>
+
 						<v-spacer></v-spacer>
-						<v-btn icon @click="show = !show">
-							<v-icon>{{ show ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon>
-						</v-btn>
+
 					</v-card-actions>
 				</v-card>
 			</v-flex>
@@ -38,29 +38,55 @@
 
 			<v-flex xs12>
 				<v-card hover>
-					<v-slide-y-transition>
-						<v-card-text v-show="show">
-							<GmapMap :center="position" v-if="jeste.destination_loc" :zoom="15" map-type-id="terrain" style="width: 100%; height: 300px">
-								<GmapMarker :position="position" :clickable="false" :draggable="true" @click="center=position" />
-							</GmapMap>
-						</v-card-text>
-					</v-slide-y-transition>
+					<v-card-text>
+						<GmapMap :center="position" v-if="jeste.destination_loc" :zoom="15" map-type-id="terrain" style="width: 100%; height: 300px">
+							<GmapMarker :position="position" :clickable="false" :draggable="true" @click="center=position" />
+						</GmapMap>
+					</v-card-text>
 				</v-card>
 			</v-flex>
+			<v-dialog v-model="dialog" max-width="290" class="warning">
+				<v-card>
+					<v-card-title class="headline grey lighten-2">Are you sure?</v-card-title>
+
+					<v-card-text>
+						Once deleted, there's no way back...
+					</v-card-text>
+					<v-divider></v-divider>
+					<v-card-actions>
+
+						<v-btn color="green darken-1" flat="flat" @click="dialog = false">
+							Cancel
+						</v-btn>
+						<v-spacer></v-spacer>
+						<v-btn color="error" flat="flat" @click="deleteJeste()">
+							Delete
+						</v-btn>
+					</v-card-actions>
+				</v-card>
+			</v-dialog>
 
 		</v-layout>
+
 	</v-container>
+
 </template>
 
 <script>
-import { JESTE_GET, JESTE_GET_BY_ID } from '@/modules/JesteModule';
+import {
+	JESTE_GET,
+	JESTE_GET_BY_ID,
+	JESTE_DELETE
+} from '@/modules/JesteModule';
 import { USER_CONNECTED } from '@/modules/UserModule';
+import { EventBus, SNACK_MSG } from '@/services/EventBusService';
+
 export default {
 	name: 'jesteDetails',
 	data() {
 		return {
 			jeste: {},
-			show: true
+			dialog: false
 		};
 	},
 	created() {
@@ -71,16 +97,30 @@ export default {
 			let id = this.$route.params.id;
 			let jeste = this.$store.getters[JESTE_GET](id);
 			if (!jeste) {
-				this.$store.dispatch({ type: JESTE_GET_BY_ID, id })
+				this.$store
+					.dispatch({ type: JESTE_GET_BY_ID, id })
 					.then(jeste => (this.jeste = jeste));
 			} else {
 				this.jeste = jeste;
 			}
+		},
+		deleteJeste() {
+			this.dialog = false;
+			this.$store
+				.dispatch({ type: JESTE_DELETE, id: this.jeste._id })
+				.then(_ => {
+					EventBus.$emit(SNACK_MSG, {
+						text: `Jeste Deleted Successfully`,
+						bgColor: 'success'
+					});
+					this.$router.push('/');
+				});
 		}
 	},
 	computed: {
 		imgUrl() {
-			if (this.jeste && this.jeste.imgs_url && this.jeste.imgs_url[0]) return this.jeste.imgs_url[0];
+			if (this.jeste && this.jeste.imgs_url && this.jeste.imgs_url[0])
+				return this.jeste.imgs_url[0];
 			else return '';
 		},
 		position() {
@@ -92,7 +132,12 @@ export default {
 			}
 		},
 		canEdit() {
-			return !this.jeste.ended_at && this.$store.getters[USER_CONNECTED] && this.$store.getters[USER_CONNECTED]._id === this.jeste.req_user_id
+			return (
+				!this.jeste.ended_at &&
+				this.$store.getters[USER_CONNECTED] &&
+				this.$store.getters[USER_CONNECTED]._id ===
+					this.jeste.req_user_id
+			);
 		}
 	}
 };
@@ -106,5 +151,4 @@ export default {
 	flex-direction: column;
 	justify-content: space-between;
 }
-
 </style>
