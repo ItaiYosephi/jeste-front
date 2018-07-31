@@ -11,8 +11,8 @@
       </v-card-title>
       <v-card-actions class="actions">
         <v-spacer></v-spacer>
-        <v-btn outline color="primary" :to="'/jeste/' + jeste._id" >details</v-btn>
-        <v-btn outline color="primary" @click.prevent="">Jeste It!</v-btn>
+        <v-btn flat color="primary" :to="'/jeste/' + jeste._id" >details</v-btn>
+        <!-- <v-btn outline color="primary" @click.prevent="">Jeste It!</v-btn> -->
       </v-card-actions>
     </v-card>
   </v-flex>
@@ -63,7 +63,7 @@ export default {
   &:before {
     content: "...";
     position: absolute;
-    right: 0;
+    right: 3px;
     bottom: 0;
   }
   &:after {

@@ -1,6 +1,7 @@
 <template>
 	<v-container fluid grid-list-md>
 		<v-layout row wrap fill-height v-if="jeste">
+			<ChatCmp v-if="user" :req-user-id="jeste.req_user_id" :curr-user="user" class="popo"></ChatCmp>
 
 			<v-flex xs12 sm6>
 				<v-card height="100%" class="jeste-details-card" hover>
@@ -72,6 +73,7 @@
 </template>
 
 <script>
+import ChatCmp from '@/components/ChatCmp'
 import { EventBus, SNACK_MSG } from "@/services/EventBusService";
 import { JESTE_GET, JESTE_GET_BY_ID, JESTE_DELETE } from "@/modules/JesteModule";
 import { USER_CONNECTED } from "@/modules/UserModule";
@@ -85,8 +87,12 @@ export default {
     };
   },
   created() {
-    this.getJeste();
-  },
+		this.getJeste();
+		
+	},
+	mounted() {
+
+	},
   methods: {
     getJeste() {
       let id = this.$route.params.id;
@@ -119,9 +125,16 @@ export default {
     },
     canEdit() {
       return ( !this.jeste.ended_at &&
-        this.$store.getters[USER_CONNECTED] &&
-        this.$store.getters[USER_CONNECTED]._id === this.jeste.req_user_id );
-    }
+        this.user &&
+        this.user._id === this.jeste.req_user_id );
+		},
+		user() {
+
+			return this.$store.getters[USER_CONNECTED]
+		}
+  },
+  components: {
+	  ChatCmp
   }
 };
 </script>
@@ -134,5 +147,7 @@ export default {
   flex-direction: column;
   justify-content: space-between;
 }
-
+.popo {
+	z-index: 10000000000000;
+}
 </style>
