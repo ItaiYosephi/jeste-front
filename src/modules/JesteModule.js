@@ -44,8 +44,7 @@ export default {
         },
         [FILTER_UPDATE](state, { filter }) {
             if (filter.coords) {
-                console.log(filter.coords);
-                
+                console.log('FilterBy Coords:', filter.coords);
                 state.filterBy.coords = `${filter.coords.lat},${filter.coords.lng}`
             }
         }
@@ -102,13 +101,9 @@ export default {
                 .then(jeste => jeste)
         },
         [JESTE_SAVE](context, { jesteToSave }) {
-            console.log();
-            
             // if (!context.getters[IS_ADMIN]) return Promise.reject('No Permissions');
             const isEdit = !!jesteToSave._id;
-            if (!isEdit) jesteToSave.req_user_id =  context.getters[USER_CONNECTED]._id
-            console.log(jesteToSave);
-            
+            if (!isEdit) jesteToSave.req_user_id =  context.getters[USER_CONNECTED]._id;
             return JesteService.saveJeste(jesteToSave)
                 .then(jeste => {
                     if (isEdit) context.commit({ type: JESTE_UPDATE, jeste })

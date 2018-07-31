@@ -56,11 +56,11 @@
 
 			<!-- Top Menu Toolbar -->
 			<v-toolbar app color="primary" class="white--text">
-				<v-toolbar-side-icon class="hidden-sm-and-up" @click.stop="drawer = !drawer">
+				<v-toolbar-side-icon class="hidden-sm-and-up" @click.stop="drawer = !drawer" dark>
 				</v-toolbar-side-icon>
-				<v-toolbar-title class="title-logo">Jeste</v-toolbar-title>
+				<v-toolbar-title class="title-logo" @click="$router.push('/')">Jeste</v-toolbar-title>
 				<v-spacer class="hidden-xs-only"></v-spacer>
-				<v-flex mx-1>
+				<v-flex>
 					<v-text-field
 						v-model="searchValue"
 						dark
@@ -76,8 +76,8 @@
 					</v-text-field>
 				</v-flex>
 				<!-- Top Menu Links -->
-				<v-toolbar-items class="hidden-xs-only">
-					<v-menu open-on-hover bottom offset-y v-for="(item, index) in menuItems" :key="index">
+				<v-toolbar-items  class="hidden-xs-only">
+					<v-menu mx-2 open-on-hover bottom offset-y v-for="(item, index) in menuItems" :key="index">
 						<v-btn flat slot="activator" :to="(item.link)" exact class="white--text">
 							{{ item.title }}
 						</v-btn>
@@ -96,7 +96,7 @@
 				</v-toolbar-items>
 			</v-toolbar>
 
-			<v-content>
+			<v-content class="content">
 				<v-container fluid>
 				<transition name="moveInUp">
 					<router-view/>
@@ -124,7 +124,7 @@
     	</v-snackbar>
 			
 		</v-app>
-			location {{location}}
+			Location: {{location}}
 	</div>
 </template>
 
@@ -234,9 +234,14 @@ export default {
 </script>
 
 <style lang="scss">
+.content {
+	background: #e9e9e9;
+}
+
 .v-toolbar__title:not(:first-child) {
-	margin: 0 5px !important;
 	min-width: 55px;
+	margin: 0 5px !important;
+	cursor: pointer;
 }
 .moveInUp-enter-active {
   // transition: all 0.4s ease;

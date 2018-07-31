@@ -1,9 +1,11 @@
 <template>
-	<v-layout class="user-details" v-if="user" column justify-center align-center>
-		<v-flex>
-			<v-card justify-center>
-				<v-layout row>
-					<v-flex xl2>
+<v-container fluid grid-list-md>
+	<v-layout v-if="user" justify-center wrap>
+		<v-flex xs12 md6>
+			<v-card>
+						<v-toolbar color="primary" class="text--text" flat>
+							<v-toolbar-title>{{user.details.firstName}}'s Details</v-toolbar-title>
+						</v-toolbar>
 						<v-card-title primary-title>
 							<v-avatar>
 								<img src="https://vuetifyjs.com/apple-touch-icon-180x180.png" alt="avatar">
@@ -13,8 +15,6 @@
 								<span class="grey--text">Weizmen Street, Tel Aviv</span>
 							</div>
 						</v-card-title>
-					</v-flex>
-				</v-layout>
 				<v-card-text>
 					<v-list two-line>
 						<v-list-tile-content>
@@ -36,14 +36,14 @@
 			</v-card>
 		</v-flex>
 
-		<v-flex my-2 class="tabs-wrapper">
-			<v-tabs grow class="elevation-1">
-				<v-tab v-for="(tab, i) in tabs" :key="i">
+		<v-flex xs12 md6>
+			<v-tabs grow class="elevation-1" color="primary" slider-color="secondary" >
+				<v-tab v-for="(tab, i) in tabs" :key="i" class="text--text">
 					{{tab.name}}
 				</v-tab>
 				<v-tab-item v-for="(list, i) in tabs" :key="i">
 					<v-card flat v-if="list.jestesList.length">
-						<v-expansion-panel popout>
+						<v-expansion-panel >
 							<v-expansion-panel-content v-for="(jeste, idx) in list.jestesList" :key="idx">
 								<div slot="header" class="jeste-title">{{jeste.title}}</div>
 								<v-card>
@@ -56,11 +56,11 @@
 									<v-card-text>
 										Description: {{jeste.description}}
 										<br/> Keywords:
-										<v-chip label outline v-for="keyword in jeste.keywords" :key="keyword" color="info">{{keyword}}</v-chip>
+										<v-chip label outline v-for="keyword in jeste.keywords" :key="keyword" color="secondary">{{keyword}}</v-chip>
 									</v-card-text>
 									<v-card-actions>
 										<v-spacer></v-spacer>
-										<v-btn flat color="blue" :to="`/jeste/${jeste._id}`">more details</v-btn>
+										<v-btn outline color="primary" :to="`/jeste/${jeste._id}`">more details</v-btn>
 									</v-card-actions>
 								</v-card>
 							</v-expansion-panel-content>
@@ -75,76 +75,67 @@
 			</v-tabs>
 		</v-flex>
 	</v-layout>
-
+</v-container>
 </template>
 
 <script>
-import { USER_CONNECTED, USER_GET_BY_ID } from '@/modules/UserModule';
-import { JESTE_GET_BY_ID } from '@/modules/JesteModule';
+import { USER_CONNECTED, USER_GET_BY_ID } from "@/modules/UserModule";
+import { JESTE_GET_BY_ID } from "@/modules/JesteModule";
 
 export default {
-	name: 'userDetails',
-	created() {
-		this.getUser();
-	},
-	mounted() {
-
-	},
-	data() {
-		return {
-			userId: this.$route.params.id,
-			tabs: [
-				{ name: 'asked jestes', jestesList: [] },
-				{ name: 'made jestes', jestesList: [] }
-			],
-			displayTabs: false,
-			user: null
-		};
-	},
-	computed: {
-	
-	},
-	methods: {
-		getUser() {
-			this.$store.dispatch({type: USER_GET_BY_ID, id: this.userId})
-				.then(user => {
-					this.user = user;
-					this.tabs[0].jestesList = user.req_jestes
-					this.tabs[1].jestesList = user.res_jestes
-				});
-		},
-
-	},
+  name: "userDetails",
+  created() {
+    this.getUser();
+  },
+  mounted() {},
+  data() {
+    return {
+      userId: this.$route.params.id,
+      tabs: [
+        { name: "asked jestes", jestesList: [] },
+        { name: "made jestes", jestesList: [] }
+      ],
+      displayTabs: false,
+      user: null
+    };
+  },
+  computed: {},
+  methods: {
+    getUser() {
+      this.$store
+        .dispatch({ type: USER_GET_BY_ID, id: this.userId })
+        .then(user => {
+          this.user = user;
+          this.tabs[0].jestesList = user.req_jestes;
+          this.tabs[1].jestesList = user.res_jestes;
+        });
+    }
+  }
 };
 </script>
 
 <style lang="scss" scoped>
-@import '../assets/styles/_vars.scss';
+@import "../assets/styles/_helpers.scss";
 
 .user-details {
-	max-width: 780px;
-	margin: 0 auto;
+  margin: 0 auto;
 }
 
 .v-avatar,
 .v-title {
-	margin: 5px;
+  margin: 5px;
 }
 
 .v-card__text {
-	font-size: 1.1em;
+  font-size: 1.1em;
 }
 
 .sub-headline {
-	font-size: 1.1em;
-}
-
-.tabs-wrapper {
-	align-self: stretch;
+  font-size: 1.1em;
 }
 
 .jeste-title {
-	text-transform: capitalize;
-	font-size: 1.35em;
+  text-transform: capitalize;
+  font-size: 1.35em;
 }
 </style>

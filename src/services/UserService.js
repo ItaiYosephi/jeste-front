@@ -13,8 +13,6 @@ function query() {
 }
 
 function getUserByID(userId) {
-    console.log('popopopopopopo');
-    
     return axios.get(`${URL}/${userId}`)
         .then(res => res.data)
         .catch(err => {
@@ -46,6 +44,5 @@ function getUserByID(userId) {
 
 export default {
     query,
-    getUserByID,
- 
+    getUserByID
 }

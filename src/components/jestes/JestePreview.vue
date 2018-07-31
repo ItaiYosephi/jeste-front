@@ -10,8 +10,9 @@
         </div>
       </v-card-title>
       <v-card-actions class="actions">
-        <v-btn flat color="blue" @click.prevent="" >details</v-btn>
-        <v-btn flat color="blue" @click.prevent="">Jeste It!</v-btn>
+        <v-spacer></v-spacer>
+        <v-btn outline color="primary" :to="'/jeste/' + jeste._id" >details</v-btn>
+        <v-btn outline color="primary" @click.prevent="">Jeste It!</v-btn>
       </v-card-actions>
     </v-card>
   </v-flex>

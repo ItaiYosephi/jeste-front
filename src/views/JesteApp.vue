@@ -2,15 +2,14 @@
     <section class="jeste-app">
         <JesteList :jestes="jestesToDisplay" />
         <v-btn
-              fixed
-              dark
-              fab
-              bottom
-              right
-              ripple
-              color="accent"
-              to="/jeste/edit">
-          <v-icon>add</v-icon>
+            fixed
+            fab
+            bottom
+            right
+            ripple
+            color="secondary"
+            to="/jeste/edit">
+            <v-icon>add</v-icon>
         </v-btn>
     </section>
 </template>

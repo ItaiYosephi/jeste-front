@@ -15,7 +15,6 @@ export const USER_LOGIN = 'user/actions/userLogin';
 export const USER_CHECK_LOGIN = 'user/actions/userCheckLogin';
 export const USER_GET_BY_ID = 'user/actions/userGetById';
 
-
 export const USER_CONNECTED = 'user/getters/userConnected';
 
 export default {
@@ -32,9 +31,7 @@ export default {
 		},
 		[SET_LOCATION](state, {loc}) {
 			state.currLocation = loc;
-			
 		}
-
 	},
 	getters: {
 		[USER_CONNECTED](state) {
@@ -65,20 +62,16 @@ export default {
 				.then(context.commit(USER_LOGOUT))
 		},
 		[USER_GET_BY_ID](context, {id}) {
-			
 			return UserService.getUserByID(id)
 				.then(user => user[0])
-
 		},
 		[GET_USER_LOCATION](context) {
 			return LocationService.getUserLocation()
 			 .then(loc => {
 				context.commit({type: SET_LOCATION, loc})
 				console.log('first',loc);
-				
-				return loc
+				return loc;
 		   })
-			
 		}
 	}
 }

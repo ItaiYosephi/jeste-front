@@ -18,8 +18,8 @@ Vue.use(VueGoogleMaps, {
 
 Vue.use(Vuetify, {
 	theme: {
-		primary: "#FFA000",
-		secondary: "#03A9F4",
+		primary: "#039BE5",
+		secondary: "#031424",
 		accent: "#424242",
 		text: '#fff',
 		bg: "#e9e9e9",

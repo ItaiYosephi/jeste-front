@@ -1,12 +1,12 @@
+.container-wrapper {
+	width: 100%;
+	max-width: 1240px;
+}
+
 .clean-list {
     list-style-type: none;
     margin: 0;
     padding: 0;
-}
-
-.masonry {
-	margin: 0 auto 2em;
-	column-gap: 1.5em;
 }
 
 @media only screen and (min-width: 1400px) {

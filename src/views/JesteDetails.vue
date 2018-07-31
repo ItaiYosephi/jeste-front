@@ -1,63 +1,55 @@
 <template>
-	<v-layout column>
-		<h1 class="text-xs-center">Jeste Details</h1>
+	<v-container fluid grid-list-md>
+		<v-layout row wrap fill-height>
 
-		<v-container fluid grid-list-md>
-			<v-layout row wrap fill-height>
-				
-				<v-flex xs12 sm6>
-					<v-card height="100%" class="jeste-details-card" hover>
-						<v-card-title primary-title>
-							<div>
-								<div class="headline mb-2" >{{jeste.title}}</div>
-								<div class="grey--text mb-2">{{jeste.formatted_address}}</div>
-								<div >{{jeste.description}}</div>
-							</div>
-						</v-card-title>
+			<v-flex xs12 sm6>
+				<v-card height="100%" class="jeste-details-card" hover>
+					<v-card-title primary-title>
+						<div>
+							<div class="headline mb-2" >{{jeste.title}}</div>
+							<div class="grey--text mb-2">{{jeste.formatted_address}}</div>
+							<div >{{jeste.description}}</div>
+						</div>
+					</v-card-title>
+					<v-card-actions>
+						<v-btn flat color="blue" @click.prevent="">Jeste It!</v-btn>
+						<v-btn v-if="canEdit" flat :to="`/jeste/${jeste._id}/edit`">Edit</v-btn>
+						<v-spacer></v-spacer>
+						<v-btn icon @click="show = !show">
+							<v-icon>{{ show ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon>
+						</v-btn>
+					</v-card-actions>
+				</v-card>
+			</v-flex>
 
-						<v-card-actions>
-							<v-btn flat color="blue" @click.prevent="">Jeste It!</v-btn>
-							<v-btn v-if="canEdit" flat :to="`/jeste/${jeste._id}/edit`">Edit</v-btn>
-							<v-spacer></v-spacer>
-							<v-btn icon @click="show = !show">
-								<v-icon>{{ show ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon>
-							</v-btn>
-						</v-card-actions>
+			<v-flex xs12 sm6>
+				<v-card hover height="100%">
+					<v-card-media :src="imgUrl" height="400px">
+						<v-container fill-height fluid pa-2>
+							<v-layout fill-height>
+								<v-flex xs12 align-end flexbox>
+									<!-- <span class="headline white--text" v-text="jeste.title"></span> -->
+								</v-flex>
+							</v-layout>
+						</v-container>
+					</v-card-media>
+				</v-card>
+			</v-flex>
 
-					</v-card>
-				</v-flex>
-				<v-flex xs12 sm6>
-					<v-card hover height="100%">
-						<v-card-media :src="imgUrl" height="400px">
-							<v-container fill-height fluid pa-2>
-								<v-layout fill-height>
-									<v-flex xs12 align-end flexbox>
-										<!-- <span class="headline white--text" v-text="jeste.title"></span> -->
-									</v-flex>
-								</v-layout>
-							</v-container>
-						</v-card-media>
+			<v-flex xs12>
+				<v-card hover>
+					<v-slide-y-transition>
+						<v-card-text v-show="show">
+							<GmapMap :center="position" v-if="jeste.destination_loc" :zoom="15" map-type-id="terrain" style="width: 100%; height: 300px">
+								<GmapMarker :position="position" :clickable="false" :draggable="true" @click="center=position" />
+							</GmapMap>
+						</v-card-text>
+					</v-slide-y-transition>
+				</v-card>
+			</v-flex>
 
-					</v-card>
-				</v-flex>
-				<v-flex xs12>
-					<v-card hover>
-
-						<v-slide-y-transition>
-							<v-card-text v-show="show">
-								<GmapMap :center="position" v-if="jeste.destination_loc" :zoom="15" map-type-id="terrain" style="width: 100%; height: 300px">
-									<GmapMarker :position="position" :clickable="false" :draggable="true" @click="center=position" />
-								</GmapMap>
-							</v-card-text>
-						</v-slide-y-transition>
-					</v-card>
-
-				</v-flex>
-			</v-layout>
-		</v-container>
-		<!-- </v-card> -->
-	</v-layout>
-
+		</v-layout>
+	</v-container>
 </template>
 
 <script>
@@ -79,8 +71,7 @@ export default {
 			let id = this.$route.params.id;
 			let jeste = this.$store.getters[JESTE_GET](id);
 			if (!jeste) {
-				this.$store
-					.dispatch({ type: JESTE_GET_BY_ID, id })
+				this.$store.dispatch({ type: JESTE_GET_BY_ID, id })
 					.then(jeste => (this.jeste = jeste));
 			} else {
 				this.jeste = jeste;
@@ -89,8 +80,7 @@ export default {
 	},
 	computed: {
 		imgUrl() {
-			if (this.jeste && this.jeste.imgs_url && this.jeste.imgs_url[0])
-				return this.jeste.imgs_url[0];
+			if (this.jeste && this.jeste.imgs_url && this.jeste.imgs_url[0]) return this.jeste.imgs_url[0];
 			else return '';
 		},
 		position() {
@@ -102,9 +92,7 @@ export default {
 			}
 		},
 		canEdit() {
-			return !this.jeste.ended_at && 
-			this.$store.getters[USER_CONNECTED] && this.$store.getters[USER_CONNECTED]._id === this.jeste.req_user_id
-
+			return !this.jeste.ended_at && this.$store.getters[USER_CONNECTED] && this.$store.getters[USER_CONNECTED]._id === this.jeste.req_user_id
 		}
 	}
 };
@@ -112,13 +100,11 @@ export default {
 
 <style lang="scss" scoped>
 @import '../assets/styles/_vars.scss';
+
 .jeste-details-card {
-	justify-content: space-between;
-	flex-direction: column;
 	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
 }
 
-.jeste-details {
-	color: $mainColor;
-}
 </style>

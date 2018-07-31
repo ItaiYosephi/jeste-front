@@ -1,104 +1,42 @@
-<v-layout column>
+<template>
+	<v-layout align-center justify-center>
+		<v-flex class="wrapper">
+			<v-card grow>
+				<v-toolbar color="primary" class="white--text">
+					<v-toolbar-title>{{isEdit? 'Edit': 'Add'}} Jeste</v-toolbar-title>
+				</v-toolbar>
+				<v-form ref="form" v-model="valid" lazy-validation>
+					<v-card-text>
+						<v-text-field v-model="jesteToSave.title" label="title" required></v-text-field>
+						<v-text-field v-model="jesteToSave.description" label="description" required></v-text-field>
+						<v-text-field
+							v-model="jesteToSave.formatted_address"
+							ref="autocomplete"
+							label="Street"
+							@keyup.enter.prevent
+							append-icon="search" 
+							:rules="addressRules"
+							required>
+						</v-text-field>
 
-	<v-card>
-		<v-container fluid grid-list-md>
-			<v-layout row wrap>
-				<v-flex xs6>
-					<v-card>
-						<v-card-media :src="card.src" height="200px">
-							<v-container fill-height fluid pa-2>
-								<v-layout fill-height>
-									<v-flex xs12 align-end flexbox>
-										<span class="headline white--text" v-text="card.title"></span>
-									</v-flex>
-								</v-layout>
-							</v-container>
-						</v-card-media>
+						<ComboBox v-model="jesteToSave.keywords"></ComboBox>
+						{{position}}
+						<v-card-text v-show="show">
+							<GmapMap :center="position" v-if="jesteToSave" :zoom="15" map-type-id="terrain" style="width: 100%; height: 300px">
+								<GmapMarker :position="position" :clickable="false" :draggable="true" @click="center=position" />
+							</GmapMap>
+						</v-card-text>
+					</v-card-text>
+					<v-card-actions>
+						<v-btn :disabled="!valid" @click.prevent="submit">
+							submit
+						</v-btn>
+						<v-btn @click="clear">clear</v-btn>
+					</v-card-actions>
+				</v-form>
+				<pre>{{jesteToSave}}</pre>
 
-					</v-card>
-				</v-flex>
-				<v-flex xs6>
-					<v-card>
-						<v-card-title primary-title>
-							<div>
-								<div class="headline">{{jeste.title}}</div>
-								<span class="grey--text">{{jeste.description}}</span>
-							</div>
-						</v-card-title>
-
-						<v-card-actions>
-							<v-btn flat color="blue" @click.prevent="">Jeste It!</v-btn>
-							<v-btn flat>Share</v-btn>
-							<v-spacer></v-spacer>
-							<v-btn icon @click="show = !show">
-								<v-icon>{{ show ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon>
-							</v-btn>
-						</v-card-actions>
-
-					</v-card>
-				</v-flex>
-			</v-layout>
-		</v-container>
-	</v-card>
-</v-layout>
-
-
-
-
-
-
-
-
-
-
-
-
-{{jeste}} {{position}}
-	<v-flex xs6>
-		<v-card>
-			<v-card-media src="https://cdn.vuetifyjs.com/images/cards/desert.jpg" height="200px"></v-card-media>
-
-			<v-card-title primary-title>
-				<div>
-					<h3 class="headline mb-0">Kangaroo Valley Safari</h3>
-					<div>Located two hours south of Sydney in the <br>Southern Highlands of New South Wales, ...</div>
-				</div>
-			</v-card-title>
-
-			<v-card-actions>
-				<v-btn flat color="orange">Share</v-btn>
-				<v-btn flat color="orange">Explore</v-btn>
-			</v-card-actions>
-		</v-card>
-	</v-flex>
-	<v-flex xs6>
-
-		<v-card>
-			<v-card-media :src="imgUrl" height="200px">
-			</v-card-media>
-
-			<v-card-title primary-title>
-				<div>
-					<div class="headline">{{jeste.title}}</div>
-					<span class="grey--text">{{jeste.description}}</span>
-				</div>
-			</v-card-title>
-
-			<v-card-actions>
-				<v-btn flat color="blue" @click.prevent="">Jeste It!</v-btn>
-				<v-btn flat>Share</v-btn>
-				<v-spacer></v-spacer>
-				<v-btn icon @click="show = !show">
-					<v-icon>{{ show ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon>
-				</v-btn>
-			</v-card-actions>
-
-			<v-slide-y-transition>
-				<v-card-text v-show="show">
-					<GmapMap :center="position" v-if="jeste.destination_loc" :zoom="15" map-type-id="terrain" style="width: 100%; height: 300px">
-						<GmapMarker :position="position" :clickable="true" :draggable="true" @click="center=position" />
-					</GmapMap>
-				</v-card-text>
-			</v-slide-y-transition>
-		</v-card>
-	</v-flex>
+			</v-card>
+		</v-flex>
+	</v-layout>
+</template>
