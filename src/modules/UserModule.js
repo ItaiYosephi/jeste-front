@@ -78,7 +78,6 @@ export default {
 			return LocationService.getUserLocation()
 			 .then(loc => {
 				context.commit({type: SET_LOCATION, loc})
-				console.log('first',loc);
 				return loc;
 		   })
 		},

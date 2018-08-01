@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
+import Home from './views/Home.vue';
 import JesteApp from './views/JesteApp.vue';
 import JesteEdit from './views/JesteEdit.vue';
 import JesteDetails from './views/JesteDetails.vue';
@@ -13,7 +14,7 @@ Vue.use(Router);
 
 export default new Router({
 	routes: [
-		{ path: '/', name: 'home', component: JesteApp },
+		{ path: '/', name: 'home', component: Home },
 		{ path: '/login', name: 'login', component: LoginPage },
 		{ path: '/jeste', name: 'jestes', component: JesteApp },
 		{ path: '/jeste/:id?/edit', name: 'jesteEdit', component: JesteEdit },

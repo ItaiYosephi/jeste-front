@@ -1,25 +1,12 @@
 <template>
-    <section class="jeste-app">
-      <v-jumbotron color="primary" dark>
-        <v-container fill-height>
-          <v-layout align-center>
-            <v-flex text-xs-center>
-              <JesteFilter/>
-            </v-flex>
-          </v-layout>
-        </v-container>
-      </v-jumbotron>
-      <JesteList :jestes="jestesToDisplay" />
-      <v-btn
-          fixed
-          fab
-          bottom
-          right
-          ripple
-          color="secondary"
-          to="/jeste/edit">
-          <v-icon>add</v-icon>
-      </v-btn>
+    <section class="home">
+        <section  class="back-img">
+          <section class="main-content">
+            <div class="header">JESTE</div>
+            <div class="sub-header">Help to the people in your community and get help</div>
+          </section>
+        </section>
+        <JesteList :jestes="jestesToDisplay" />
     </section>
 </template>
 
@@ -29,7 +16,7 @@ import JesteFilter from "@/components/jestes/JesteFilter";
 import { JESTES_LOAD, JESTES_TO_DISPLAY } from "@/modules/JesteModule";
 
 export default {
-  name: "jesteApp",
+  name: "home",
   components: {
     JesteList,
     JesteFilter
@@ -38,7 +25,7 @@ export default {
     jestesToDisplay() {
       // console.log("jestes", this.$store.getters[JESTES_TO_DISPLAY]);
       return this.$store.getters[JESTES_TO_DISPLAY];
-    }
+    },
   }
 };
 </script>
@@ -58,9 +45,9 @@ export default {
   height: 100%;
   text-align: center;
   padding: 10px 10px;
-  color: white;
+  color: white; 
   background: rgba(3, 20, 36, 0.4);
-  // color: #031424;
+  // color: #031424; 
   // background: rgba(3, 154, 229, 0.507);
   span {
     background: white;
@@ -69,10 +56,11 @@ export default {
     text-transform: uppercase;
     font-size: 5.75em;
     letter-spacing: 1.75px;
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   }
   .sub-header {
     margin-top: -10px;
   }
+
 }
 </style>
