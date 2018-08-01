@@ -1,20 +1,29 @@
 <template>
 	<div>
-		<button @click="emitMsg">test</button>
 		<!-- <button @click="test">test</button> -->
-		<beautiful-chat :colors="color" :agentProfile="agentProfile" :onMessageWasSent="onMessageWasSent" :messageList="messageList" :newMessagesCount="newMessagesCount" :isOpen="isChatOpen" :close="closeChat" :open="openChat" :showEmoji="true" :showFile="true" />
+		<beautiful-chat ref="chat" :colors="color" :agentProfile="agentProfile" :showTypingIndicator="isTyping" :onMessageWasSent="onMessageWasSent" :messageList="messageList" :newMessagesCount="newMessagesCount" :isOpen="isChatOpen" :close="closeChat" :open="openChat" :showEmoji="true" :showFile="true" />
 		</beautiful-chat>
 	</div>
 
 </template>
 
 <script>
-import { CURR_CHAT } from '@/modules/UserModule';
+import { USER_GET_BY_ID } from '@/modules/UserModule';
 export default {
-	props: ['isReqUser', 'reqUserId', 'currUser', 'jesteId'],
+	props: ['jesteId', 'userId', 'reqUserId', 'resUserId'],
 	sockets: {
-		msgReceived(msg) {
+		receivedMsg({ msg }) {
 			console.log('this message was recived', msg);
+			if (msg) this.handleReceivedMsg(msg);
+		},
+		isTyping() {
+			console.log('popo');
+
+			if (this.typingTimout) clearTimeout(this.typingTimeout);
+			this.isTyping = true;
+			setTimeout(_ => {
+				this.isTyping = false;
+			}, 1000);
 		}
 	},
 	data() {
@@ -50,44 +59,56 @@ export default {
 			},
 			messageList: [],
 			newMessagesCount: 0,
-			isChatOpen: true
+			isChatOpen: false,
+			isTyping: false,
+			typingTimeout: null
 		};
 	},
 	created() {
-		if (this.isReqUser && this.$store.getters[CURR_CHAT]) {
-			this.$socket.emit('roomRequested', {
-				user: this.currUser,
-				req_user_id: this.$store.getters[CURR_CHAT].userId
-			});
+		// if (this.isReqUser && this.$store.getters[CURR_CHAT]) {
+		// 	this.$socket.emit('roomRequested', {
+		// 		user: this.currUser,
+		// 		req_user_id: this.$store.getters[CURR_CHAT].userId
+		// 	});
+		// } else {
+		// 	this.$socket.emit('roomRequested', {
+		// 		user: this.currUser,
+		// 		req_user_id: this.reqUserId
+		// 	});
+		// }
+		console.log('requserid', this.reqUserId);
+		console.log('Res User', this.resUserId);
+
+		if (this.userId === this.reqUserId) {
+			this.getUser(this.resUserId);
 		} else {
-			this.$socket.emit('roomRequested', {
-				user: this.currUser,
-				req_user_id: this.reqUserId
-			});
+			this.getUser(this.reqUserId);
 		}
 	},
-	methods: {
-		emitMsg() {
-			console.log('popo', this.jesteId);
+	mounted() {
+		var txtInput = document.querySelector('.sc-user-input--text');
+		let _this = this;
 
-			this.$socket.emit('messageSent', {
-				txt: 'bla',
-				from: this.currUser,
-				to: this.reqUserId,
-				jesteId: this.jesteId
-			});
-		},
-		sendMessage(msg) {
-			if (msg.data.text.length > 0) {
+		txtInput.addEventListener('input', function() {
+			_this.handleTyping();
+		});
+	},
+	methods: {
+		handleReceivedMsg(msg) {
+			if (msg.data.file || msg.data.emoji || msg.data.text.length > 0) {
 				this.newMessagesCount = this.isChatOpen
 					? this.newMessagesCount
 					: this.newMessagesCount + 1;
+				this.isTyping = false;
 				this.messageList.push(msg);
 				console.log('send');
 			}
 		},
 		onMessageWasSent(msg) {
 			this.messageList.push(msg);
+
+			this.$socket.emit('sendMsg', { msg, jesteId: this.jesteId });
+
 			console.log('msg', msg);
 		},
 		openChat() {
@@ -97,14 +118,16 @@ export default {
 		closeChat() {
 			this.isChatOpen = false;
 		},
-		test() {
-			this.sendMessage({
-				author: 'them',
-				type: 'text',
-				data: {
-					text:
-						'somaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaae text'
-				}
+		handleTyping() {
+			this.$socket.emit('isTyping', { jesteId: this.jesteId });
+		},
+		getUser(id) {
+			console.log('method id', id);
+
+			this.$store.dispatch({ type: USER_GET_BY_ID, id }).then(user => {
+				this.agentProfile.teamName =
+					user.details.firstName + ' ' + user.details.lastName;
+				// this.agentProfile.imageUrl = user.img.url
 			});
 		}
 	}

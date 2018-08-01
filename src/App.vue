@@ -1,8 +1,8 @@
 <template>
-	<div id="app">
-		<v-app>
-			<!-- Side Menu (Mobile) -->
-			<v-navigation-drawer app v-model="drawer" fixed temporary>
+  <div id="app">
+    <v-app>
+      <!-- Side Menu (Mobile) -->
+      <v-navigation-drawer app v-model="drawer" fixed temporary>
 
 				<v-list class="pa-1">
 					<v-list-tile avatar v-if="user">
@@ -26,32 +26,32 @@
 						</v-list-tile-content>
 					</v-list-tile>
 
-					<v-list-group v-if="user" prepend-icon="account_circle" value="true">
-						<v-list-tile slot="activator">
-							<v-list-tile-title>{{user.details.firstName}} {{user.details.lastName}}</v-list-tile-title>
-						</v-list-tile>
-						<v-list-tile :to="`/user/${user._id}`" excat>
-							<v-list-tile-title>Profile</v-list-tile-title>
-							<v-list-tile-action>
-								<v-icon>account_circle</v-icon>
-							</v-list-tile-action>
-						</v-list-tile>
-						<v-list-tile to="/user/settings" excat>
-							<v-list-tile-title>Settings</v-list-tile-title>
-							<v-list-tile-action>
-								<v-icon>settings</v-icon>
-							</v-list-tile-action>
-						</v-list-tile>
-						<v-list-tile @click="logout">
-							<v-list-tile-title>Logout</v-list-tile-title>
-							<v-list-tile-action>
-								<v-icon>exit_to_app</v-icon>
-							</v-list-tile-action>
-						</v-list-tile>
-					</v-list-group>
+          <v-list-group v-if="user" prepend-icon="account_circle" value="true">
+            <v-list-tile slot="activator">
+              <v-list-tile-title>{{user.details.firstName}} {{user.details.lastName}}</v-list-tile-title>
+            </v-list-tile>
+            <v-list-tile :to="`/user/${user._id}`" excat>
+              <v-list-tile-title>Profile</v-list-tile-title>
+              <v-list-tile-action>
+                <v-icon>account_circle</v-icon>
+              </v-list-tile-action>
+            </v-list-tile>
+            <v-list-tile to="/user/settings" excat>
+              <v-list-tile-title>Settings</v-list-tile-title>
+              <v-list-tile-action>
+                <v-icon>settings</v-icon>
+              </v-list-tile-action>
+            </v-list-tile>
+            <v-list-tile @click="logout">
+              <v-list-tile-title>Logout</v-list-tile-title>
+              <v-list-tile-action>
+                <v-icon>exit_to_app</v-icon>
+              </v-list-tile-action>
+            </v-list-tile>
+          </v-list-group>
 
-				</v-list>
-			</v-navigation-drawer>
+        </v-list>
+      </v-navigation-drawer>
 
 			<!-- Top Menu Toolbar -->
 			<v-toolbar app flat color="primary" class="white--text">
@@ -80,24 +80,24 @@
 				</v-toolbar-items>
 			</v-toolbar>
 
-			<v-content class="content">
-				<!-- <v-container fluid> -->
-				<transition name="moveInUp">
-					<router-view/>
-				</transition>
-				<!-- </v-container> -->
-			</v-content>
+      <v-content class="content">
+        <!-- <v-container fluid> -->
+        <transition name="moveInUp">
+          <router-view/>
+        </transition>
+        <!-- </v-container> -->
+      </v-content>
 
-			<v-snackbar v-model="snackbarDisplay" :top="snackbarProps.y === 'top'" :bottom="snackbarProps.y === 'bottom'" :left="snackbarProps.x === 'left'" :right="snackbarProps.x === 'right'" :multi-line="snackbarProps.mode === 'multi-line'" :vertical="snackbarProps.mode === 'vertical'" :timeout="snackbarProps.timeout" :color="snackbarProps.bgColor">
-				{{ snackbarProps.text }}
-				<v-btn flat :color="snackbarProps.btnColor" @click="snackbarDisplay = false">
-					Close
-				</v-btn>
-			</v-snackbar>
+      <v-snackbar v-model="snackbarDisplay" :top="snackbarProps.y === 'top'" :bottom="snackbarProps.y === 'bottom'" :left="snackbarProps.x === 'left'" :right="snackbarProps.x === 'right'" :multi-line="snackbarProps.mode === 'multi-line'" :vertical="snackbarProps.mode === 'vertical'" :timeout="snackbarProps.timeout" :color="snackbarProps.bgColor">
+        {{ snackbarProps.text }}
+        <v-btn flat :color="snackbarProps.btnColor" @click="snackbarDisplay = false">
+          Close
+        </v-btn>
+      </v-snackbar>
 
-		</v-app>
-		Location: {{location}}
-	</div>
+    </v-app>
+    Location: {{location}}
+  </div>
 </template>
 
 <script>
@@ -169,8 +169,8 @@ export default {
     loadUser() {
       this.$store.dispatch(USER_CHECK_LOGIN)
         .then(_ => {
-			console.log('User Loggedin')
-          })
+          console.log("User Loggedin");
+        })
         .catch(err => console.log(err));
     },
     loadJestes() {
@@ -181,7 +181,9 @@ export default {
     },
     toggleSnackbar(msg) {
       this.snackbarProps.text = msg.text;
-      this.snackbarProps.bgColor = msg.bgColor ? msg.bgColor : this.snackbarProps.bgColor;
+      this.snackbarProps.bgColor = msg.bgColor
+        ? msg.bgColor
+        : this.snackbarProps.bgColor;
       this.snackbarDisplay = true;
     },
     logout() {
@@ -199,12 +201,6 @@ export default {
         this.$socket.emit("userLogged", {
           userId: this.user._id
         });
-        setTimeout(x => {
-          this.$socket.emit("sendMsg", {
-            msg: "this is te text",
-            jesteId: "5b5e21518cb43c2d607a1bc4"
-          });
-        }, 1000);
         this.menuItems[2] = {
           title: this.user.details.firstName + " " + this.user.details.lastName,
           link: "#",
@@ -250,7 +246,7 @@ export default {
 
 .moveInUp-enter-active {
   // transition: all 0.4s ease;
-  transition: all 0.45s linear
+  transition: all 0.45s linear;
 }
 .moveInUp-leave-active {
   transition: all 0.45s linear;

@@ -1,7 +1,8 @@
 <template>
 	<v-container fluid grid-list-md>
 		<v-layout row wrap fill-height v-if="jeste">
-			<ChatCmp v-if="user" :isReqUser="canEdit" :jeste-id="jeste._id" :req-user-id="jeste.req_user_id" :curr-user="user" class="popo"></ChatCmp>
+
+			<ChatCmp :jeste-id="jeste._id" :req-user-id="jeste.req_user_id" :res-user-id="jeste.res_user_id" :user-id="user._id" v-if="showChat" class="popo"></ChatCmp>
 
 			<v-flex xs12 sm6>
 				<v-card height="100%" class="jeste-details-card" hover>
@@ -114,7 +115,10 @@ export default {
         });
 		},
 		respond() {
-			this.$socket.emit('respondJeste', {jeste: this.jeste, resUserId: this.user._id});
+			console.log('user', this.user);
+			
+			this.jeste.res_user_id = this.user._id
+			this.$socket.emit('jesteResponded', {jeste: this.jeste});
 		}
   },
   computed: {
@@ -134,6 +138,9 @@ export default {
 		user() {
 
 			return this.$store.getters[USER_CONNECTED]
+		},
+		showChat() {
+			return !!this.user && !!this.jeste.res_user_id && (this.user._id === this.jeste.res_user_id || this.user._id === this.jeste.req_user_id)
 		}
   },
   components: {
