@@ -7,7 +7,7 @@
 				<v-list class="pa-1">
 					<v-list-tile avatar v-if="user">
 						<v-list-tile-avatar>
-							<img src="https://randomuser.me/api/portraits/men/85.jpg">
+							<img :src="user.img.url">
 						</v-list-tile-avatar>
 						<v-list-tile-content>
 							<v-list-tile-title v-if="user">{{user.details.firstName}} {{user.details.lastName}}</v-list-tile-title>
@@ -17,7 +17,6 @@
 
 				<v-list class="pt-0">
 					<v-divider></v-divider>
-
 					<v-list-tile v-for="(item, index) in menuItems" :key="item.title" v-if="(index === 2 && !user) || index !== 2" :to="(item.link)" exact>
 						<v-list-tile-action>
 							<v-icon>{{ item.icon }}</v-icon>
@@ -60,10 +59,6 @@
 				</v-toolbar-side-icon>
 				<v-toolbar-title class="title-logo" @click="$router.push('/')">JESTE</v-toolbar-title>
 				<v-spacer class="hidden-xs-only"></v-spacer>
-				<v-flex class="search-wrapper">
-					<v-text-field v-model="searchValue" dark flat solo-inverted hide-details clearable prepend-inner-icon="search" label="Search" hide-details @keyup.enter.native="search" @click:prepend-inner="search">
-					</v-text-field>
-				</v-flex>
 				<!-- Top Menu Links -->
 				<v-toolbar-items class="hidden-xs-only btns-wrapper">
 					<v-menu mx-2 open-on-hover bottom offset-y v-for="(item, index) in menuItems" :key="index">
@@ -178,29 +173,21 @@ export default {
           })
         .catch(err => console.log(err));
     },
-    loadJestes(filterBy = {}) {
+    loadJestes() {
       this.$store.dispatch({ type: JESTES_LOAD });
     },
     pushToLink(link) {
       this.$router.push(link);
     },
-    search() {
-      console.log("search", this.searchValue);
-    },
     toggleSnackbar(msg) {
       this.snackbarProps.text = msg.text;
-      this.snackbarProps.bgColor = msg.bgColor
-        ? msg.bgColor
-        : this.snackbarProps.bgColor;
+      this.snackbarProps.bgColor = msg.bgColor ? msg.bgColor : this.snackbarProps.bgColor;
       this.snackbarDisplay = true;
     },
     logout() {
       let fName = this.$store.getters[USER_CONNECTED].details.firstName;
       this.$store.dispatch(USER_LOGOUT).then(_ => {
-        EventBus.$emit(SNACK_MSG, {
-          text: `Bey ${fName}`,
-          bgColor: "info"
-        });
+        EventBus.$emit(SNACK_MSG, { text: `Bey ${fName}`, bgColor: "info" });
         console.log("Logged out successfuly");
         this.$router.push("/");
       });
@@ -218,13 +205,13 @@ export default {
             jesteId: "5b5e21518cb43c2d607a1bc4"
           });
         }, 1000);
-        this.menuItems[1] = {
+        this.menuItems[2] = {
           title: this.user.details.firstName + " " + this.user.details.lastName,
           link: "#",
           icon: "account_circle"
         };
       } else {
-        this.menuItems[1] = {
+        this.menuItems[2] = {
           title: "Signup \\ Login",
           link: "/login",
           icon: "swap_horizontal_circle"
@@ -263,27 +250,26 @@ export default {
 
 .moveInUp-enter-active {
   // transition: all 0.4s ease;
-  transition: all 0.6s cubic-bezier(1, 0.5, 0.8, 1);
+  transition: all 0.45s linear
 }
 .moveInUp-leave-active {
-  transition: all 0.3s ease;
+  transition: all 0.45s linear;
   // transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
 }
 
 .moveInUp-enter,
 .moveInUp-leave-to {
   position: absolute;
-  top: 64px;
 }
 .moveInUp-enter {
-  transform: translateX(100%);
+  transform: translateX(-100%);
 }
 .moveInUp-leave-to {
   // transform: translateY(100%);
   position: fixed;
   top: 64px;
 
-  transform: translateX(-100%);
+  transform: translateX(100%);
   opacity: 0;
 }
 </style>

@@ -14,6 +14,13 @@
             </v-text-field>
 
 						<ComboBox v-model="jesteToSave.keywords"></ComboBox>
+            <v-select
+              box
+              v-model="jesteToSave.category"
+              :items="categories"
+              label="Categories"
+              hint="Type of the Jeste">
+            </v-select>
 						<v-flex xs12 class="text-xs-center text-sm-center text-md-center text-lg-center">
 					    <img :src="imageUrl" height="150" v-if="imageUrl"/>
 					    <v-text-field box label="Select Image" @click='pickFile' v-model='imageName' append-icon='attach_file' @focus="pickFile" @click:append="pickFile"></v-text-field>
@@ -45,7 +52,7 @@
 
 <script>
 import { EventBus, SNACK_MSG } from "@/services/EventBusService";
-import { JESTE_EMPTY, JESTE_GET_BY_ID, JESTE_GET, JESTE_SAVE, JESTE_UPLOAD_IMG } from "@/modules/JesteModule";
+import { JESTE_EMPTY, JESTE_GET_BY_ID, JESTE_GET, JESTE_SAVE, JESTE_UPLOAD_IMG, JESTE_CATEGORIES_GET } from "@/modules/JesteModule";
 import { GET_USER_LOCATION } from "@/modules/UserModule";
 import ComboBox from "@/components/ComboBox";
 // import {google} from 'vue2-google-maps'
@@ -89,9 +96,10 @@ export default {
         }
       ],
       id: "maps",
-      labelText: "Search Address",
-      placeholderText: "",
-      types: ["address"],
+      // labelText: "Search Address",
+      // placeholderText: "",
+      // types: ["address"],
+      categories: this.$store.getters[JESTE_CATEGORIES_GET],
       // Image upload
       imageName: "",
       imageUrl: "",

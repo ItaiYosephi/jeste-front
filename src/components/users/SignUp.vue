@@ -53,7 +53,7 @@ export default {
       lNameRules: [v => !!v || "Last name is required"],
       ageRules: [v => !!v || "Age is required"],
       genderRules: [v => !!v || "Gender is required"],
-      phoneRules: [v => !!v || "Gender is required"],
+      phoneRules: [v => !!v || "Mobile number is required"],
       emailRules: [
         v => !!v || "E-mail is required",
         v => /.+@.+/.test(v) || "Please enter a valid email"

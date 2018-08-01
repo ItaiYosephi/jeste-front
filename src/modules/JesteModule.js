@@ -17,6 +17,7 @@ export const JESTE_UPLOAD_IMG = 'jeste/actions/uploadJesteImg';
 export const JESTE_GET = 'jeste/getters/getJeste';
 export const JESTES_TO_DISPLAY = 'jeste/getters/jestesToDisplay';
 export const JESTE_EMPTY = 'jeste/getters/emptyJeste';
+export const JESTE_CATEGORIES_GET = 'jeste/getters/getJesteCategories';
 export const FILTER_GET = 'jeste/getters/getFilterBy';
 
 import { USER_CONNECTED } from './UserModule'
@@ -24,12 +25,13 @@ import { USER_CONNECTED } from './UserModule'
 export default {
 	state: {
 		jestes: [],
+		categories: ['All', 'Delivery', 'Work', 'Other'],
 		filterBy: {
 			coords: '',
 			txt: '',
 			category: '',
-			maxDistance: 10000,
-			maxPrice: 100
+			maxDistance: 100000,
+			maxPrice: 200
 		}
 	},
 	mutations: {
@@ -47,19 +49,18 @@ export default {
 			state.jestes = state.jestes.filter(jeste => jeste._id !== id);
 		},
 		[FILTER_UPDATE](state, { filter }) {
-			if (filter.coords) {
-				state.filterBy.coords = `${filter.coords.lat},${filter.coords.lng}`;
+			for (let prop in filter) {
+				if (filter[prop] && prop !== 'coords') state.filterBy[prop] = filter[prop];
+				else if (filter[prop] && prop === 'coords') state.filterBy.coords = `${filter.coords.lat},${filter.coords.lng}`;
 			}
-			console.log(state.filterBy.coords);
-			
-			// for (let prop in filter) {
-			// 	if (filter[prop]) state.filterBy[prop] = filter[prop]
-			// }
 		}
 	},
 	getters: {
 		[FILTER_GET](state) {
 			return state.filterBy;
+		},
+		[JESTE_CATEGORIES_GET](state) {
+			return state.categories;
 		},
 		[JESTES_TO_DISPLAY](state) {
 			return state.jestes;
@@ -85,6 +86,7 @@ export default {
 				title: '',
 				description: '',
 				price: '',
+				category: '',
 				address_components: null,
 				formatted_address: '',
 				time_frame: { from: '', until: '' },
@@ -94,10 +96,10 @@ export default {
 		},
 	},
 	actions: {
-		[JESTES_LOAD](context) {
-
+		[JESTES_LOAD](context, { filterBy = '' }) {
+			if (!filterBy) filterBy = context.state.filterBy;
 			// filterBy.coords = context.rootState.UserModule.state.currLocation
-			return JesteService.query(context.state.filterBy)
+			return JesteService.query(filterBy)
 				.then(jestes => {
 					context.commit({ type: JESTES_LOAD, jestes })
 					return jestes;

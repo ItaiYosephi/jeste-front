@@ -3,8 +3,9 @@ import axios from 'axios'
 
 const URL = (process.env.NODE_ENV !== 'development') ? '/jeste' : '//localhost:3000/jeste';
 
-function query({ coords = '', q= '' }) {
-    const query = `?coords=${coords}&q=${q}`;
+function query({ txt = '', coords = '', category = '', maxDistance = 10000, maxPrice = 200 }) {
+
+    const query = `?q=${txt}&coords=${coords}&category=${category}&maxDistance=${maxDistance}&maxPrice=${maxPrice}`;
     return axios.get(`${URL}/${query}`)
         .then(res => res.data)
         .catch(err => {
@@ -14,9 +15,9 @@ function query({ coords = '', q= '' }) {
         });
 }
 
-function getJesteByID(jesteId) {    
+function getJesteByID(jesteId) {
     return axios.get(`${URL}/${jesteId}`)
-        .then(res => {            
+        .then(res => {
             return res.data
         })
         .catch(err => {
@@ -33,7 +34,7 @@ function deleteJeste(jesteId) {
 }
 
 function saveJeste(jeste) {
-    
+
     if (jeste._id) {
         delete jeste.req_user
         return axios.put(`${URL}/${jeste}`, jeste)

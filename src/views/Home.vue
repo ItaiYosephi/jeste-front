@@ -2,8 +2,8 @@
     <section class="home">
         <section  class="back-img">
           <section class="main-content">
-            <div class="header">JESTE</div>
-            <div class="sub-header">Help to the people in your community and get help</div>
+            <div class="header">jeste</div>
+            <div class="sub-header">help others | get help</div>
           </section>
         </section>
         <JesteList :jestes="jestesToDisplay" />
@@ -54,13 +54,26 @@ export default {
   }
   .header {
     text-transform: uppercase;
-    font-size: 5.75em;
-    letter-spacing: 1.75px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 5em;
+    letter-spacing: 1.5px;
+    font-family: 'Open Sans', 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   }
   .sub-header {
+    font-family: 'Open Sans', 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin-top: -10px;
+    font-size: 1.25em;
+    letter-spacing: 1.1px;
+    text-transform: uppercase;
   }
-
+  @media (min-width: 600px) {
+    .header {
+      font-size: 6.5em;
+      letter-spacing: 2px;
+    }
+    .sub-header {
+      font-size: 2em;
+      letter-spacing: 1.5px;
+    }
+  }
 }
 </style>

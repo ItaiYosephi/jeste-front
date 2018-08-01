@@ -1,11 +1,10 @@
 <template>
     <section class="jeste-app">
-      <v-jumbotron color="primary" dark>
+      <v-jumbotron class="jumbotron" height="300px" dark>
         <v-container fill-height>
-          <v-layout align-center>
-            <v-flex text-xs-center>
-              <JesteFilter/>
-            </v-flex>
+          <v-layout align-center wrap>
+            <div class="filter-header">do jestes for others.</div>
+            <JesteFilter/>
           </v-layout>
         </v-container>
       </v-jumbotron>
@@ -44,35 +43,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../assets/styles/_vars.scss";
 
-.back-img {
-  width: 100%;
-  height: 75vh;
-  min-height: 300px;
-  background: url(/img/main_bg.png) no-repeat center center fixed;
-  background-size: cover;
-}
-
-.main-content {
-  height: 100%;
-  text-align: center;
-  padding: 10px 10px;
-  color: white;
-  background: rgba(3, 20, 36, 0.4);
-  // color: #031424;
-  // background: rgba(3, 154, 229, 0.507);
-  span {
-    background: white;
-  }
-  .header {
+.jumbotron {
+  background: #21a7e8;
+  .filter-header {
+    font-size: 2em;
+    margin: -5px 0;
     text-transform: uppercase;
-    font-size: 5.75em;
-    letter-spacing: 1.75px;
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  }
-  .sub-header {
-    margin-top: -10px;
   }
 }
 </style>
