@@ -47,9 +47,14 @@ export default {
 			state.jestes = state.jestes.filter(jeste => jeste._id !== id);
 		},
 		[FILTER_UPDATE](state, { filter }) {
-			for (let prop in filter) {
-				if (filter[prop]) state.filterBy[prop] = filter[prop]
+			if (filter.coords) {
+				state.filterBy.coords = `${filter.coords.lat},${filter.coords.lng}`;
 			}
+			console.log(state.filterBy.coords);
+			
+			// for (let prop in filter) {
+			// 	if (filter[prop]) state.filterBy[prop] = filter[prop]
+			// }
 		}
 	},
 	getters: {

@@ -89,7 +89,7 @@
 				<!-- <v-container fluid> -->
 				<transition name="moveInUp">
 					<router-view/>
-					</transition>
+				</transition>
 				<!-- </v-container> -->
 			</v-content>
 
@@ -129,11 +129,8 @@ export default {
     });
   },
   sockets: {
-    gotResponse(data) {
-      console.log(" i got message", data);
-
-      this.$store.commit({ type: SET_CURR_CHAT, data });
-      this.$router.push(`/jeste/${data.jeste._id}`);
+    reciveMsg() {
+      alert("recive msg");
     }
   },
   mounted() {
@@ -145,7 +142,11 @@ export default {
       menuItems: [
         { title: "Home", icon: "home", link: "/" },
         { title: "Jeste", icon: "assistant", link: "/jeste" },
-        { title: "Signup \\ Login", icon: "swap_horizontal_circle", link: "/login" },
+        {
+          title: "Signup \\ Login",
+          icon: "swap_horizontal_circle",
+          link: "/login"
+        },
         { title: "About", icon: "info", link: "/about" }
       ],
       searchValue: "",
@@ -171,15 +172,10 @@ export default {
   },
   methods: {
     loadUser() {
-      this.$store
-        .dispatch(USER_CHECK_LOGIN)
+      this.$store.dispatch(USER_CHECK_LOGIN)
         .then(_ => {
-          // debugger;
-
-          this.$socket.emit("userLogged", {
-            userId: this.user._id
-          });
-        })
+			console.log('User Loggedin')
+          })
         .catch(err => console.log(err));
     },
     loadJestes(filterBy = {}) {
@@ -213,13 +209,22 @@ export default {
   watch: {
     user() {
       if (this.user) {
-        this.menuItems[2] = {
+        this.$socket.emit("userLogged", {
+          userId: this.user._id
+        });
+        setTimeout(x => {
+          this.$socket.emit("sendMsg", {
+            msg: "this is te text",
+            jesteId: "5b5e21518cb43c2d607a1bc4"
+          });
+        }, 1000);
+        this.menuItems[1] = {
           title: this.user.details.firstName + " " + this.user.details.lastName,
           link: "#",
           icon: "account_circle"
         };
       } else {
-        this.menuItems[2] = {
+        this.menuItems[1] = {
           title: "Signup \\ Login",
           link: "/login",
           icon: "swap_horizontal_circle"
@@ -231,6 +236,12 @@ export default {
         this.snackbarProps.bgColor = "black";
         this.snackbarProps.btnColor = "white";
       }
+    }
+  },
+  snackbarDisplay() {
+    if (!this.snackbarDisplay) {
+      this.snackbarProps.bgColor = "black";
+      this.snackbarProps.btnColor = "white";
     }
   }
 };
