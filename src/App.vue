@@ -22,7 +22,7 @@
 						<v-list-tile-action>
 							<v-icon>{{ item.icon }}</v-icon>
 						</v-list-tile-action>
-						<v-list-tile-content >
+						<v-list-tile-content>
 							<v-list-tile-title>{{ item.title }}</v-list-tile-title>
 						</v-list-tile-content>
 					</v-list-tile>
@@ -61,18 +61,7 @@
 				<v-toolbar-title class="title-logo" @click="$router.push('/')">Jeste</v-toolbar-title>
 				<v-spacer class="hidden-xs-only"></v-spacer>
 				<v-flex class="search-wrapper">
-					<v-text-field
-						v-model="searchValue"
-						dark
-						flat
-						solo-inverted
-						hide-details
-						clearable
-						prepend-inner-icon="search"
-						label="Search"
-						hide-details
-						@keyup.enter.native="search"
-						@click:prepend-inner="search">
+					<v-text-field v-model="searchValue" dark flat solo-inverted hide-details clearable prepend-inner-icon="search" label="Search" hide-details @keyup.enter.native="search" @click:prepend-inner="search">
 					</v-text-field>
 				</v-flex>
 				<!-- Top Menu Links -->
@@ -98,130 +87,151 @@
 
 			<v-content class="content">
 				<v-container fluid>
-				<transition name="moveInUp">
-					<router-view/>
+					<transition name="moveInUp">
+						<router-view/>
 					</transition>
 				</v-container>
 			</v-content>
 
-			<v-snackbar
-				v-model="snackbarDisplay"
-				:top="snackbarProps.y === 'top'"
-				:bottom="snackbarProps.y === 'bottom'"
-				:left="snackbarProps.x === 'left'"
-				:right="snackbarProps.x === 'right'"
-				:multi-line="snackbarProps.mode === 'multi-line'"
-				:vertical="snackbarProps.mode === 'vertical'"
-				:timeout="snackbarProps.timeout"
-				:color="snackbarProps.bgColor">
+			<v-snackbar v-model="snackbarDisplay" :top="snackbarProps.y === 'top'" :bottom="snackbarProps.y === 'bottom'" :left="snackbarProps.x === 'left'" :right="snackbarProps.x === 'right'" :multi-line="snackbarProps.mode === 'multi-line'" :vertical="snackbarProps.mode === 'vertical'" :timeout="snackbarProps.timeout" :color="snackbarProps.bgColor">
 				{{ snackbarProps.text }}
-				<v-btn
-					flat
-					:color="snackbarProps.btnColor"
-					@click="snackbarDisplay = false">
+				<v-btn flat :color="snackbarProps.btnColor" @click="snackbarDisplay = false">
 					Close
 				</v-btn>
-    	</v-snackbar>
-			
+			</v-snackbar>
+
 		</v-app>
-			Location: {{location}}
+		Location: {{location}}
 	</div>
 </template>
 
 <script>
-import { EventBus, SNACK_MSG } from "@/services/EventBusService";
-import { JESTES_LOAD, FILTER_UPDATE } from "@/modules/JesteModule";
-import { USER_CHECK_LOGIN, USER_CONNECTED, USER_LOGOUT, GET_USER_LOCATION } from "@/modules/UserModule";
+import { EventBus, SNACK_MSG } from '@/services/EventBusService';
+import { JESTES_LOAD, FILTER_UPDATE } from '@/modules/JesteModule';
+import {
+	USER_CHECK_LOGIN,
+	USER_CONNECTED,
+	USER_LOGOUT,
+	GET_USER_LOCATION,
+	
+} from '@/modules/UserModule';
 
 export default {
-  name: "app",
-  created() {
-    console.log("--- Jeste App ---");
-    if (!this.$store.getters.USER_CONNECTED) {
-      this.loadUser();
+	name: 'app',
+	created() {
+		console.log('--- Jeste App ---');
+		if (!this.$store.getters.USER_CONNECTED) {
+			this.loadUser();
 		}
-		this.$store.dispatch(GET_USER_LOCATION)
-			.then(coords => {
-				this.$store.commit({type:FILTER_UPDATE, filter: {coords}})
+		this.$store.dispatch(GET_USER_LOCATION).then(coords => {
+			this.$store.commit({ type: FILTER_UPDATE, filter: { coords } });
 
-				
-				this.loadJestes()
-			});
-  },
-  mounted() {
-    EventBus.$on(SNACK_MSG, msg => this.toggleSnackbar(msg));
-  },
-  data() {
-    return {
-      drawer: null,
-      menuItems: [
-        { title: "Home", icon: "home", link: "/" },
-				{ title: "Signup \\ Login", icon: "swap_horizontal_circle", link: "/login" },
-        { title: "About", icon: "info", link: "/about" }
-      ],
-      searchValue: "",
+			this.loadJestes();
+		});
+	},
+	sockets: {
+		gotResponse(data) {
+			console.log(' i got message', data);
 			
-      snackbarDisplay: false,
-      snackbarProps: {
-        y: "top",
-        x: null,
-        mode: "multi-line",
-        timeout: 3000,
-        text: "",
-        type: "black"
-      }
-    };
-  },
-  computed: {
-    user() {
-      return this.$store.getters[USER_CONNECTED];
+			this.$store.commit({type: SET_CURR_CHAT, data})
+			this.$router.push(`/jeste/${data.jeste._id}`)
+		}
+	},
+	mounted() {
+		EventBus.$on(SNACK_MSG, msg => this.toggleSnackbar(msg));
+	},
+	data() {
+		return {
+			drawer: null,
+			menuItems: [
+				{ title: 'Home', icon: 'home', link: '/' },
+				{
+					title: 'Signup \\ Login',
+					icon: 'swap_horizontal_circle',
+					link: '/login'
+				},
+				{ title: 'About', icon: 'info', link: '/about' }
+			],
+			searchValue: '',
+
+			snackbarDisplay: false,
+			snackbarProps: {
+				y: 'top',
+				x: null,
+				mode: 'multi-line',
+				timeout: 3000,
+				text: '',
+				type: 'black'
+			}
+		};
+	},
+	computed: {
+		user() {
+			return this.$store.getters[USER_CONNECTED];
 		},
 		location() {
-			return this.$store.getters[GET_USER_LOCATION]
+			return this.$store.getters[GET_USER_LOCATION];
 		}
-  },
-  methods: {
-    loadUser() {
-      this.$store.dispatch(USER_CHECK_LOGIN).catch(err => console.log(err));
+	},
+	methods: {
+		loadUser() {
+			this.$store
+				.dispatch(USER_CHECK_LOGIN)
+				.then(_ => {
+					// debugger;
+
+					this.$socket.emit('userLogged', {
+						userId: this.user._id
+					});
+				})
+				.catch(err => console.log(err));
 		},
 		loadJestes(filterBy = {}) {
-      this.$store.dispatch({ type: JESTES_LOAD });
-    },
-    pushToLink(link) {
-      this.$router.push(link);
-    },
-    search() {
-      console.log("search", this.searchValue);
-    },
-    toggleSnackbar(msg) {
-      this.snackbarProps.text = msg.text;
-      this.snackbarProps.bgColor = (msg.bgColor) ? msg.bgColor : this.snackbarProps.bgColor;
-      this.snackbarDisplay = true;
+			this.$store.dispatch({ type: JESTES_LOAD });
+		},
+		pushToLink(link) {
+			this.$router.push(link);
+		},
+		search() {
+			console.log('search', this.searchValue);
+		},
+		toggleSnackbar(msg) {
+			this.snackbarProps.text = msg.text;
+			this.snackbarProps.bgColor = msg.bgColor
+				? msg.bgColor
+				: this.snackbarProps.bgColor;
+			this.snackbarDisplay = true;
 		},
 		logout() {
-      let fName = this.$store.getters[USER_CONNECTED].details.firstName;
-      this.$store.dispatch(USER_LOGOUT).then(_ => {
-        EventBus.$emit(SNACK_MSG, { text: `Bey ${fName}`, bgColor: "info" });
-				console.log("Logged out successfuly");
+			let fName = this.$store.getters[USER_CONNECTED].details.firstName;
+			this.$store.dispatch(USER_LOGOUT).then(_ => {
+				EventBus.$emit(SNACK_MSG, {
+					text: `Bey ${fName}`,
+					bgColor: 'info'
+				});
+				console.log('Logged out successfuly');
 				this.$router.push('/');
-      });
-    }
-  },
-  watch: {
-    user() {
-      if (this.user) {
-        this.menuItems[1] = {
-					title: this.user.details.firstName + " " + this.user.details.lastName,
-					link: '#',
-					icon: "account_circle"
-				};
-      } else {
+			});
+		}
+	},
+	watch: {
+		user() {
+			if (this.user) {
 				this.menuItems[1] = {
-					title: "Login",
-					link: '/login',
-					icon: "swap_horizontal_circle"
+					title:
+						this.user.details.firstName +
+						' ' +
+						this.user.details.lastName,
+					link: '#',
+					icon: 'account_circle'
 				};
-      }
+			} else {
+				this.menuItems[1] = {
+					title: 'Login',
+					link: '/login',
+					icon: 'swap_horizontal_circle'
+				};
+			}
 		},
 		snackbarDisplay() {
 			if (!this.snackbarDisplay) {
@@ -229,7 +239,7 @@ export default {
 				this.snackbarProps.btnColor = 'white';
 			}
 		}
-  }
+	}
 };
 </script>
 
@@ -248,28 +258,28 @@ export default {
 }
 
 .moveInUp-enter-active {
-  // transition: all 0.4s ease;
-  transition: all 0.6s cubic-bezier(1, 0.5, 0.8, 1);
+	// transition: all 0.4s ease;
+	transition: all 0.6s cubic-bezier(1, 0.5, 0.8, 1);
 }
 .moveInUp-leave-active {
-  transition: all 0.3s ease;
-  // transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+	transition: all 0.3s ease;
+	// transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
 }
 
 .moveInUp-enter,
 .moveInUp-leave-to {
-  position: absolute;
-  top: 64px;
+	position: absolute;
+	top: 64px;
 }
 .moveInUp-enter {
-  transform: translateX(100%);
+	transform: translateX(100%);
 }
 .moveInUp-leave-to {
-  // transform: translateY(100%);
-  position: fixed;
-  top: 64px;
+	// transform: translateY(100%);
+	position: fixed;
+	top: 64px;
 
-  transform: translateX(-100%);
-  opacity: 0;
+	transform: translateX(-100%);
+	opacity: 0;
 }
 </style>

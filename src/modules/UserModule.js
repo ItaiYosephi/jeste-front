@@ -6,6 +6,7 @@ import LocationService from '@/services/LocationService';
 
 export const USER_LOAD = 'user/mutations/userLoad';
 export const SET_LOCATION = 'user/mutation/setLocation';
+export const SET_CURR_CHAT = 'user/mutation/setCurrChat';
 
 export const USER_LOGOUT = 'user/userLogout';
 
@@ -16,11 +17,13 @@ export const USER_GET_BY_ID = 'user/actions/userGetById';
 export const USER_SIGNUP = 'user/actions/addUser';
 
 export const USER_CONNECTED = 'user/getters/userConnected';
+export const CURR_CHAT = 'user/getters/currChat';
 
 export default {
 	state: {
 		user: null,
-		currLocation: {lat: null, lng: null}
+		currLocation: {lat: null, lng: null},
+		currChat: null
 	},
 	mutations: {
 		[USER_LOAD](state, { user }) {
@@ -31,6 +34,9 @@ export default {
 		},
 		[SET_LOCATION](state, {loc}) {
 			state.currLocation = loc;
+		},
+		[SET_CURR_CHAT](state, {data}) {
+			state.currChat = {jesteId: data.jesteId, userId: data.from._id}
 		}
 	},
 	getters: {
@@ -39,6 +45,9 @@ export default {
 		},
 		[GET_USER_LOCATION](state) {
 			return state.currLocation
+		},
+		[CURR_CHAT](state) {
+			return state.currChat
 		}
 	},
 	actions: {

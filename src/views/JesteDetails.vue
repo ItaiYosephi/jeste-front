@@ -1,7 +1,7 @@
 <template>
 	<v-container fluid grid-list-md>
 		<v-layout row wrap fill-height v-if="jeste">
-			<ChatCmp v-if="user" :req-user-id="jeste.req_user_id" :curr-user="user" class="popo"></ChatCmp>
+			<ChatCmp v-if="user" :isReqUser="canEdit" :jeste-id="jeste._id" :req-user-id="jeste.req_user_id" :curr-user="user" class="popo"></ChatCmp>
 
 			<v-flex xs12 sm6>
 				<v-card height="100%" class="jeste-details-card" hover>
@@ -13,7 +13,7 @@
 						</div>
 					</v-card-title>
 					<v-card-actions>
-						<v-btn flat color="blue" @click.prevent="">Jeste It!</v-btn>
+						<v-btn flat color="blue" @click.prevent="respond">Jeste It!</v-btn>
 						<v-btn v-if="canEdit" flat :to="`/jeste/${jeste._id}/edit`">Edit</v-btn>
 						<v-btn v-if="canEdit" flat @click.stop="dialog = true">Delete</v-btn>
 
@@ -112,7 +112,10 @@ export default {
           EventBus.$emit(SNACK_MSG, { text: `Jeste Deleted Successfully`, bgColor: "success" });
           this.$router.push("/");
         });
-    }
+		},
+		respond() {
+			this.$socket.emit('respondJeste', {jeste: this.jeste, resUserId: this.user._id});
+		}
   },
   computed: {
     position() {

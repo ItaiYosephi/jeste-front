@@ -44,6 +44,8 @@ export default {
         this.$store
           .dispatch({ type: USER_LOGIN, user: this.user })
           .then(user => {
+            this.$socket.emit('userLogged', {
+						userId: user._id});
             EventBus.$emit(SNACK_MSG, {
               text: `Welcome back ${user.details.firstName}`,
               bgColor: "success"

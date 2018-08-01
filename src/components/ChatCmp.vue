@@ -1,5 +1,6 @@
 <template>
 	<div>
+		<button @click="emitMsg">test</button>
 		<!-- <button @click="test">test</button> -->
 		<beautiful-chat :colors="color" :agentProfile="agentProfile" :onMessageWasSent="onMessageWasSent" :messageList="messageList" :newMessagesCount="newMessagesCount" :isOpen="isChatOpen" :close="closeChat" :open="openChat" :showEmoji="true" :showFile="true" />
 		</beautiful-chat>
@@ -8,11 +9,12 @@
 </template>
 
 <script>
+import { CURR_CHAT } from '@/modules/UserModule';
 export default {
-	props: ['reqUserId', 'currUser'],
+	props: ['isReqUser', 'reqUserId', 'currUser', 'jesteId'],
 	sockets: {
-		elad() {
-			console.log('ela os the cmp');
+		msgReceived(msg) {
+			console.log('this message was recived', msg);
 		}
 	},
 	data() {
@@ -41,7 +43,6 @@ export default {
 					text: '#565867'
 				}
 			},
-
 			agentProfile: {
 				teamName: 'Vue Beautiful Chat',
 				imageUrl:
@@ -49,27 +50,33 @@ export default {
 			},
 			messageList: [],
 			newMessagesCount: 0,
-			isChatOpen: true,
-			sockets: {
-				connect: function() {
-					console.log('socket connected');
-				},
-				customEmit: function(val) {
-					console.log(
-						'this method was fired by the socket server. eg: io.emit("customEmit", data)'
-					);
-				}
-			}
+			isChatOpen: true
 		};
 	},
 	created() {
-		console.log('this chat user', this.currUser);
-		
-		this.$socket.emit('roomRequested', {user: this.currUser, req_user_id: this.reqUserId});
-
-
+		if (this.isReqUser && this.$store.getters[CURR_CHAT]) {
+			this.$socket.emit('roomRequested', {
+				user: this.currUser,
+				req_user_id: this.$store.getters[CURR_CHAT].userId
+			});
+		} else {
+			this.$socket.emit('roomRequested', {
+				user: this.currUser,
+				req_user_id: this.reqUserId
+			});
+		}
 	},
 	methods: {
+		emitMsg() {
+			console.log('popo', this.jesteId);
+
+			this.$socket.emit('messageSent', {
+				txt: 'bla',
+				from: this.currUser,
+				to: this.reqUserId,
+				jesteId: this.jesteId
+			});
+		},
 		sendMessage(msg) {
 			if (msg.data.text.length > 0) {
 				this.newMessagesCount = this.isChatOpen
