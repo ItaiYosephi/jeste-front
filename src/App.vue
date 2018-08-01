@@ -89,7 +89,7 @@
 				<!-- <v-container fluid> -->
 				<transition name="moveInUp">
 					<router-view/>
-					</transition>
+				</transition>
 				<!-- </v-container> -->
 			</v-content>
 
@@ -112,14 +112,15 @@ import {
 	USER_CHECK_LOGIN,
 	USER_CONNECTED,
 	USER_LOGOUT,
-	GET_USER_LOCATION,
-	
+	GET_USER_LOCATION
 } from '@/modules/UserModule';
 
 export default {
 	name: 'app',
 	created() {
 		console.log('--- Jeste App ---');
+		console.log(this.$store.getters.USER_CONNECTED);
+
 		if (!this.$store.getters.USER_CONNECTED) {
 			this.loadUser();
 		}
@@ -130,11 +131,8 @@ export default {
 		});
 	},
 	sockets: {
-		gotResponse(data) {
-			console.log(' i got message', data);
-			
-			this.$store.commit({type: SET_CURR_CHAT, data})
-			this.$router.push(`/jeste/${data.jeste._id}`)
+		reciveMsg() {
+			alert('recive msg');
 		}
 	},
 	mounted() {
@@ -178,11 +176,7 @@ export default {
 			this.$store
 				.dispatch(USER_CHECK_LOGIN)
 				.then(_ => {
-					// debugger;
-
-					this.$socket.emit('userLogged', {
-						userId: this.user._id
-					});
+					console.log('user loaded');
 				})
 				.catch(err => console.log(err));
 		},
@@ -217,6 +211,15 @@ export default {
 	watch: {
 		user() {
 			if (this.user) {
+				this.$socket.emit('userLogged', {
+					userId: this.user._id
+				});
+				setTimeout(x => {
+					this.$socket.emit('sendMsg', {
+						msg: 'this is te text',
+						jesteId: '5b5e21518cb43c2d607a1bc4'
+					});
+				}, 1000);
 				this.menuItems[1] = {
 					title:
 						this.user.details.firstName +
@@ -227,7 +230,7 @@ export default {
 				};
 			} else {
 				this.menuItems[1] = {
-					title: "Signup \\ Login",
+					title: 'Signup \\ Login',
 					link: '/login',
 					icon: 'swap_horizontal_circle'
 				};
