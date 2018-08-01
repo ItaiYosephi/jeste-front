@@ -25,4 +25,7 @@ export default {
 
 <style lang="scss" scoped>
 @import "../assets/styles/_helpers.scss";
+.container-wrapper {
+	margin: 0 auto !important;
+}
 </style>

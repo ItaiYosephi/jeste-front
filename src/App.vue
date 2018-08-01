@@ -55,7 +55,7 @@
 			</v-navigation-drawer>
 
 			<!-- Top Menu Toolbar -->
-			<v-toolbar app color="primary" class="white--text">
+			<v-toolbar app flat color="primary" class="white--text">
 				<v-toolbar-side-icon class="hidden-sm-and-up" @click.stop="drawer = !drawer" dark>
 				</v-toolbar-side-icon>
 				<v-toolbar-title class="title-logo" @click="$router.push('/')">Jeste</v-toolbar-title>
@@ -86,11 +86,11 @@
 			</v-toolbar>
 
 			<v-content class="content">
-				<v-container fluid>
-					<transition name="moveInUp">
-						<router-view/>
+				<!-- <v-container fluid> -->
+				<transition name="moveInUp">
+					<router-view/>
 					</transition>
-				</v-container>
+				<!-- </v-container> -->
 			</v-content>
 
 			<v-snackbar v-model="snackbarDisplay" :top="snackbarProps.y === 'top'" :bottom="snackbarProps.y === 'bottom'" :left="snackbarProps.x === 'left'" :right="snackbarProps.x === 'right'" :multi-line="snackbarProps.mode === 'multi-line'" :vertical="snackbarProps.mode === 'vertical'" :timeout="snackbarProps.timeout" :color="snackbarProps.bgColor">
@@ -227,7 +227,7 @@ export default {
 				};
 			} else {
 				this.menuItems[1] = {
-					title: 'Login',
+					title: "Signup \\ Login",
 					link: '/login',
 					icon: 'swap_horizontal_circle'
 				};
@@ -245,7 +245,7 @@ export default {
 
 <style lang="scss">
 .content {
-	background: #e9e9e9;
+	background: rgba(3, 20, 37, 0.2);
 }
 
 .v-toolbar__title:not(:first-child) {
