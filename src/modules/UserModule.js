@@ -81,6 +81,8 @@ export default {
 				.then(context.commit(USER_LOGOUT))
 		},
 		[USER_GET_BY_ID](context, {id}) {
+			console.log('id ig fot', id);
+			
 			return UserService.getUserByID(id)
 				.then(user => user[0])
 		},
