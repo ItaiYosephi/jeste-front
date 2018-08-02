@@ -13,7 +13,9 @@ import VueSocketio from 'vue-socket.io';
 import io from 'socket.io-client';
 // Vue.use(VueSocketio, 'http://localhost:3000');
 // io('http://localhost:3000')
-Vue.use(VueSocketio, io('http://localhost:3000'), store);
+const PORT = process.env.PORT || 3000;
+
+Vue.use(VueSocketio, io(`//localhost:${PORT}`), store);
 
 Vue.use(VueGoogleMaps, {
 	load: {
