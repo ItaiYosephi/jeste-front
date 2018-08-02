@@ -3,6 +3,7 @@
 import UserService from '@/services/UserService';
 import AuthService from '@/services/AuthService';
 import LocationService from '@/services/LocationService';
+import ImgUploadService from '@/services/ImgUploadService';
 
 export const USER_LOAD = 'user/mutations/userLoad';
 export const SET_LOCATION = 'user/mutation/setLocation';
@@ -14,6 +15,7 @@ export const GET_USER_LOCATION = 'user/action/getUserLocation';
 export const USER_LOGIN = 'user/actions/userLogin';
 export const USER_CHECK_LOGIN = 'user/actions/userCheckLogin';
 export const USER_GET_BY_ID = 'user/actions/userGetById';
+export const USER_UPLOAD_IMG = 'user/actions/uploadUserImg';
 export const USER_SIGNUP = 'user/actions/addUser';
 
 export const USER_CONNECTED = 'user/getters/userConnected';
@@ -92,6 +94,11 @@ export default {
 				context.commit({type: SET_LOCATION, loc})
 				return loc;
 		   })
+		},
+		[USER_UPLOAD_IMG](context, { image }) {
+			if (!image) return '';
+			return ImgUploadService.uploadImg(image)
+				.then(image => image)
 		},
 		[USER_SIGNUP](context, { user }) {
 			return UserService.saveUser(user)
