@@ -101,7 +101,7 @@
 
 <script>
 import { EventBus, SNACK_MSG } from "@/services/EventBusService";
-import { JESTES_LOAD, FILTER_UPDATE } from "@/modules/JesteModule";
+import { JESTES_LOAD, FILTER_UPDATE , TOGGLE_LOADING} from "@/modules/JesteModule";
 import {
   USER_CHECK_LOGIN,
   USER_CONNECTED,
@@ -116,9 +116,9 @@ export default {
     if (!this.$store.getters.USER_CONNECTED) {
       this.loadUser();
     }
+    this.$store.commit({type: TOGGLE_LOADING, isLoad: true });
     this.$store.dispatch(GET_USER_LOCATION).then(coords => {
       this.$store.commit({ type: FILTER_UPDATE, filter: { coords } });
-
       this.loadJestes();
     });
   },

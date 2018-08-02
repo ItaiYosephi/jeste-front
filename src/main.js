@@ -13,8 +13,8 @@ import VueSocketio from 'vue-socket.io';
 import io from 'socket.io-client';
 // Vue.use(VueSocketio, 'http://localhost:3000');
 // io('http://localhost:3000')
-const SOCKET_URL =
-	process.env.NODE_ENV !== 'development' ? '/' : '//localhost:3000';
+// const SOCKET_URL =	process.env.NODE_ENV !== 'development' ? '/' : '//localhost:3000';
+const SOCKET_URL =	'https://tranquil-headland-25582.herokuapp.com'
 Vue.use(VueSocketio, io(SOCKET_URL), store);
 // console.log(SOCKET_URL);
 

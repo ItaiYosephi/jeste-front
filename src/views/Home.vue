@@ -6,7 +6,7 @@
             <div class="sub-header">help others | get help</div>
           </section>
         </section>
-        <div class="load-wrapper">
+        <div class="load-wrapper" v-if="isLoading">
           <LoadingCmp/>
         </div>
         <JesteList :jestes="jestesToDisplay" />
@@ -28,7 +28,6 @@ export default {
   },
   computed: {
     jestesToDisplay() {
-      return null
       // console.log("jestes", this.$store.getters[JESTES_TO_DISPLAY]);
       return this.$store.getters[JESTES_TO_DISPLAY];
     },
