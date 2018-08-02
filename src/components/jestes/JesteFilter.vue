@@ -58,6 +58,11 @@
           type="number">
         </v-text-field>
       </v-flex>
+
+      <v-flex xs12 class="text-xs-right">
+      <v-btn large @click="filterJestes">Search</v-btn>
+      </v-flex>
+      
     </v-layout>
   </v-form>
 </template>
@@ -75,8 +80,10 @@ export default {
   },
   methods: {
     filterJestes() {
-      console.log("filterBy:", this.filterBy);
-      this.$store.dispatch({type: JESTES_LOAD, filterBy: this.filterBy})
+      let filterBy = JSON.parse(JSON.stringify(this.filterBy));
+      filterBy.maxDistance = filterBy.maxDistance * 1000;
+      console.log("filterBy:", filterBy);
+      this.$store.dispatch({type: JESTES_LOAD, filterBy })
     }
   }
 };

@@ -9,8 +9,8 @@
 
 <script>
 import { GET_CHAT_HISTORY } from '@/modules/JesteModule';
-
 import { USER_GET_BY_ID } from '@/modules/UserModule';
+
 export default {
 	props: ['jesteId', 'userId', 'reqUserId', 'resUserId'],
 	sockets: {

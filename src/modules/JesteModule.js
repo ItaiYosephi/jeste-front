@@ -33,7 +33,7 @@ export default {
 			coords: '',
 			txt: '',
 			category: '',
-			maxDistance: 100000,
+			maxDistance: 50000,
 			maxPrice: 200
 		},
 		isLoading: false
@@ -70,7 +70,9 @@ export default {
 	},
 	getters: {
 		[FILTER_GET](state) {
-			return state.filterBy;
+			let filters = JSON.parse(JSON.stringify(state.filterBy));
+			filters.maxDistance = filters.maxDistance / 1000;
+			return filters;
 		},
 		[JESTE_CATEGORIES_GET](state) {
 			return state.categories;

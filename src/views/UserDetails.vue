@@ -3,18 +3,18 @@
 	<v-layout v-if="user" justify-center wrap>
 		<v-flex xs12 md6>
 			<v-card>
-						<v-toolbar color="primary" class="text--text" flat>
-							<v-toolbar-title>{{user.details.firstName}}'s Details</v-toolbar-title>
-						</v-toolbar>
-						<v-card-title primary-title>
-							<v-avatar>
-								<img :src="imgUrl" alt="avatar">
-							</v-avatar>
-							<div class="v-title">
-								<div class="headline">{{user.details.firstName}} {{user.details.lastName}}</div>
-								<span class="grey--text">Weizmen Street, Tel Aviv</span>
-							</div>
-						</v-card-title>
+				<v-toolbar color="primary" class="text--text" flat>
+					<v-toolbar-title>{{user.details.firstName}}'s Details</v-toolbar-title>
+				</v-toolbar>
+				<v-card-title primary-title>
+					<v-avatar>
+						<img :src="imgUrl" alt="avatar">
+					</v-avatar>
+					<div class="v-title">
+						<div class="headline">{{user.details.firstName}} {{user.details.lastName}}</div>
+						<span class="grey--text">{{user.formatted_address}}</span>
+					</div>
+				</v-card-title>
 				<v-card-text>
 					<v-list two-line>
 						<v-list-tile-content>

@@ -1,6 +1,6 @@
 <template>
     <section class="jeste-app">
-      <v-jumbotron class="jumbotron" height="300px" dark>
+      <v-jumbotron class="jumbotron" height="375px" dark>
         <v-container fill-height>
           <v-layout align-center wrap>
             <div class="filter-header">do jestes for others.</div>
