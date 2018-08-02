@@ -8,6 +8,8 @@
 </template>
 
 <script>
+import { GET_CHAT_HISTORY } from '@/modules/JesteModule';
+
 import { USER_GET_BY_ID } from '@/modules/UserModule';
 export default {
 	props: ['jesteId', 'userId', 'reqUserId', 'resUserId'],
@@ -23,7 +25,7 @@ export default {
 			this.isTyping = true;
 			setTimeout(_ => {
 				this.isTyping = false;
-			}, 1000);
+			}, 1500);
 		}
 	},
 	data() {
@@ -65,17 +67,6 @@ export default {
 		};
 	},
 	created() {
-		// if (this.isReqUser && this.$store.getters[CURR_CHAT]) {
-		// 	this.$socket.emit('roomRequested', {
-		// 		user: this.currUser,
-		// 		req_user_id: this.$store.getters[CURR_CHAT].userId
-		// 	});
-		// } else {
-		// 	this.$socket.emit('roomRequested', {
-		// 		user: this.currUser,
-		// 		req_user_id: this.reqUserId
-		// 	});
-		// }
 		console.log('requserid', this.reqUserId);
 		console.log('Res User', this.resUserId);
 
@@ -84,6 +75,22 @@ export default {
 		} else {
 			this.getUser(this.reqUserId);
 		}
+		this.$store
+			.dispatch({ type: GET_CHAT_HISTORY, jesteId: this.jesteId })
+			.then(res => {
+				console.log(res);
+
+				var orderHistory = res.reduce((acc, item) => {
+					if (item.msg.authorId === this.userId) {
+						item.msg.author = 'me';
+					} else {
+						item.msg.author = 'them';
+					}
+					acc.push(item.msg);
+					return acc;
+				}, []);
+				this.messageList = orderHistory;
+			});
 	},
 	mounted() {
 		var txtInput = document.querySelector('.sc-user-input--text');
@@ -95,6 +102,7 @@ export default {
 	},
 	methods: {
 		handleReceivedMsg(msg) {
+			msg.author = 'them';
 			if (msg.data.file || msg.data.emoji || msg.data.text.length > 0) {
 				this.newMessagesCount = this.isChatOpen
 					? this.newMessagesCount
@@ -105,7 +113,9 @@ export default {
 			}
 		},
 		onMessageWasSent(msg) {
+			msg.timestamp = Date.now();
 			this.messageList.push(msg);
+			msg.authorId = this.userId;
 
 			this.$socket.emit('sendMsg', { msg, jesteId: this.jesteId });
 
@@ -127,12 +137,27 @@ export default {
 			this.$store.dispatch({ type: USER_GET_BY_ID, id }).then(user => {
 				this.agentProfile.teamName =
 					user.details.firstName + ' ' + user.details.lastName;
-				// this.agentProfile.imageUrl = user.img.url
+				this.agentProfile.imageUrl = user.img.url;
 			});
 		}
 	}
 };
 </script>
 
-<style>
+
+<style  lang="scss">
+img.sc-header--img {
+	width: 54px !important;
+	height: 54px !important;
+}
+.sc-message--avatar {
+	    background-size: 30px 30px !important;
+	// display: none
+}
+.sc-message--content.received .sc-message--text {
+	    max-width: calc(100% - 120px);
+    word-wrap: break-word;
+}
+
+
 </style>

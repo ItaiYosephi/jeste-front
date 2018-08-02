@@ -255,10 +255,14 @@ export default {
 
 .moveInUp-enter,
 .moveInUp-leave-to {
-  position: absolute;
+  // position: absolute;
+   position: fixed;
+  top: 64px;
 }
 .moveInUp-enter {
   transform: translateX(-100%);
+   position: fixed;
+  top: 64px;
 }
 .moveInUp-leave-to {
   // transform: translateY(100%);

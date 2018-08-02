@@ -2,6 +2,7 @@
 import axios from 'axios'
 
 const URL = (process.env.NODE_ENV !== 'development') ? '/jeste' : '//localhost:3000/jeste';
+const CHAT_URL = (process.env.NODE_ENV !== 'development') ? '/chat' : '//localhost:3000/chat';
 
 function query({ txt = '', coords = '', category = '', maxDistance = 10000, maxPrice = 200 }) {
 
@@ -48,10 +49,23 @@ function saveJeste(jeste) {
             .then(res => res.data);
     }
 }
+function getChatHistory(jesteId) {
+    return axios.get(`${CHAT_URL}/${jesteId}`)
+    .then(res => {
+        return res.data
+    })
+    .catch(err => {
+        console.warn(`Had a problem to load chat history of jeste ${jesteId}:`);
+        console.log(err);
+        return err;
+    });
+
+}
 
 export default {
     query,
     getJesteByID,
     deleteJeste,
-    saveJeste
+    saveJeste,
+    getChatHistory
 }

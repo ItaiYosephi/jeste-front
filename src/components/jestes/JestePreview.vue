@@ -1,7 +1,7 @@
 <template>
   <v-flex class="jeste-card-wrapper" xs12 sm4 md3>
     <v-card class="jeste-card" tile hover :to="'/jeste/' + jeste._id" height="400px">
-      <v-card-media :src="jeste.img.url" height="200px"></v-card-media>
+      <v-card-media :src="imgUrl" height="200px"></v-card-media>
       <v-card-title primary-title>
         <div>
           <h3 class="headline mb-0">{{jeste.title}}</h3>
@@ -33,6 +33,10 @@ export default {
     distance() {
       let distance = (this.jeste.destination_loc.calculated / 1000).toFixed(2)
       return `${distance} km away from you`
+    },
+    imgUrl() {
+      if (this.jeste.img && this.jeste.img.url) return  this.jeste.img.url
+      else return ''
     }
   },
   filters: {

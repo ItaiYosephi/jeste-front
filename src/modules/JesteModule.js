@@ -13,6 +13,7 @@ export const JESTE_DELETE = 'jeste/jesteDelete';
 
 export const JESTE_GET_BY_ID = 'jeste/actions/getJesteById';
 export const JESTE_UPLOAD_IMG = 'jeste/actions/uploadJesteImg';
+export const GET_CHAT_HISTORY = 'jeste/actions/uploadJesteImg';
 
 export const JESTE_GET = 'jeste/getters/getJeste';
 export const JESTES_TO_DISPLAY = 'jeste/getters/jestesToDisplay';
@@ -130,6 +131,12 @@ export default {
 			return JesteService.deleteJeste(id)
 				.then(() => context.commit({ type: JESTE_DELETE, id }))
 				.catch(err => err)
-		}
+		},
+		[GET_CHAT_HISTORY](context, {jesteId}) {
+			return JesteService.getChatHistory(jesteId)
+				.then(res => res)
+				.catch(err => err)
+		},
+		
 	}
 }

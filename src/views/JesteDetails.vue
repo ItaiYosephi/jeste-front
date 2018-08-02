@@ -1,22 +1,35 @@
 <template>
 	<v-container fluid grid-list-md>
 		<v-layout row wrap fill-height v-if="jeste">
-
 			<ChatCmp :jeste-id="jeste._id" :req-user-id="jeste.req_user_id" :res-user-id="jeste.res_user_id" :user-id="user._id" v-if="showChat" class="popo"></ChatCmp>
 
 			<v-flex xs12 sm6>
 				<v-card height="100%" class="jeste-details-card" hover>
 					<v-card-title primary-title>
-						<div>
-							<div class="headline mb-2">{{jeste.title}}</div>
-							<div class="grey--text mb-2">{{jeste.formatted_address}}</div>
-							<div>{{jeste.description}}</div>
-						</div>
+						<v-layout row justify-space-between>
+							<v-flex>
+								<div class="headline mb-2">{{jeste.title}}</div>
+								<div class="grey--text mb-2">{{jeste.formatted_address}}</div>
+								<div class="desc">{{jeste.description}}</div>
+							</v-flex>
+
+							<v-flex v-if="user" xs2 ml-4 class="user">
+								<router-link :to="`/user/${user._id}`">
+									<v-avatar size="50px" color="grey lighten-4">
+										<img :src="user.img.url" alt="avatar">
+
+									</v-avatar>
+									<div class="grey--text">{{user.details.firstName}}</div>
+								</router-link>
+
+							</v-flex>
+						</v-layout>
 					</v-card-title>
+
 					<v-card-actions>
-						<v-btn flat color="blue" @click.prevent="respond">Jeste It!</v-btn>
+						<v-btn v-if="!canEdit && user && !jeste.res_user_id" flat color="blue" @click.prevent="respond">Jeste It!</v-btn>
 						<v-btn v-if="canEdit" flat :to="`/jeste/${jeste._id}/edit`">Edit</v-btn>
-						<v-btn v-if="canEdit" flat @click.stop="dialog = true">Delete</v-btn>
+						<v-btn v-if="canEdit" fla t @click.stop="dialog = true">Delete</v-btn>
 
 						<v-spacer></v-spacer>
 
@@ -27,13 +40,6 @@
 			<v-flex xs12 sm6>
 				<v-card hover height="100%">
 					<v-card-media v-if="jeste.img" :src="jeste.img.url" height="400px">
-						<!-- <v-container fill-height fluid pa-2>
-							<v-layout fill-height>
-								<v-flex xs12 align-end flexbox>
-									<span class="headline white--text" v-text="jeste.title"></span>
-								</v-flex>
-							</v-layout>
-						</v-container> -->
 					</v-card-media>
 				</v-card>
 			</v-flex>
@@ -74,90 +80,114 @@
 </template>
 
 <script>
-import ChatCmp from '@/components/ChatCmp'
-import { EventBus, SNACK_MSG } from "@/services/EventBusService";
-import { JESTE_GET, JESTE_GET_BY_ID, JESTE_DELETE } from "@/modules/JesteModule";
-import { USER_CONNECTED } from "@/modules/UserModule";
+import ChatCmp from '@/components/ChatCmp';
+import { EventBus, SNACK_MSG } from '@/services/EventBusService';
+import {
+	JESTE_GET,
+	JESTE_GET_BY_ID,
+	JESTE_DELETE
+} from '@/modules/JesteModule';
+import { USER_CONNECTED, USER_GET_BY_ID } from '@/modules/UserModule';
 
 export default {
-  name: "jesteDetails",
-  data() {
-    return {
-      jeste: {},
-      dialog: false
-    };
-  },
-  created() {
-		this.getJeste();
-		
+	name: 'jesteDetails',
+	data() {
+		return {
+			jeste: {},
+			dialog: false,
+			reqUser: null
+		};
 	},
-	mounted() {
-
+	created() {
+		this.getJeste().then(this.getUser);
 	},
-  methods: {
-    getJeste() {
-      let id = this.$route.params.id;
-      let jeste = this.$store.getters[JESTE_GET](id);
-      if (!jeste) {
-        this.$store.dispatch({ type: JESTE_GET_BY_ID, id })
-          .then(jeste => (this.jeste = jeste));
-      } else {
-        this.jeste = jeste;
-      }
-    },
-    deleteJeste() {
-      this.dialog = false;
-      this.$store
-        .dispatch({ type: JESTE_DELETE, id: this.jeste._id })
-        .then(_ => {
-          EventBus.$emit(SNACK_MSG, { text: `Jeste Deleted Successfully`, bgColor: "success" });
-          this.$router.push("/");
-        });
+	mounted() {},
+	methods: {
+		getJeste() {
+			let id = this.$route.params.id;
+			return this.$store
+				.dispatch({ type: JESTE_GET_BY_ID, id })
+				.then(jeste => (this.jeste = jeste));
+		},
+		deleteJeste() {
+			this.dialog = false;
+			this.$store
+				.dispatch({ type: JESTE_DELETE, id: this.jeste._id })
+				.then(_ => {
+					EventBus.$emit(SNACK_MSG, {
+						text: `Jeste Deleted Successfully`,
+						bgColor: 'success'
+					});
+					this.$router.push('/');
+				});
 		},
 		respond() {
 			console.log('user', this.user);
-			
-			this.jeste.res_user_id = this.user._id
-			this.$socket.emit('jesteResponded', {jeste: this.jeste});
+
+			this.jeste.res_user_id = this.user._id;
+			this.$socket.emit('jesteResponded', { jeste: this.jeste });
+		},
+		getUser() {
+			this.$store
+				.dispatch({ type: USER_GET_BY_ID, id: this.jeste.req_user_id })
+				.then(user => {
+					this.reqUser = user;
+				});
 		}
-  },
-  computed: {
-    position() {
-      if (this.jeste.destination_loc) {
-        return {
-          lat: +this.jeste.destination_loc.coordinates[0],
-          lng: +this.jeste.destination_loc.coordinates[1]
-        };
-      }
-    },
-    canEdit() {
-      return ( !this.jeste.ended_at &&
-        this.user &&
-        this.user._id === this.jeste.req_user_id );
+	},
+	computed: {
+		position() {
+			if (this.jeste.destination_loc) {
+				return {
+					lat: +this.jeste.destination_loc.coordinates[0],
+					lng: +this.jeste.destination_loc.coordinates[1]
+				};
+			}
+		},
+		canEdit() {
+			return (
+				!this.jeste.ended_at &&
+				this.user &&
+				this.user._id === this.jeste.req_user_id
+			);
 		},
 		user() {
-
-			return this.$store.getters[USER_CONNECTED]
+			return this.$store.getters[USER_CONNECTED];
 		},
 		showChat() {
-			return !!this.user && !!this.jeste.res_user_id && (this.user._id === this.jeste.res_user_id || this.user._id === this.jeste.req_user_id)
+			return (
+				!!this.user &&
+				!!this.jeste.res_user_id &&
+				(this.user._id === this.jeste.res_user_id ||
+					this.user._id === this.jeste.req_user_id)
+			);
 		}
-  },
-  components: {
-	  ChatCmp
-  }
+	},
+	components: {
+		ChatCmp
+	}
 };
 </script>
 
 <style lang="scss" scoped>
-@import "../assets/styles/_vars.scss";
+@import '../assets/styles/_vars.scss';
+a {
+	text-decoration: none;
+}
+.v-card--hover {
+	cursor: default;
+}
 
 .jeste-details-card {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
 }
 .popo {
 	z-index: 10000000000000;
+}
+.user {
+	display: flex;
+	justify-content: center;
 }
 </style>

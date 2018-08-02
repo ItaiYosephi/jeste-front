@@ -8,7 +8,7 @@
 						</v-toolbar>
 						<v-card-title primary-title>
 							<v-avatar>
-								<img src="https://vuetifyjs.com/apple-touch-icon-180x180.png" alt="avatar">
+								<img :src="imgUrl" alt="avatar">
 							</v-avatar>
 							<div class="v-title">
 								<div class="headline">{{user.details.firstName}} {{user.details.lastName}}</div>
@@ -99,7 +99,12 @@ export default {
       user: null
     };
   },
-  computed: {},
+  computed: {
+		imgUrl() {
+			if (this.user && this.user.img && this.user.img.url) return this.user.img.url
+			else return 'https://vuetifyjs.com/apple-touch-icon-180x180.png'
+		}
+	},
   methods: {
     getUser() {
       this.$store
