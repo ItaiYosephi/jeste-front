@@ -96,7 +96,6 @@
       </v-snackbar>
 
     </v-app>
-    Location: {{location}}
   </div>
 </template>
 

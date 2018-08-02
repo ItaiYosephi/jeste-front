@@ -16,6 +16,7 @@ import io from 'socket.io-client';
 const SOCKET_URL =
 	process.env.NODE_ENV !== 'development' ? '/' : '//localhost:3000';
 Vue.use(VueSocketio, io(SOCKET_URL), store);
+// console.log(SOCKET_URL);
 
 Vue.use(VueGoogleMaps, {
 	load: {

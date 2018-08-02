@@ -6,6 +6,7 @@ import ImgUploadService from '@/services/ImgUploadService';
 export const JESTE_ADD = 'jeste/mutations/addJeste';
 export const JESTE_UPDATE = 'jeste/mutations/updateJeste';
 export const FILTER_UPDATE = 'jeste/mutations/updateFilter';
+export const TOGGLE_LOADING = 'jeste/mutations/toggleLoad';
 
 export const JESTES_LOAD = 'jeste/jestesLoad';
 export const JESTE_SAVE = 'jeste/jesteSave';
@@ -19,9 +20,10 @@ export const JESTE_GET = 'jeste/getters/getJeste';
 export const JESTES_TO_DISPLAY = 'jeste/getters/jestesToDisplay';
 export const JESTE_EMPTY = 'jeste/getters/emptyJeste';
 export const JESTE_CATEGORIES_GET = 'jeste/getters/getJesteCategories';
+export const JESTE_IS_LOADING = 'jeste/getters/loadingJeste';
 export const FILTER_GET = 'jeste/getters/getFilterBy';
 
-import { USER_CONNECTED } from './UserModule'
+import { USER_CONNECTED } from './UserModule';
 
 export default {
 	state: {
@@ -33,7 +35,8 @@ export default {
 			category: '',
 			maxDistance: 100000,
 			maxPrice: 200
-		}
+		},
+		isLoading: false
 	},
 	mutations: {
 		[JESTES_LOAD](state, { jestes }) {
@@ -43,7 +46,9 @@ export default {
 			state.jestes.push(jeste);
 		},
 		[JESTE_UPDATE](state, { jeste }) {
-			const jesteIdx = state.jestes.findIndex(currJeste => currJeste._id === jeste._id);
+			const jesteIdx = state.jestes.findIndex(
+				currJeste => currJeste._id === jeste._id
+			);
 			state.jestes.splice(jesteIdx, 1, jeste);
 		},
 		[JESTE_DELETE](state, { id }) {
@@ -51,9 +56,16 @@ export default {
 		},
 		[FILTER_UPDATE](state, { filter }) {
 			for (let prop in filter) {
-				if (filter[prop] && prop !== 'coords') state.filterBy[prop] = filter[prop];
-				else if (filter[prop] && prop === 'coords') state.filterBy.coords = `${filter.coords.lat},${filter.coords.lng}`;
+				if (filter[prop] && prop !== 'coords')
+					state.filterBy[prop] = filter[prop];
+				else if (filter[prop] && prop === 'coords')
+					state.filterBy.coords = `${filter.coords.lat},${
+						filter.coords.lng
+					}`;
 			}
+		},
+		[TOGGLE_LOADING](state, { isLoad }) {
+			state.isLoading = isLoad;
 		}
 	},
 	getters: {
@@ -66,8 +78,8 @@ export default {
 		[JESTES_TO_DISPLAY](state) {
 			return state.jestes;
 		},
-		[JESTE_GET]: (state) => (id) => {
-			return state.jestes.find(jeste => jeste._id === id)
+		[JESTE_GET]: state => id => {
+			return state.jestes.find(jeste => jeste._id === id);
 		},
 		// TODO: add supoort in 2level array (array of keywords)
 		// JesteKeywords(state) {
@@ -79,7 +91,7 @@ export default {
 			// TODO: Check the fields and add/remove/edit by needs
 			return {
 				from_loc: '',
-				destination_loc: { "type": "Point", coordinates: [null, null] },
+				destination_loc: { type: 'Point', coordinates: [null, null] },
 				ended_at: null,
 				req_user_id: null,
 				res_user_id: null,
@@ -93,51 +105,53 @@ export default {
 				formatted_address: '',
 				time_frame: { from: '', until: '' },
 				keywords: [],
-				status: 0,
-			}
+				status: 0
+			};
 		},
+		[JESTE_IS_LOADING](state) {
+			return state.isLoading;
+		}
 	},
 	actions: {
 		[JESTES_LOAD](context, { filterBy = '' }) {
+			context.commit({ type: TOGGLE_LOADING, isLoad: true });
 			if (!filterBy) filterBy = context.state.filterBy;
 			// filterBy.coords = context.rootState.UserModule.state.currLocation
-			return JesteService.query(filterBy)
-				.then(jestes => {
-					context.commit({ type: JESTES_LOAD, jestes })
-					return jestes;
-				})
+			return JesteService.query(filterBy).then(jestes => {
+				context.commit({ type: JESTES_LOAD, jestes });
+				context.commit({ type: TOGGLE_LOADING, isLoad: false });
+
+				return jestes;
+			});
 		},
 		[JESTE_GET_BY_ID](context, { id }) {
-			return JesteService.getJesteByID(id)
-				.then(jeste => jeste)
+			return JesteService.getJesteByID(id).then(jeste => jeste);
 		},
 		[JESTE_UPLOAD_IMG](context, { image }) {
 			if (!image) return '';
-			return ImgUploadService.uploadImg(image)
-				.then(image => image)
+			return ImgUploadService.uploadImg(image).then(image => image);
 		},
 		[JESTE_SAVE](context, { jesteToSave }) {
 			// if (!context.getters[IS_ADMIN]) return Promise.reject('No Permissions');
 			const isEdit = !!jesteToSave._id;
-			if (!isEdit) jesteToSave.req_user_id = context.getters[USER_CONNECTED]._id
-			return JesteService.saveJeste(jesteToSave)
-				.then(jeste => {
-					if (isEdit) context.commit({ type: JESTE_UPDATE, jeste })
-					else context.commit({ type: JESTE_ADD, jeste })
-					return jeste;
-				})
+			if (!isEdit)
+				jesteToSave.req_user_id = context.getters[USER_CONNECTED]._id;
+			return JesteService.saveJeste(jesteToSave).then(jeste => {
+				if (isEdit) context.commit({ type: JESTE_UPDATE, jeste });
+				else context.commit({ type: JESTE_ADD, jeste });
+				return jeste;
+			});
 		},
 		[JESTE_DELETE](context, { id }) {
 			// if (!context.getters[IS_ADMIN]) return Promise.reject('No Permissions');
 			return JesteService.deleteJeste(id)
 				.then(() => context.commit({ type: JESTE_DELETE, id }))
-				.catch(err => err)
+				.catch(err => err);
 		},
-		[GET_CHAT_HISTORY](context, {jesteId}) {
+		[GET_CHAT_HISTORY](context, { jesteId }) {
 			return JesteService.getChatHistory(jesteId)
 				.then(res => res)
-				.catch(err => err)
-		},
-		
+				.catch(err => err);
+		}
 	}
-}
+};

@@ -6,32 +6,47 @@
             <div class="sub-header">help others | get help</div>
           </section>
         </section>
+        <div class="load-wrapper">
+          <LoadingCmp/>
+        </div>
         <JesteList :jestes="jestesToDisplay" />
     </section>
 </template>
 
 <script>
 import JesteList from "@/components/jestes/JesteList";
+import LoadingCmp from "@/components/LoadingCmp";
 import JesteFilter from "@/components/jestes/JesteFilter";
-import { JESTES_LOAD, JESTES_TO_DISPLAY } from "@/modules/JesteModule";
+import { JESTES_LOAD, JESTES_TO_DISPLAY, JESTE_IS_LOADING } from "@/modules/JesteModule";
 
 export default {
   name: "home",
   components: {
     JesteList,
-    JesteFilter
+    JesteFilter,
+    LoadingCmp
   },
   computed: {
     jestesToDisplay() {
+      return null
       // console.log("jestes", this.$store.getters[JESTES_TO_DISPLAY]);
       return this.$store.getters[JESTES_TO_DISPLAY];
     },
+    isLoading() {
+      return this.$store.getters[JESTE_IS_LOADING];
+
+    }
   }
 };
 </script>
 
 <style lang="scss" scoped>
 @import "../assets/styles/_vars.scss";
+.load-wrapper {
+    text-align: center;
+    padding: 50px;
+    min-height: 400px;
+}
 
 .back-img {
   width: 100%;
