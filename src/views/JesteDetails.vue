@@ -13,15 +13,13 @@
 								<div class="desc">{{jeste.description}}</div>
 							</v-flex>
 
-							<v-flex v-if="user" xs2 ml-4 class="user">
-								<router-link :to="`/user/${user._id}`">
+							<v-flex v-if="reqUser" xs2 ml-4 class="user">
+								<router-link :to="`/user/${reqUser._id}`">
 									<v-avatar size="50px" color="grey lighten-4">
-										<img :src="user.img.url" alt="avatar">
-
+										<img :src="reqUser.img.url" alt="avatar">
 									</v-avatar>
-									<div class="grey--text">{{user.details.firstName}}</div>
+									<div class="grey--text">{{reqUser.details.firstName}} {{reqUser.details.lastName}}</div>
 								</router-link>
-
 							</v-flex>
 						</v-layout>
 					</v-card-title>
@@ -187,7 +185,7 @@ a {
 	z-index: 10000000000000;
 }
 .user {
-	display: flex;
-	justify-content: center;
+	// display: flex;
+	// justify-content: center;
 }
 </style>
