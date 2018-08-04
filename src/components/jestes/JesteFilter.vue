@@ -91,9 +91,10 @@ export default {
 		},
 		maxDistance: {
 			get: function() {
-				return this.filter.maxDistance;
+				return this.filter.maxDistance / 1000;
 			},
 			set: function(val) {
+				val *=1000
 				this.$store.commit({ type: UPDATE_MAXDISTANCE_FILTER, val });
 			}
 		}

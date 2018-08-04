@@ -5,15 +5,15 @@
         </v-toolbar>
         <v-form @submit.prevent="signup" v-model="validSignUp" ref="formSignUp">
             <v-card-text>
-                <v-text-field box v-model="user.details.firstName" label="First Name" :rules="fNameRules" hint="Insert your first name" required>
+                <v-text-field box v-model="user.details.firstName"  label="First Name" browser-autocomplete="given-name" :rules="fNameRules" hint="Insert your first name" required>
                 </v-text-field>
-                <v-text-field box v-model="user.details.lastName" label="Last Name" :rules="lNameRules" hint="Insert your last name" required>
+                <v-text-field box v-model="user.details.lastName" label="Last Name" browser-autocomplete="family-name" :rules="lNameRules" hint="Insert your last name" required>
                 </v-text-field>
-								<v-text-field box v-model="user.email" label="E-mail" :rules="emailRules" hint="Insert a valid E-mail" required>
+								<v-text-field box v-model="user.email" label="E-mail" browser-autocomplete="email" :rules="emailRules" hint="Insert a valid E-mail" required>
 								</v-text-field>
-                <v-text-field box mask="phone" v-model="user.mobile" label="Mobile Phone" :rules="phoneRules" hint="Insert your mobile phone number" required>
+                <v-text-field box mask="phone" v-model="user.mobile" browser-autocomplete="tel" label="Mobile Phone" :rules="phoneRules" hint="Insert your mobile phone number" required>
                 </v-text-field>
-                <v-text-field box v-model="user.password" label="Password" :rules="passwordRules" :type="show ? 'text' : 'password'" :append-icon="show ? 'visibility_off' : 'visibility'"
+                <v-text-field box v-model="user.password" browser-autocomplete="new-password" label="Password" :rules="passwordRules" :type="show ? 'text' : 'password'" :append-icon="show ? 'visibility_off' : 'visibility'"
                     @click:append="show = !show" hint="At least 8 characters" required>
                 </v-text-field>
                 <v-text-field box v-model="user.formatted_address" ref="autocomplete" label="Address" hint="The address you base at" @keyup.enter.prevent append-icon="search" :rules="addressRules" required>
