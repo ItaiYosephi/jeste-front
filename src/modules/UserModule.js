@@ -89,6 +89,8 @@ export default {
 				.then(user => user[0])
 		},
 		[GET_USER_LOCATION](context) {
+			console.log('getting user location');
+			
 			return LocationService.getUserLocation()
 			 .then(loc => {
 				context.commit({type: SET_LOCATION, loc})

@@ -7,6 +7,11 @@ export const JESTE_ADD = 'jeste/mutations/addJeste';
 export const JESTE_UPDATE = 'jeste/mutations/updateJeste';
 export const FILTER_UPDATE = 'jeste/mutations/updateFilter';
 export const TOGGLE_LOADING = 'jeste/mutations/toggleLoad';
+export const UPDATE_TXT_FILTER = 'jeste/mutations/updateTxtFilter';
+export const UPDATE_MAXPRICE_FILTER = 'jeste/mutations/updateMaxPriceFilter';
+export const UPDATE_CATEGORY_FILTER = 'jeste/mutations/updateCategoryFilter';
+export const UPDATE_MAXDISTANCE_FILTER =
+	'jeste/mutations/updateMaxDistanceFilter';
 
 export const JESTES_LOAD = 'jeste/jestesLoad';
 export const JESTE_SAVE = 'jeste/jesteSave';
@@ -55,17 +60,37 @@ export default {
 			state.jestes = state.jestes.filter(jeste => jeste._id !== id);
 		},
 		[FILTER_UPDATE](state, { filter }) {
+			console.log('filter update', filter);
+
 			for (let prop in filter) {
-				if (filter[prop] && prop !== 'coords')
-					state.filterBy[prop] = filter[prop];
-				else if (filter[prop] && prop === 'coords')
-					state.filterBy.coords = `${filter.coords.lat},${
-						filter.coords.lng
-					}`;
+				if (filter[prop]) {
+					if (prop !== 'coords') {
+						state.filterBy[prop] = filter[prop];
+					} else {
+						state.filterBy.coords = `${filter.coords.lat},${
+							filter.coords.lng
+						}`;
+					}
+				}
 			}
 		},
 		[TOGGLE_LOADING](state, { isLoad }) {
 			state.isLoading = isLoad;
+		},
+		[UPDATE_TXT_FILTER](state, { txt }) {
+			state.filterBy.txt = txt;
+		},
+		[UPDATE_CATEGORY_FILTER](state, { val }) {
+			state.filterBy.category = val;
+		},
+		[UPDATE_CATEGORY_FILTER](state, { val }) {
+			state.filterBy.category = val;
+		},
+		[UPDATE_MAXPRICE_FILTER](state, { val }) {
+			state.filterBy.maxPrice = val;
+		},
+		[UPDATE_MAXDISTANCE_FILTER](state, { val }) {
+			state.filterBy.maxDistance = val;
 		}
 	},
 	getters: {
@@ -115,9 +140,10 @@ export default {
 		}
 	},
 	actions: {
-		[JESTES_LOAD](context, { filterBy = '' }) {
+		[JESTES_LOAD](context) {
 			context.commit({ type: TOGGLE_LOADING, isLoad: true });
-			if (!filterBy) filterBy = context.state.filterBy;
+			let filterBy = { ...context.state.filterBy };
+			filterBy.maxDistance *= 1000;
 			// filterBy.coords = context.rootState.UserModule.state.currLocation
 			return JesteService.query(filterBy).then(jestes => {
 				context.commit({ type: JESTES_LOAD, jestes });
