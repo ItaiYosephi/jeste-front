@@ -5,9 +5,9 @@
       </v-toolbar>
       <v-form @submit.prevent="login" v-model="validLogin" ref="formLogin">
         <v-card-text>
-          <v-text-field box v-model="user.email" label="E-mail" :rules="emailRules" hint="Insert a valid E-mail" required>
+          <v-text-field browser-autocomplete="email" box v-model="user.email" type="email" label="E-mail" :rules="emailRules" hint="Insert a valid E-mail" required>
           </v-text-field>
-          <v-text-field box v-model="user.password" label="Password" :rules="passwordRules" :type="show ? 'text' : 'password'" :append-icon="show ? 'visibility_off' : 'visibility'"
+          <v-text-field browser-autocomplete="current-password" box v-model="user.password" label="Password" :rules="passwordRules" :type="show ? 'text' : 'password'" :append-icon="show ? 'visibility_off' : 'visibility'"
             @click:append="show = !show" hint="At least 8 characters" required>
           </v-text-field>
         </v-card-text>
@@ -65,5 +65,21 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss" >
+/* Change Autocomplete styles in Chrome*/
+input:-webkit-autofill,
+input:-webkit-autofill:focus
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  // border: 1px solid green !important;
+  // -webkit-text-fill-color: green !important;
+  -webkit-box-shadow: 0 0 0px 1000px #f0f0f0 inset !important;
+  // transition: background-color 5000s ease-in-out 0s !important;
+}
+
+
 </style>

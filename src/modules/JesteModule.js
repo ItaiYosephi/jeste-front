@@ -85,14 +85,12 @@ export default {
 			state.filterBy.maxPrice = val;
 		},
 		[UPDATE_MAXDISTANCE_FILTER](state, { val }) {
-			state.filterBy.maxDistance = val * 1000;
+			state.filterBy.maxDistance = val;
 		}
 	},
 	getters: {
 		[FILTER_GET](state) {
-			let filters = JSON.parse(JSON.stringify(state.filterBy));
-			filters.maxDistance = filters.maxDistance / 1000;
-			return filters;
+			return state.filterBy;
 		},
 		[JESTE_CATEGORIES_GET](state) {
 			return state.categories;
