@@ -1,6 +1,5 @@
 <template>
 	<v-form>
-		{{filter}}
 		<v-layout row wrap>
 			<v-flex xs12 md7>
 				<v-text-field color="secondary" v-model="txt" flat hide-details clearable prepend-inner-icon="search" label="Free Text" @keyup.enter.native="filterJestes" @click:prepend-inner="filterJestes">
