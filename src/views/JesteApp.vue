@@ -8,7 +8,10 @@
           </v-layout>
         </v-container>
       </v-jumbotron>
-      <JesteList :jestes="jestesToDisplay" />
+      <div class="load-wrapper" v-if="isLoading">
+			  <LoadingCmp/>
+		  </div>
+      <JesteList v-else :jestes="jestesToDisplay" />
       <v-btn
           fixed
           fab
@@ -23,17 +26,22 @@
 </template>
 
 <script>
+import LoadingCmp from "@/components/LoadingCmp";
 import JesteList from "@/components/jestes/JesteList";
 import JesteFilter from "@/components/jestes/JesteFilter";
-import { JESTES_LOAD, JESTES_TO_DISPLAY } from "@/modules/JesteModule";
+import { JESTES_LOAD, JESTES_TO_DISPLAY, JESTE_IS_LOADING } from "@/modules/JesteModule";
 
 export default {
   name: "jesteApp",
   components: {
+    LoadingCmp,
     JesteList,
     JesteFilter
   },
   computed: {
+    isLoading() {
+      return this.$store.getters[JESTE_IS_LOADING];
+    },
     jestesToDisplay() {
       // console.log("jestes", this.$store.getters[JESTES_TO_DISPLAY]);
       return this.$store.getters[JESTES_TO_DISPLAY];
@@ -43,6 +51,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.load-wrapper {
+	height: 100%;
+  padding: 50px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
 .jumbotron {
   background: #21a7e8;
   .filter-header {

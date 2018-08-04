@@ -1,10 +1,16 @@
 <template>
 	<section class="home">
 		<section class="back-img">
-			<section class="main-content">
+			<v-layout column wrap justify-center align-center class="main-content">
 				<div class="header">jeste</div>
 				<div class="sub-header">help others | get help</div>
-			</section>
+        <v-spacer></v-spacer>
+        <div class="stats">
+          64 | 54 | 25
+        </div>
+        <v-btn large color="primary" to="/jeste/edit">ask for jeste</v-btn>
+        <v-spacer></v-spacer>
+			</v-layout>
 		</section>
 		<div class="load-wrapper" v-if="isLoading">
 			<LoadingCmp/>
@@ -14,8 +20,8 @@
 </template>
 
 <script>
-import JesteList from "@/components/jestes/JesteList";
 import LoadingCmp from "@/components/LoadingCmp";
+import JesteList from "@/components/jestes/JesteList";
 import JesteFilter from "@/components/jestes/JesteFilter";
 import { JESTES_LOAD, JESTES_TO_DISPLAY, JESTE_IS_LOADING } from "@/modules/JesteModule";
 
@@ -41,11 +47,12 @@ export default {
 <style lang="scss" scoped>
 @import "../assets/styles/_vars.scss";
 .load-wrapper {
-  text-align: center;
+	height: 100%;
   padding: 50px;
-  min-height: 400px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
-
 .back-img {
   width: 100%;
   height: 75vh;
@@ -56,13 +63,9 @@ export default {
 
 .main-content {
   height: 100%;
-  text-align: center;
-  padding: 10px 10px;
+  // padding: 5px;
   color: white;
-  background: rgba(3, 20, 36, 0.4);
-  span {
-    background: white;
-  }
+  background: rgba(3, 20, 36, 0.35);
   .header {
     text-transform: uppercase;
     font-size: 5em;
@@ -75,6 +78,12 @@ export default {
     font-size: 1.25em;
     letter-spacing: 1.1px;
     text-transform: uppercase;
+  }
+  .stats {
+    text-transform: uppercase;
+    font-size: 3em;
+    letter-spacing: 1.25px;
+    font-family: "Open Sans", "Roboto", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   }
   @media (min-width: 600px) {
     .header {

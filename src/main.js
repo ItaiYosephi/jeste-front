@@ -14,7 +14,7 @@ import io from 'socket.io-client';
 
 const SOCKET_URL = process.env.NODE_ENV !== 'development' ? '/' : '//localhost:3000';
 
-// const SOCKET_URL =	'https://tranquil-headland-25582.herokuapp.com'
+// const SOCKET_URL = 'https://tranquil-headland-25582.herokuapp.com'
 Vue.use(VueSocketio, io(SOCKET_URL), store);
 
 Vue.use(VueGoogleMaps, {
@@ -27,7 +27,7 @@ Vue.use(VueGoogleMaps, {
 Vue.use(Vuetify, {
 	theme: {
 		primary: '#039BE5',
-		secondary: '#031424',
+		secondary: '#',
 		accent: '#424242',
 		text: '#fff',
 		bg: '#e9e9e9',

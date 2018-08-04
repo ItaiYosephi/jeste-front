@@ -57,7 +57,7 @@
 			<v-toolbar app flat color="primary" class="white--text">
 				<v-toolbar-side-icon class="hidden-sm-and-up" @click.stop="drawer = !drawer" dark>
 				</v-toolbar-side-icon>
-				<v-toolbar-title class="title-logo" @click="$router.push('/')">JESTE</v-toolbar-title>
+				<v-toolbar-title class="title-logo" @click="$router.push('/')">jeste</v-toolbar-title>
 				<v-spacer class="hidden-xs-only"></v-spacer>
 				<!-- Top Menu Links -->
 				<v-toolbar-items class="hidden-xs-only btns-wrapper">
@@ -188,7 +188,7 @@ export default {
     logout() {
       let fName = this.$store.getters[USER_CONNECTED].details.firstName;
       this.$store.dispatch(USER_LOGOUT).then(_ => {
-        EventBus.$emit(SNACK_MSG, { text: `Bey ${fName}`, bgColor: "info" });
+        EventBus.$emit(SNACK_MSG, { text: `Bey ${fName}`, bgColor: "#000" });
         console.log("Logged out successfuly");
         this.$router.push("/");
       });
@@ -233,9 +233,15 @@ export default {
 }
 
 .v-toolbar__title:not(:first-child) {
+  cursor: pointer;
   min-width: 55px;
   margin: 0 5px !important;
-  cursor: pointer;
+  text-transform: uppercase;
+  transition: color 0.3s linear;
+
+}
+.v-toolbar__title:not(:first-child):hover {
+  color: #031424;
 }
 .btns-wrapper {
   margin-left: 8px;

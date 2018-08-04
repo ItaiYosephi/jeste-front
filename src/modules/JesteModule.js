@@ -61,7 +61,7 @@ export default {
 				else if (filter[prop] && prop === 'coords')
 					state.filterBy.coords = `${filter.coords.lat},${
 						filter.coords.lng
-					}`;
+						}`;
 			}
 		},
 		[TOGGLE_LOADING](state, { isLoad }) {
@@ -127,7 +127,11 @@ export default {
 			});
 		},
 		[JESTE_GET_BY_ID](context, { id }) {
-			return JesteService.getJesteByID(id).then(jeste => jeste);
+			context.commit({ type: TOGGLE_LOADING, isLoad: true });
+			return JesteService.getJesteByID(id).then(jeste => {
+				context.commit({ type: TOGGLE_LOADING, isLoad: false });
+				return jeste;
+			});
 		},
 		[JESTE_UPLOAD_IMG](context, { image }) {
 			if (!image) return '';
