@@ -138,7 +138,6 @@ export default {
 		[JESTES_LOAD](context) {
 			context.commit({ type: TOGGLE_LOADING, isLoad: true });
 			let filterBy = { ...context.state.filterBy };
-			filterBy.maxDistance *= 1000;
 			// filterBy.coords = context.rootState.UserModule.state.currLocation
 			return JesteService.query(filterBy).then(jestes => {
 				context.commit({ type: JESTES_LOAD, jestes });
