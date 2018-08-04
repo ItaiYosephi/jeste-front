@@ -1,6 +1,5 @@
 <template>
 	<v-form>
-		{{filter}}
 		<v-layout row wrap>
 			<v-flex xs12 md7>
 				<v-text-field color="secondary" v-model="txt" flat hide-details clearable prepend-inner-icon="search" label="Free Text" @keyup.enter.native="filterJestes" @click:prepend-inner="filterJestes">
@@ -60,9 +59,6 @@ export default {
 	},
 	methods: {
 		filterJestes() {
-			// let filterBy = JSON.parse(JSON.stringify(this.filterBy));
-			// filterBy.maxDistance = filterBy.maxDistance * 1000;
-			// console.log('filterBy:', filterBy);
 			this.$store.dispatch({ type: JESTES_LOAD });
 		}
 	},
