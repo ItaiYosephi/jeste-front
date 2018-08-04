@@ -7,8 +7,8 @@ import JesteDetails from './views/JesteDetails.vue';
 import Users from './views/Users.vue';
 import UserEdit from './views/UserEdit.vue';
 import UserDetails from './views/UserDetails.vue';
-import About from './views/About.vue';
 import LoginPage from './views/LoginPage.vue';
+import About from './views/About.vue';
 
 Vue.use(Router);
 

@@ -5,18 +5,17 @@ import store from './store';
 import './registerServiceWorker';
 import axios from 'axios';
 import Vuetify from 'vuetify';
-import Chat from 'vue-beautiful-chat';
 import 'vuetify/dist/vuetify.min.css';
+import Chat from 'vue-beautiful-chat';
 import * as VueGoogleMaps from 'vue2-google-maps';
 const GOOGLE_API_KEY = 'AIzaSyB1XEp2JKq8CAO8EbBSDGEvjrVC264DLPA';
 import VueSocketio from 'vue-socket.io';
 import io from 'socket.io-client';
-// Vue.use(VueSocketio, 'http://localhost:3000');
-// io('http://localhost:3000')
-// const SOCKET_URL =	process.env.NODE_ENV !== 'development' ? '/' : '//localhost:3000';
-const SOCKET_URL =	'https://tranquil-headland-25582.herokuapp.com'
+
+const SOCKET_URL = process.env.NODE_ENV !== 'development' ? '/' : '//localhost:3000';
+
+// const SOCKET_URL =	'https://tranquil-headland-25582.herokuapp.com'
 Vue.use(VueSocketio, io(SOCKET_URL), store);
-// console.log(SOCKET_URL);
 
 Vue.use(VueGoogleMaps, {
 	load: {

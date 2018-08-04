@@ -1,7 +1,7 @@
 <template>
 	<v-container fluid grid-list-md>
 		<v-layout row wrap fill-height v-if="jeste">
-			<ChatCmp :jeste-id="jeste._id" :req-user-id="jeste.req_user_id" :res-user-id="jeste.res_user_id" :user-id="user._id" v-if="showChat" class="popo"></ChatCmp>
+			<ChatCmp :jeste-id="jeste._id" :req-user-id="jeste.req_user_id" :res-user-id="jeste.res_user_id" :user-id="user._id" v-if="showChat" class="chat-cmp"></ChatCmp>
 
 			<v-flex xs12 sm6>
 				<v-card height="100%" class="jeste-details-card" hover>
@@ -13,7 +13,7 @@
 								<div class="desc">{{jeste.description}}</div>
 							</v-flex>
 
-							<v-flex v-if="reqUser" xs2 ml-4 class="user">
+							<v-flex v-if="reqUser" xs2 ml-4>
 								<router-link :to="`/user/${reqUser._id}`">
 									<v-avatar size="50px" color="grey lighten-4">
 										<img :src="reqUser.img.url" alt="avatar">
@@ -25,12 +25,10 @@
 					</v-card-title>
 
 					<v-card-actions>
-						<v-btn v-if="!canEdit && user && !jeste.res_user_id" flat color="blue" @click.prevent="respond">Jeste It!</v-btn>
-						<v-btn v-if="canEdit" flat :to="`/jeste/${jeste._id}/edit`">Edit</v-btn>
-						<v-btn v-if="canEdit" fla t @click.stop="dialog = true">Delete</v-btn>
-
+						<v-btn v-if="canEdit" flat color="green" :to="`/jeste/${jeste._id}/edit`">Edit</v-btn>
+						<v-btn v-if="canEdit" flat color="error" @click.stop="dialog = true">Delete</v-btn>
 						<v-spacer></v-spacer>
-
+						<v-btn v-if="!canEdit && user && !jeste.res_user_id" flat color="blue" @click.prevent="respond">Jeste It!</v-btn>
 					</v-card-actions>
 				</v-card>
 			</v-flex>
@@ -60,11 +58,11 @@
 					</v-card-text>
 					<v-divider></v-divider>
 					<v-card-actions>
-						<v-btn color="green darken-1" flat="flat" @click="dialog = false">
+						<v-btn color="green darken-1" flat @click="dialog = false">
 							Cancel
 						</v-btn>
 						<v-spacer></v-spacer>
-						<v-btn color="error" flat="flat" @click="deleteJeste()">
+						<v-btn color="error" flat @click="deleteJeste()">
 							Delete
 						</v-btn>
 					</v-card-actions>
@@ -80,58 +78,23 @@
 <script>
 import ChatCmp from '@/components/ChatCmp';
 import { EventBus, SNACK_MSG } from '@/services/EventBusService';
-import {
-	JESTE_GET,
-	JESTE_GET_BY_ID,
-	JESTE_DELETE
-} from '@/modules/JesteModule';
+import { JESTE_GET, JESTE_GET_BY_ID, JESTE_DELETE } from '@/modules/JesteModule';
 import { USER_CONNECTED, USER_GET_BY_ID } from '@/modules/UserModule';
 
 export default {
 	name: 'jesteDetails',
+	components: {
+		ChatCmp
+	},
+	created() {
+		this.getJeste().then(this.getUser);
+	},
 	data() {
 		return {
 			jeste: {},
 			dialog: false,
 			reqUser: null
 		};
-	},
-	created() {
-		this.getJeste().then(this.getUser);
-	},
-	mounted() {},
-	methods: {
-		getJeste() {
-			let id = this.$route.params.id;
-			return this.$store
-				.dispatch({ type: JESTE_GET_BY_ID, id })
-				.then(jeste => (this.jeste = jeste));
-		},
-		deleteJeste() {
-			this.dialog = false;
-			this.$store
-				.dispatch({ type: JESTE_DELETE, id: this.jeste._id })
-				.then(_ => {
-					EventBus.$emit(SNACK_MSG, {
-						text: `Jeste Deleted Successfully`,
-						bgColor: 'success'
-					});
-					this.$router.push('/');
-				});
-		},
-		respond() {
-			console.log('user', this.user);
-
-			this.jeste.res_user_id = this.user._id;
-			this.$socket.emit('jesteResponded', { jeste: this.jeste });
-		},
-		getUser() {
-			this.$store
-				.dispatch({ type: USER_GET_BY_ID, id: this.jeste.req_user_id })
-				.then(user => {
-					this.reqUser = user;
-				});
-		}
 	},
 	computed: {
 		position() {
@@ -161,8 +124,35 @@ export default {
 			);
 		}
 	},
-	components: {
-		ChatCmp
+	methods: {
+		getJeste() {
+			let id = this.$route.params.id;
+			return this.$store.dispatch({ type: JESTE_GET_BY_ID, id })
+				.then(jeste => (this.jeste = jeste));
+		},
+		deleteJeste() {
+			this.dialog = false;
+			this.$store.dispatch({ type: JESTE_DELETE, id: this.jeste._id })
+				.then(_ => {
+					EventBus.$emit(SNACK_MSG, {
+						text: `Jeste Deleted Successfully`,
+						bgColor: 'success'
+					});
+					this.$router.push('/');
+				});
+		},
+		respond() {
+			console.log('User:', this.user);
+
+			this.jeste.res_user_id = this.user._id;
+			this.$socket.emit('jesteResponded', { jeste: this.jeste });
+		},
+		getUser() {
+			this.$store.dispatch({ type: USER_GET_BY_ID, id: this.jeste.req_user_id })
+				.then(user => {
+					this.reqUser = user;
+				});
+		}
 	}
 };
 </script>
@@ -175,20 +165,12 @@ a {
 .v-card--hover {
 	cursor: default;
 }
-
 .jeste-details-card {
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
 }
-.popo {
-	z-index: 10000000000000;
-}
-.user {
-	// display: flex;
-	// justify-content: center;
-
-
-	
+.chat-cmp {
+	z-index: 10;
 }
 </style>

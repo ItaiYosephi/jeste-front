@@ -43,7 +43,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 .jumbotron {
   background: #21a7e8;
   .filter-header {

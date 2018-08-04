@@ -11,13 +11,7 @@ export default new Vuex.Store({
 		JesteModule,
 		UserModule
 	},
-	state: {
-
-	},
-	mutations: {
-
-	},
-	actions: {
-
-	},
+	state: {},
+	mutations: {},
+	actions: {},
 });

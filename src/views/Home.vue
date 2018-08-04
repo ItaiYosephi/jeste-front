@@ -1,16 +1,16 @@
 <template>
-    <section class="home">
-        <section  class="back-img">
-          <section class="main-content">
-            <div class="header">jeste</div>
-            <div class="sub-header">help others | get help</div>
-          </section>
-        </section>
-        <div class="load-wrapper" v-if="isLoading">
-          <LoadingCmp/>
-        </div>
-        <JesteList :jestes="jestesToDisplay" />
-    </section>
+	<section class="home">
+		<section class="back-img">
+			<section class="main-content">
+				<div class="header">jeste</div>
+				<div class="sub-header">help others | get help</div>
+			</section>
+		</section>
+		<div class="load-wrapper" v-if="isLoading">
+			<LoadingCmp/>
+		</div>
+		<JesteList :jestes="jestesToDisplay" />
+	</section>
 </template>
 
 <script>
@@ -21,8 +21,8 @@ import { JESTES_LOAD, JESTES_TO_DISPLAY, JESTE_IS_LOADING } from "@/modules/Jest
 
 export default {
   name: "home",
-  components: {
-    JesteList,
+  components: { 
+		JesteList,
     JesteFilter,
     LoadingCmp
   },
@@ -33,7 +33,6 @@ export default {
     },
     isLoading() {
       return this.$store.getters[JESTE_IS_LOADING];
-
     }
   }
 };
@@ -42,9 +41,9 @@ export default {
 <style lang="scss" scoped>
 @import "../assets/styles/_vars.scss";
 .load-wrapper {
-    text-align: center;
-    padding: 50px;
-    min-height: 400px;
+  text-align: center;
+  padding: 50px;
+  min-height: 400px;
 }
 
 .back-img {
@@ -59,10 +58,8 @@ export default {
   height: 100%;
   text-align: center;
   padding: 10px 10px;
-  color: white; 
+  color: white;
   background: rgba(3, 20, 36, 0.4);
-  // color: #031424; 
-  // background: rgba(3, 154, 229, 0.507);
   span {
     background: white;
   }
@@ -70,10 +67,10 @@ export default {
     text-transform: uppercase;
     font-size: 5em;
     letter-spacing: 1.5px;
-    font-family: 'Open Sans', 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: "Open Sans", "Roboto", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   }
   .sub-header {
-    font-family: 'Open Sans', 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: "Open Sans", "Roboto", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     margin-top: -10px;
     font-size: 1.25em;
     letter-spacing: 1.1px;

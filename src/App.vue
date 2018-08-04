@@ -168,7 +168,7 @@ export default {
     loadUser() {
       this.$store.dispatch(USER_CHECK_LOGIN)
         .then(_ => {
-          console.log("User Loggedin");
+          console.log("User Logged in");
         })
         .catch(err => console.log(err));
     },
@@ -197,9 +197,7 @@ export default {
   watch: {
     user() {
       if (this.user) {
-        this.$socket.emit("userLogged", {
-          userId: this.user._id
-        });
+        this.$socket.emit("userLogged", { userId: this.user._id });
         this.menuItems[2] = {
           title: this.user.details.firstName + " " + this.user.details.lastName,
           link: "#",
@@ -255,12 +253,12 @@ export default {
 .moveInUp-enter,
 .moveInUp-leave-to {
   // position: absolute;
-   position: fixed;
+  position: fixed;
   top: 64px;
 }
 .moveInUp-enter {
   transform: translateX(-100%);
-   position: fixed;
+  position: fixed;
   top: 64px;
 }
 .moveInUp-leave-to {

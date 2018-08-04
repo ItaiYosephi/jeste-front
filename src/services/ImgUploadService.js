@@ -1,5 +1,4 @@
 const CLOUD_NAME = "jeste";
-
 var UPLOAD_URL = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`
 
 function uploadImg(imgFile) {
