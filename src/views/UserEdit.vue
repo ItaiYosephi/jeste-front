@@ -13,7 +13,4 @@ export default {
 <style lang="scss" scoped>
 @import "../assets/styles/_vars.scss";
 
-.user-edit {
-  color: $mainColor;
-}
 </style>

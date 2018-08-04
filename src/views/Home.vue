@@ -6,7 +6,15 @@
 				<div class="sub-header">help others | get help</div>
         <v-spacer></v-spacer>
         <div class="stats">
-          64 | 54 | 25
+          <span class="stat">
+            64
+          </span> |
+          <span class="stat">
+            32
+          </span> |
+          <span class="stat">
+            16
+          </span>
         </div>
         <v-btn large color="primary" to="/jeste/edit">ask for jeste</v-btn>
         <v-spacer></v-spacer>
@@ -81,8 +89,8 @@ export default {
   }
   .stats {
     text-transform: uppercase;
-    font-size: 3em;
-    letter-spacing: 1.25px;
+    font-size: 2.25em;
+    letter-spacing: 1.2px;
     font-family: "Open Sans", "Roboto", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   }
   @media (min-width: 600px) {

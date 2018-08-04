@@ -27,7 +27,7 @@ Vue.use(VueGoogleMaps, {
 Vue.use(Vuetify, {
 	theme: {
 		primary: '#039BE5',
-		secondary: '#',
+		secondary: '#031424',
 		accent: '#424242',
 		text: '#fff',
 		bg: '#e9e9e9',
