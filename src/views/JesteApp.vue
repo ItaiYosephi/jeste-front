@@ -38,6 +38,9 @@ export default {
     JesteList,
     JesteFilter
   },
+  mounted() {
+    // this.$vuetify.goTo(0, {easeing: 'easeInQuad', duration: 600});
+  },
   computed: {
     isLoading() {
       return this.$store.getters[JESTE_IS_LOADING];

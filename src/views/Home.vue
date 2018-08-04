@@ -16,18 +16,21 @@
             16
           </span>
         </div>
+        <v-btn large color="primary" @click="$vuetify.goTo($refs.list, {easeing: 'easeInQuad', offset: -64, duration: 600})" >do a jeste</v-btn>
         <v-btn large color="primary" to="/jeste/edit">ask for jeste</v-btn>
         <v-spacer></v-spacer>
 			</v-layout>
 		</section>
-		<div class="load-wrapper" v-if="isLoading">
+		<div  class="load-wrapper" v-if="isLoading">
 			<LoadingCmp/>
 		</div>
-		<JesteList :jestes="jestesToDisplay" />
+		<JesteList ref="list" :jestes="jestesToDisplay" />
 	</section>
 </template>
 
 <script>
+import * as easings from 'vuetify/es5/util/easing-patterns'
+
 import LoadingCmp from "@/components/LoadingCmp";
 import JesteList from "@/components/jestes/JesteList";
 import JesteFilter from "@/components/jestes/JesteFilter";
@@ -47,6 +50,9 @@ export default {
     },
     isLoading() {
       return this.$store.getters[JESTE_IS_LOADING];
+    },
+    target() {
+
     }
   }
 };
@@ -63,10 +69,12 @@ export default {
 }
 .back-img {
   width: 100%;
-  height: 75vh;
-  min-height: 300px;
+  height: calc(100vh - 48px);
   background: url(/img/main_bg.png) no-repeat center center fixed;
   background-size: cover;
+  @media (min-width: 960px){
+    height: calc(100vh - 64px);
+  }
 }
 
 .main-content {

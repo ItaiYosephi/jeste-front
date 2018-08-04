@@ -58,26 +58,34 @@
         </v-card>
       </v-flex>
     </v-layout>
+
+    <PermDialog :displayDialog="isDisallowed"/>
+
   </v-container>
 </template>
 
 <script>
 import { EventBus, SNACK_MSG } from "@/services/EventBusService";
 import { JESTE_EMPTY, JESTE_GET_BY_ID, JESTE_GET, JESTE_SAVE, JESTE_UPLOAD_IMG, JESTE_CATEGORIES_GET } from "@/modules/JesteModule";
-import { GET_USER_LOCATION } from "@/modules/UserModule";
+import { GET_USER_LOCATION, USER_CONNECTED } from "@/modules/UserModule";
+import PermDialog from "@/components/PermDialog";
 import ComboBox from "@/components/ComboBox";
 import ImageUpload from "@/components/ImageUpload";
 
 export default {
   name: "jesteEdit",
   components: {
+    PermDialog,
     ComboBox,
     ImageUpload
   },
   created() {
-    let id = this.$route.params.id;
-    if (id) {
-      this.getJeste(id);
+    if (!this.currUser) this.isDisallowed = true; // Check if user is connected
+    else if (this.$route.params.id) {
+      this.getJeste(this.$route.params.id)
+        .then(_ => {
+          if (this.currUser._id !== this.jesteToSave.req_user_id) this.isDisallowed = true; // Check if the user is allowed to edit the jeste
+        })
     }
   },
   mounted() {
@@ -85,12 +93,11 @@ export default {
       this.google = x;
       this.initGoogle();
     });
-    // console.log(this.jesteToSave.img);
-    
-    // this.imageUrl = (this.jesteToSave.img) ? this.jesteToSave.img.url : ""
   },
   data() {
     return {
+      currUser: this.$store.getters[USER_CONNECTED],
+      isDisallowed: false,
       valid: true,
       jesteToSave: JSON.parse(JSON.stringify(this.$store.getters[JESTE_EMPTY])),
       imageFile: null,
@@ -111,14 +118,6 @@ export default {
     };
   },
   computed: {
-    // imageUrl() {
-      
-    //   if (this.jesteToSave.img) {
-    //     console.log(this.jesteToSave.img);
-    //     return (this.jesteToSave.img.url) ? this.jesteToSave.img.url : "";
-    //   }
-    //   else return "";
-    // },
     isEdit() {
       return !!this.jesteToSave && !!this.jesteToSave._id;
     },
@@ -141,11 +140,9 @@ export default {
   },
   methods: {
     getJeste(id) {
-      this.$store.dispatch({ type: JESTE_GET_BY_ID, id }).then(jeste => {
+      return this.$store.dispatch({ type: JESTE_GET_BY_ID, id }).then(jeste => {
         this.jesteToSave = JSON.parse(JSON.stringify(jeste));
         this.imageUrl = this.jesteToSave.img.url;
-        console.log('r', this.imageUrl);
-        
         this.currPlace = { formatted_address: jeste.formatted_address };
       });
     },
