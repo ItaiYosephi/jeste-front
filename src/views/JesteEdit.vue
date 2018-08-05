@@ -1,60 +1,55 @@
 <template>
-  <v-container fluid grid-list-md>
-    <v-layout wrap align-center justify-center>
-      <v-flex class="container-wrapper">
-        <v-card grow>
-          <v-toolbar color="primary" class="white--text" flat>
-            <v-toolbar-title>{{isEdit? 'Edit': 'Add'}} Jeste</v-toolbar-title>
-          </v-toolbar>
-          <v-form ref="form" v-model="valid" lazy-validation>
-            <v-card-text>
-              <v-text-field box v-model="jesteToSave.title" label="Title" required></v-text-field>
-              <v-textarea box v-model="jesteToSave.description" label="Description" hint="Few words about the jeste" required></v-textarea>
-              <<<<<<< HEAD <ComboBox v-model="jesteToSave.keywords">
-                </ComboBox>
-                <v-select box v-model="jesteToSave.category" :items="categories" label="Categories" hint="Type of the Jeste">
-                  =======
-                  <ComboBox v-model="jesteToSave.keywords"></ComboBox>
-                  {{categories}}
-                  <v-select box v-model="jesteToSave.category" :items="categories" label="Categories" hint="Type of the Jeste">
-                    >>>>>>> 68961f9ca0c9c74d50476a2386150a138fdc63f8
-                  </v-select>
-                  <ImageUpload v-model="imageFile" :imgUrl="imageUrl" />
-                  <v-layout row wrap>
-                    <v-flex xs9>
-                      <v-slider v-model="jesteToSave.price" :max="200" thumb-label label="Price">
-                      </v-slider>
-                    </v-flex>
-                    <v-spacer></v-spacer>
-                    <v-flex xs2>
-                      <v-text-field v-model="jesteToSave.price" class="mt-0" type="number">
-                      </v-text-field>
-                    </v-flex>
-                  </v-layout>
+	<v-container fluid grid-list-md>
+		<v-layout wrap align-center justify-center>
+			<v-flex class="container-wrapper">
+				<v-card grow>
+					<v-toolbar color="primary" class="white--text" flat>
+						<v-toolbar-title>{{isEdit? 'Edit': 'Add'}} Jeste</v-toolbar-title>
+					</v-toolbar>
+					<v-form ref="form" v-model="valid" lazy-validation>
+						<v-card-text>
+							<v-text-field box v-model="jesteToSave.title" label="Title" required></v-text-field>
+							<v-textarea box v-model="jesteToSave.description" label="Description" hint="Few words about the jeste" required></v-textarea>
+							<ComboBox v-model="jesteToSave.keywords">
+							</ComboBox>
+							<v-select box v-model="jesteToSave.category" :items="categories" label="Categories" hint="Type of the Jeste">
+							</v-select>
+							<ImageUpload v-model="imageFile" :imgUrl="imageUrl" />
+							<v-layout row wrap>
+								<v-flex xs9>
+									<v-slider v-model="jesteToSave.price" :max="200" thumb-label label="Price">
+									</v-slider>
+								</v-flex>
+								<v-spacer></v-spacer>
+								<v-flex xs2>
+									<v-text-field v-model="jesteToSave.price" class="mt-0" type="number">
+									</v-text-field>
+								</v-flex>
+							</v-layout>
 
-                  <v-text-field box v-model="jesteToSave.formatted_address" ref="autocomplete" label="Street" @keyup.enter.prevent append-icon="search" :rules="addressRules" required>
-                  </v-text-field>
-                  <v-card-text v-show="show">
-                    <GmapMap :center="position" v-if="jesteToSave" :zoom="15" map-type-id="terrain" style="width: 100%; height: 300px">
-                      <GmapMarker :position="position" :clickable="false" :draggable="true" @click="center=position" />
-                    </GmapMap>
-                  </v-card-text>
-            </v-card-text>
+							<v-text-field box v-model="jesteToSave.formatted_address" ref="autocomplete" label="Street" @keyup.enter.prevent append-icon="search" :rules="addressRules" required>
+							</v-text-field>
+							<v-card-text v-show="show">
+								<GmapMap :center="position" v-if="jesteToSave" :zoom="15" map-type-id="terrain" style="width: 100%; height: 300px">
+									<GmapMarker :position="position" :clickable="false" :draggable="true" @click="center=position" />
+								</GmapMap>
+							</v-card-text>
+						</v-card-text>
 
-            <v-card-actions>
-              <v-btn @click="$router.go(-1)" color="secondary">cancel</v-btn>
-              <v-btn @click="clear" color="secondary">clear</v-btn>
-              <v-spacer></v-spacer>
-              <v-btn :disabled="!valid" @click.prevent="submit" color="primary">submit</v-btn>
-            </v-card-actions>
-          </v-form>
-        </v-card>
-      </v-flex>
-    </v-layout>
+						<v-card-actions>
+							<v-btn @click="$router.go(-1)" color="secondary">cancel</v-btn>
+							<v-btn @click="clear" color="secondary">clear</v-btn>
+							<v-spacer></v-spacer>
+							<v-btn :disabled="!valid" @click.prevent="submit" color="primary">submit</v-btn>
+						</v-card-actions>
+					</v-form>
+				</v-card>
+			</v-flex>
+		</v-layout>
 
-    <PermDialog :displayDialog="isDisallowed" />
+		<PermDialog :displayDialog="isDisallowed" />
 
-  </v-container>
+	</v-container>
 </template>
 
 
