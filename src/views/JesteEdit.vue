@@ -10,30 +10,35 @@
             <v-card-text>
               <v-text-field box v-model="jesteToSave.title" label="Title" required></v-text-field>
               <v-textarea box v-model="jesteToSave.description" label="Description" hint="Few words about the jeste" required></v-textarea>
+              <<<<<<< HEAD <ComboBox v-model="jesteToSave.keywords">
+                </ComboBox>
+                <v-select box v-model="jesteToSave.category" :items="categories" label="Categories" hint="Type of the Jeste">
+                  =======
+                  <ComboBox v-model="jesteToSave.keywords"></ComboBox>
+                  {{categories}}
+                  <v-select box v-model="jesteToSave.category" :items="categories" label="Categories" hint="Type of the Jeste">
+                    >>>>>>> 68961f9ca0c9c74d50476a2386150a138fdc63f8
+                  </v-select>
+                  <ImageUpload v-model="imageFile" :imgUrl="imageUrl" />
+                  <v-layout row wrap>
+                    <v-flex xs9>
+                      <v-slider v-model="jesteToSave.price" :max="200" thumb-label label="Price">
+                      </v-slider>
+                    </v-flex>
+                    <v-spacer></v-spacer>
+                    <v-flex xs2>
+                      <v-text-field v-model="jesteToSave.price" class="mt-0" type="number">
+                      </v-text-field>
+                    </v-flex>
+                  </v-layout>
 
-              <ComboBox v-model="jesteToSave.keywords"></ComboBox>
-              <v-select box v-model="jesteToSave.category" :items="categories" label="Categories" hint="Type of the Jeste">
-              </v-select>
-              <ImageUpload v-model="imageFile" :imgUrl="imageUrl" />
-              <v-layout row wrap>
-                <v-flex xs9>
-                  <v-slider v-model="jesteToSave.price" :max="200" thumb-label label="Price">
-                  </v-slider>
-                </v-flex>
-                <v-spacer></v-spacer>
-                <v-flex xs2>
-                  <v-text-field v-model="jesteToSave.price" class="mt-0" type="number">
+                  <v-text-field box v-model="jesteToSave.formatted_address" ref="autocomplete" label="Street" @keyup.enter.prevent append-icon="search" :rules="addressRules" required>
                   </v-text-field>
-                </v-flex>
-              </v-layout>
-
-              <v-text-field box v-model="jesteToSave.formatted_address" ref="autocomplete" label="Street" @keyup.enter.prevent append-icon="search" :rules="addressRules" required>
-              </v-text-field>
-              <v-card-text v-show="show">
-                <GmapMap :center="position" v-if="jesteToSave" :zoom="15" map-type-id="terrain" style="width: 100%; height: 300px">
-                  <GmapMarker :position="position" :clickable="false" :draggable="true" @click="center=position" />
-                </GmapMap>
-              </v-card-text>
+                  <v-card-text v-show="show">
+                    <GmapMap :center="position" v-if="jesteToSave" :zoom="15" map-type-id="terrain" style="width: 100%; height: 300px">
+                      <GmapMarker :position="position" :clickable="false" :draggable="true" @click="center=position" />
+                    </GmapMap>
+                  </v-card-text>
             </v-card-text>
 
             <v-card-actions>
@@ -46,8 +51,12 @@
         </v-card>
       </v-flex>
     </v-layout>
+
+    <PermDialog :displayDialog="isDisallowed" />
+
   </v-container>
 </template>
+
 
 <script>
 import { EventBus, SNACK_MSG } from '@/services/EventBusService';
@@ -59,7 +68,8 @@ import {
 	JESTE_UPLOAD_IMG,
 	JESTE_CATEGORIES_GET
 } from '@/modules/JesteModule';
-import { GET_USER_LOCATION } from '@/modules/UserModule';
+import { GET_USER_LOCATION, USER_CONNECTED } from '@/modules/UserModule';
+import PermDialog from '@/components/PermDialog';
 import ComboBox from '@/components/ComboBox';
 import ImageUpload from '@/components/ImageUpload';
 import { UPDATE_TITLE } from '@/store';
@@ -67,13 +77,18 @@ import { UPDATE_TITLE } from '@/store';
 export default {
 	name: 'jesteEdit',
 	components: {
+		PermDialog,
 		ComboBox,
 		ImageUpload
 	},
 	created() {
-		let id = this.$route.params.id;
-		if (id) {
-			this.getJeste(id);
+		if (!this.currUser) this.isDisallowed = true;
+		else if (this.$route.params.id) {
+			// Check if user is connected
+			this.getJeste(this.$route.params.id).then(_ => {
+				if (this.currUser._id !== this.jesteToSave.req_user_id)
+					this.isDisallowed = true; // Check if the user is allowed to edit the jeste
+			});
 		}
 		this.$store.commit({ type: UPDATE_TITLE, title: 'Jeste - Edit' });
 	},
@@ -82,12 +97,11 @@ export default {
 			this.google = x;
 			this.initGoogle();
 		});
-		// console.log(this.jesteToSave.img);
-
-		// this.imageUrl = (this.jesteToSave.img) ? this.jesteToSave.img.url : ""
 	},
 	data() {
 		return {
+			currUser: this.$store.getters[USER_CONNECTED],
+			isDisallowed: false,
 			valid: true,
 			jesteToSave: JSON.parse(
 				JSON.stringify(this.$store.getters[JESTE_EMPTY])
@@ -118,14 +132,6 @@ export default {
 		};
 	},
 	computed: {
-		// imageUrl() {
-
-		//   if (this.jesteToSave.img) {
-		//     console.log(this.jesteToSave.img);
-		//     return (this.jesteToSave.img.url) ? this.jesteToSave.img.url : "";
-		//   }
-		//   else return "";
-		// },
 		isEdit() {
 			return !!this.jesteToSave && !!this.jesteToSave._id;
 		},
@@ -148,13 +154,15 @@ export default {
 	},
 	methods: {
 		getJeste(id) {
-			this.$store.dispatch({ type: JESTE_GET_BY_ID, id }).then(jeste => {
-				this.jesteToSave = JSON.parse(JSON.stringify(jeste));
-				this.imageUrl = this.jesteToSave.img.url;
-				console.log('r', this.imageUrl);
-
-				this.currPlace = { formatted_address: jeste.formatted_address };
-			});
+			return this.$store
+				.dispatch({ type: JESTE_GET_BY_ID, id })
+				.then(jeste => {
+					this.jesteToSave = JSON.parse(JSON.stringify(jeste));
+					this.imageUrl = this.jesteToSave.img.url;
+					this.currPlace = {
+						formatted_address: jeste.formatted_address
+					};
+				});
 		},
 		submit() {
 			if (this.$refs.form.validate()) {

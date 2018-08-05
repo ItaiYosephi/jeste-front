@@ -58,7 +58,7 @@
 				</v-card>
 			</v-flex>
 
-			<v-dialog v-model="dialog" max-width="290" class="warning">
+			<v-dialog v-model="dialog" max-width="400" class="warning">
 				<v-card>
 					<v-card-title class="headline grey lighten-2">Are you sure?</v-card-title>
 					<v-card-text>

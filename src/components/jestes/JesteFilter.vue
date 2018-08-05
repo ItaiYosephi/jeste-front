@@ -29,11 +29,9 @@
 				<v-text-field color="secondary" v-model="maxDistance" class="mt-0" type="number">
 				</v-text-field>
 			</v-flex>
-
 			<v-flex xs12 class="text-xs-right">
 				<v-btn large @click="filterJestes">Search</v-btn>
 			</v-flex>
-
 		</v-layout>
 	</v-form>
 </template>

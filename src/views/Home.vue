@@ -5,29 +5,42 @@
         <div class="header">jeste</div>
         <div class="sub-header">help others | get help</div>
         <v-spacer></v-spacer>
-        <div class="stats">
-          <span class="stat">
-            64
-          </span> |
-          <span class="stat">
-            32
-          </span> |
-          <span class="stat">
-            16
-          </span>
-        </div>
-        <v-btn large color="primary" to="/jeste/edit">ask for jeste</v-btn>
+        <div class="about">JESTE is a new way to help your communiuty in small works or jobs, and in return get help when you need it</div>
+        <v-spacer></v-spacer>
+        <v-layout row wrap justify-center class="stats">
+          <div class="stat">
+            <div>64</div>
+            <div class="desc">total jestes</div>
+          </div>
+          <div class="stat">
+            <div>32</div>
+            <div class="desc">made jestes</div>
+          </div>
+          <div class="stat">
+            <div>16</div>
+            <div class="desc">active jestes</div>
+          </div>
+        </v-layout>
+        <v-layout row wrap justify-center mt-2>
+          <v-btn large color="primary" @click="$vuetify.goTo($refs.list, {easeing: 'easeInQuad', offset: -64, duration: 600})">do a jeste</v-btn>
+          <v-btn large color="primary" to="/jeste/edit">ask for jeste</v-btn>
+        </v-layout>
         <v-spacer></v-spacer>
       </v-layout>
     </section>
     <div class="load-wrapper" v-if="isLoading">
       <LoadingCmp/>
     </div>
-    <JesteList :jestes="jestesToDisplay" />
+    <h1>Recent Jestes</h1>
+    <JesteList ref="list" :jestes="jestesToDisplay" />
+    <h1>Nearby Jestes</h1>
+    <JesteList ref="list" :jestes="jestesToDisplay" />
   </section>
 </template>
 
 <script>
+import * as easings from 'vuetify/es5/util/easing-patterns';
+
 import LoadingCmp from '@/components/LoadingCmp';
 import JesteList from '@/components/jestes/JesteList';
 import JesteFilter from '@/components/jestes/JesteFilter';
@@ -55,7 +68,8 @@ export default {
 		},
 		isLoading() {
 			return this.$store.getters[JESTE_IS_LOADING];
-		}
+		},
+		target() {}
 	}
 };
 </script>
@@ -71,20 +85,29 @@ export default {
 }
 .back-img {
 	width: 100%;
-	height: 75vh;
-	min-height: 300px;
+	height: calc(100vh - 48px);
 	background: url(/img/main_bg.png) no-repeat center center fixed;
 	background-size: cover;
+	@media (min-width: 960px) {
+		height: calc(100vh - 64px);
+	}
+}
+h1 {
+	margin-top: 10px;
+	padding: 0 20px;
+	font-size: 2em;
+	font-weight: 500;
+	color: #031424;
 }
 
 .main-content {
 	height: 100%;
 	// padding: 5px;
 	color: white;
-	background: rgba(3, 20, 36, 0.35);
+	background: rgba(3, 20, 36, 0.5);
 	.header {
 		text-transform: uppercase;
-		font-size: 5em;
+		font-size: 4.8em;
 		letter-spacing: 1.5px;
 		font-family: 'Open Sans', 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana,
 			sans-serif;
@@ -93,9 +116,15 @@ export default {
 		font-family: 'Open Sans', 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana,
 			sans-serif;
 		margin-top: -10px;
-		font-size: 1.25em;
+		font-size: 1.15em;
 		letter-spacing: 1.1px;
 		text-transform: uppercase;
+	}
+	.about {
+		padding: 10px;
+		text-align: center;
+		font-size: 1.2em;
+		// color: white;
 	}
 	.stats {
 		text-transform: uppercase;
@@ -103,14 +132,29 @@ export default {
 		letter-spacing: 1.2px;
 		font-family: 'Open Sans', 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana,
 			sans-serif;
+		.stat {
+			padding: 0 10px;
+			display: flex;
+			flex-flow: column wrap;
+			justify-content: center;
+			align-content: center;
+			align-items: center;
+			.desc {
+				text-align: center;
+				font-size: 0.5em;
+			}
+		}
+		.stat:not(:last-child) {
+			border-right: 2px solid white;
+		}
 	}
 	@media (min-width: 600px) {
 		.header {
-			font-size: 6.5em;
+			font-size: 6.25em;
 			letter-spacing: 2px;
 		}
 		.sub-header {
-			font-size: 2em;
+			font-size: 1.5em;
 			letter-spacing: 1.5px;
 		}
 	}
