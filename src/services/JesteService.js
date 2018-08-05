@@ -50,6 +50,8 @@ function saveJeste(jeste) {
     }
 }
 function getChatHistory(jesteId) {
+    console.log('chat historey');
+    
     return axios.get(`${CHAT_URL}/${jesteId}`)
     .then(res => {
         return res.data

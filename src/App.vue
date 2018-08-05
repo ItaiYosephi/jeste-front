@@ -128,9 +128,17 @@ export default {
 		});
 	},
 	sockets: {
-		reciveMsg() {
-			alert('recive msg');
-		}
+		jesteResponded(jeste) {
+			console.log('jeste resssss');
+			
+			var title = jeste.title
+			EventBus.$emit(SNACK_MSG, {
+				text: 'got new jeste',
+				bgColor: 'success'
+
+			})
+		},
+		
 	},
 	mounted() {
 		EventBus.$on(SNACK_MSG, msg => this.toggleSnackbar(msg));
