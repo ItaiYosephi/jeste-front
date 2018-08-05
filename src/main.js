@@ -11,6 +11,7 @@ import * as VueGoogleMaps from 'vue2-google-maps';
 const GOOGLE_API_KEY = 'AIzaSyB1XEp2JKq8CAO8EbBSDGEvjrVC264DLPA';
 import VueSocketio from 'vue-socket.io';
 import io from 'socket.io-client';
+import './assets/styles/main.scss'
 
 // const SOCKET_URL = '//localhost:3000';
 // const SOCKET_URL = 'https://tranquil-headland-25582.herokuapp.com'
