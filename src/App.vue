@@ -112,7 +112,8 @@ import { GET_TITLE } from "@/store";
 import {
   JESTES_LOAD,
   FILTER_UPDATE,
-  TOGGLE_LOADING
+  TOGGLE_LOADING,
+  UPDATE_RES_JESTE
 } from "@/modules/JesteModule";
 import {
   USER_CHECK_LOGIN,
@@ -136,6 +137,7 @@ export default {
   },
   sockets: {
     jesteResponded(jeste) {
+      this.$store.commit({type: UPDATE_RES_JESTE, JESTE})
 			EventBus.$emit(SNACK_JESTE_IT, {
 				text: 'Someone just responded your jeste!',
 				link: `/jeste/${jeste._id}`
