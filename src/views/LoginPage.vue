@@ -14,12 +14,18 @@
 <script>
 import SignUp from "@/components/users/SignUp";
 import Login from "@/components/users/Login";
+import { UPDATE_TITLE } from '@/store';
+
 
 export default {
   components: {
     SignUp,
     Login
-  }
+	},
+	created() {
+this.$store.commit({ type: UPDATE_TITLE, title: 'Jeste - Login' });
+
+	}
 };
 </script>
 

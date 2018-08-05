@@ -42,6 +42,10 @@ Vue.use(Chat);
 axios.defaults.withCredentials = true;
 Vue.config.productionTip = false;
 
+Vue.directive('title', {
+	inserted: (el, binding) => document.title = binding.value,
+	update: (el, binding) => document.title = binding.value
+  })
 new Vue({
 	router,
 	store,

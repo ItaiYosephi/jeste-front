@@ -1,8 +1,7 @@
 <template>
 	<v-container fluid grid-list-md>
 		<v-layout row wrap fill-height v-if="jeste">
-			<ChatCmp v-if="showChat" :jeste-id="jeste._id" :req-user-id="jeste.req_user_id" :res-user-id="jeste.res_user_id" :user-id="user._id"
-			 class="chat-cmp">
+			<ChatCmp v-if="showChat" :jeste-id="jeste._id" :req-user-id="jeste.req_user_id" :res-user-id="jeste.res_user_id" :user-id="user._id" class="chat-cmp">
 			</ChatCmp>
 
 			<v-flex xs12 sm6>
@@ -83,100 +82,115 @@
 </template>
 
 <script>
-import LoadingCmp from "@/components/LoadingCmp";
-import ChatCmp from "@/components/ChatCmp";
-import { EventBus, SNACK_MSG } from "@/services/EventBusService";
-import { JESTE_GET, JESTE_GET_BY_ID, JESTE_DELETE, JESTE_IS_LOADING } from "@/modules/JesteModule";
-import { USER_CONNECTED, USER_GET_BY_ID } from "@/modules/UserModule";
+import LoadingCmp from '@/components/LoadingCmp';
+import ChatCmp from '@/components/ChatCmp';
+import { EventBus, SNACK_MSG } from '@/services/EventBusService';
+import {
+	JESTE_GET,
+	JESTE_GET_BY_ID,
+	JESTE_DELETE,
+	JESTE_IS_LOADING
+} from '@/modules/JesteModule';
+import { USER_CONNECTED, USER_GET_BY_ID } from '@/modules/UserModule';
+import { UPDATE_TITLE } from '@/store';
 
 export default {
-  name: "jesteDetails",
-  components: {
-    ChatCmp,
-    LoadingCmp
-  },
-  created() {
+	name: 'jesteDetails',
+	components: {
+		ChatCmp,
+		LoadingCmp
+	},
+	created() {
 		this.getJeste().then(this.getUser);
-  },
-  data() {
-    return {
-      jeste: {},
-      dialog: false,
-      reqUser: null
-    };
-  },
-  computed: {
-    isLoading() {
-      return this.$store.getters[JESTE_IS_LOADING];
-    },
-    position() {
-      if (this.jeste.destination_loc) {
-        return {
-          lat: +this.jeste.destination_loc.coordinates[0],
-          lng: +this.jeste.destination_loc.coordinates[1]
-        };
-      }
-    },
-    canEdit() {
-      return ( !this.jeste.ended_at && this.user &&
-        this.user._id === this.jeste.req_user_id );
-    },
-    user() {
-      return this.$store.getters[USER_CONNECTED];
-    },
-    showChat() {
-      return ( !!this.user && !!this.jeste.res_user_id &&
-        (this.user._id === this.jeste.res_user_id || this.user._id === this.jeste.req_user_id)
-      );
-    }
-  },
-  methods: {
-    getJeste() {
-      return this.$store.dispatch({ type: JESTE_GET_BY_ID, id: this.$route.params.id })
-        .then(jeste => this.jeste = jeste);
-    },
-    deleteJeste() {
-      this.dialog = false;
-      this.$store
-        .dispatch({ type: JESTE_DELETE, id: this.jeste._id })
-        .then(_ => {
-          EventBus.$emit(SNACK_MSG, {
-            text: `Jeste Deleted Successfully`,
-            bgColor: "success"
-          });
-          this.$router.push("/");
-        });
-    },
-    respond() {
-      console.log("User:", this.user);
+		this.$store.commit({ type: UPDATE_TITLE, title: 'Jeste - Details' });
+	},
+	data() {
+		return {
+			jeste: {},
+			dialog: false,
+			reqUser: null
+		};
+	},
+	computed: {
+		isLoading() {
+			return this.$store.getters[JESTE_IS_LOADING];
+		},
+		position() {
+			if (this.jeste.destination_loc) {
+				return {
+					lat: +this.jeste.destination_loc.coordinates[0],
+					lng: +this.jeste.destination_loc.coordinates[1]
+				};
+			}
+		},
+		canEdit() {
+			return (
+				!this.jeste.ended_at &&
+				this.user &&
+				this.user._id === this.jeste.req_user_id
+			);
+		},
+		user() {
+			return this.$store.getters[USER_CONNECTED];
+		},
+		showChat() {
+			return (
+				!!this.user &&
+				!!this.jeste.res_user_id &&
+				(this.user._id === this.jeste.res_user_id ||
+					this.user._id === this.jeste.req_user_id)
+			);
+		}
+	},
+	methods: {
+		getJeste() {
+			return this.$store
+				.dispatch({ type: JESTE_GET_BY_ID, id: this.$route.params.id })
+				.then(jeste => (this.jeste = jeste));
+		},
+		deleteJeste() {
+			this.dialog = false;
+			this.$store
+				.dispatch({ type: JESTE_DELETE, id: this.jeste._id })
+				.then(_ => {
+					EventBus.$emit(SNACK_MSG, {
+						text: `Jeste Deleted Successfully`,
+						bgColor: 'success'
+					});
+					this.$router.push('/');
+				});
+		},
+		respond() {
+			console.log('User:', this.user);
 
-      this.jeste.res_user_id = this.user._id;
-      this.$socket.emit("jesteResponded", { jeste: this.jeste });
-    },
-    getUser() {
-      this.$store.dispatch({ type: USER_GET_BY_ID, id: this.jeste.req_user_id })
-        .then(user => this.reqUser = user);
-    }
-  }
+			this.jeste.res_user_id = this.user._id;
+			this.$socket.emit('jesteResponded', { jeste: this.jeste });
+		},
+		getUser() {
+			this.$store
+				.dispatch({ type: USER_GET_BY_ID, id: this.jeste.req_user_id })
+				.then(user => (this.reqUser = user));
+		}
+	}
 };
 </script>
 
 <style lang="scss" scoped>
-@import "../assets/styles/_vars.scss";
+@import '../assets/styles/_vars.scss';
 
 a {
-  text-decoration: none;
+	text-decoration: none;
 }
 .v-card--hover {
-  cursor: default;
+	cursor: default;
 }
 .jeste-details-card {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
 }
 .chat-cmp {
-  z-index: 10;
+	z-index: 10;
 }
 .load-wrapper {
 	height: 100%;
