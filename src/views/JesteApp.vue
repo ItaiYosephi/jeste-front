@@ -22,11 +22,7 @@
 import LoadingCmp from '@/components/LoadingCmp';
 import JesteList from '@/components/jestes/JesteList';
 import JesteFilter from '@/components/jestes/JesteFilter';
-import {
-	JESTES_LOAD,
-	JESTES_TO_DISPLAY,
-	JESTE_IS_LOADING
-} from '@/modules/JesteModule';
+import { JESTES_LOAD, JESTES_TO_DISPLAY, JESTE_IS_LOADING } from '@/modules/JesteModule';
 import { UPDATE_TITLE } from '@/store';
 
 export default {
@@ -38,9 +34,6 @@ export default {
 	},
 	created() {
 		this.$store.commit({ type: UPDATE_TITLE, title: 'Jeste - Search' });
-	},
-	mounted() {
-		// this.$vuetify.goTo(0, {easeing: 'easeInQuad', duration: 600});
 	},
 	computed: {
 		isLoading() {

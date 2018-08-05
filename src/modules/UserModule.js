@@ -29,17 +29,7 @@ export default {
 	},
 	mutations: {
 		[USER_LOAD](state, { user }) {
-			if (user){
-
-				state.user = user;
-				
-				// this.$socket.emit('userLogged', {
-				// 	userId: this.user._id
-				// });
-				// setTimeout( x => {
-				// 	this.$socket.emit('sendMsg', {msg: 'this is te text', jesteId: "5b5e21518cb43c2d607a1bc4"})
-				// }, 1000)
-			}
+			if (user) state.user = user;
 		},
 		[USER_LOGOUT](state) {
 			state.user = null

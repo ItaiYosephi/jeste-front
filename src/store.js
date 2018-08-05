@@ -20,7 +20,6 @@ export default new Vuex.Store({
 	mutations: {
 		[UPDATE_TITLE](state, {title}) {
 			state.title = title
-
 		}
 	},
 	actions: {},

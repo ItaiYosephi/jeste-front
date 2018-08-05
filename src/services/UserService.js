@@ -1,5 +1,4 @@
 import axios from 'axios'
-
 const URL = (process.env.NODE_ENV !== 'development') ? '/user' : '//localhost:3000/user';
 
 function query() {

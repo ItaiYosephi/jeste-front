@@ -153,7 +153,7 @@ export default {
 		},
 		submit() {
 			if (this.$refs.form.validate()) {
-        // Native form submission is not yet supported
+        	// Native form submission is not yet supported
 				this.$store.dispatch({ type: JESTE_UPLOAD_IMG, image: this.imageFile })
 					.then(img => {
 						if (img) this.jesteToSave.img = img;
@@ -198,16 +198,8 @@ export default {
 				this.currPlace = this.autocomplete.getPlace();
 				this.jesteToSave.address_components = this.currPlace.address_components;
 				this.jesteToSave.formatted_address = this.currPlace.formatted_address;
-				this.jesteToSave.destination_loc.coordinates.splice(
-					0,
-					1,
-					+this.currPlace.geometry.location.lat()
-				);
-				this.jesteToSave.destination_loc.coordinates.splice(
-					1,
-					1,
-					+this.currPlace.geometry.location.lng()
-				);
+				this.jesteToSave.destination_loc.coordinates.splice(0, 1, +this.currPlace.geometry.location.lat());
+				this.jesteToSave.destination_loc.coordinates.splice(1, 1, +this.currPlace.geometry.location.lng());
 			});
 		}
 	}

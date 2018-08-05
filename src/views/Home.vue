@@ -28,13 +28,16 @@
         <v-spacer></v-spacer>
       </v-layout>
     </section>
-    <div class="load-wrapper" v-if="isLoading">
+    <h1>Recent Jestes</h1>
+		<div class="load-wrapper" v-if="isLoading">
       <LoadingCmp/>
     </div>
-    <h1>Recent Jestes</h1>
-    <JesteList ref="listRecent" :jestes="jestesToDisplay" />
+    <JesteList v-else ref="listRecent" :jestes="jestesToDisplay" />
     <h1>Nearby Jestes</h1>
-    <JesteList ref="listNearby" :jestes="jestesToDisplay" />
+		<div class="load-wrapper" v-if="isLoading">
+      <LoadingCmp/>
+    </div>
+    <JesteList v-else ref="listNearby" :jestes="jestesToDisplay" />
   </section>
 </template>
 
@@ -44,11 +47,7 @@ import * as easings from 'vuetify/es5/util/easing-patterns';
 import LoadingCmp from '@/components/LoadingCmp';
 import JesteList from '@/components/jestes/JesteList';
 import JesteFilter from '@/components/jestes/JesteFilter';
-import {
-	JESTES_LOAD,
-	JESTES_TO_DISPLAY,
-	JESTE_IS_LOADING
-} from '@/modules/JesteModule';
+import { JESTES_LOAD, JESTES_TO_DISPLAY, JESTE_IS_LOADING } from '@/modules/JesteModule';
 import { UPDATE_TITLE } from '@/store';
 
 export default {
@@ -63,7 +62,6 @@ export default {
 	},
 	computed: {
 		jestesToDisplay() {
-			// console.log("jestes", this.$store.getters[JESTES_TO_DISPLAY]);
 			return this.$store.getters[JESTES_TO_DISPLAY];
 		},
 		isLoading() {
@@ -124,7 +122,6 @@ h1 {
 		padding: 10px;
 		text-align: center;
 		font-size: 1.2em;
-		// color: white;
 	}
 	.stats {
 		text-transform: uppercase;

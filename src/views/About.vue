@@ -1,6 +1,7 @@
 <template>
     <section class="about">
         <h1>This is an about page</h1>
+        <p>Coming Soon</p>
     </section>
 </template>
 

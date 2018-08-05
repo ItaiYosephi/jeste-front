@@ -43,17 +43,7 @@ export default {
       colors: ["green", "purple", "indigo", "cyan", "teal", "orange", "blue", "yellow", "red"],
       editing: null,
       index: -1,
-      items: [
-        { header: "Select a keyword or create one" },
-        {
-          text: "Foo",
-          color: "blue"
-        },
-        {
-          text: "Bar",
-          color: "red"
-        }
-      ],
+      items: [ { header: "Select a keyword or create one" } ],
       nonce: 1,
       menu: false,
       model: [],
@@ -81,16 +71,9 @@ export default {
       if (item.header) return false;
 
       const hasValue = val => (val != null ? val : "");
-
       const text = hasValue(itemText);
       const query = hasValue(queryText);
-
-      return (
-        text
-          .toString()
-          .toLowerCase()
-          .indexOf(query.toString().toLowerCase()) > -1
-      );
+      return (text.toString().toLowerCase().indexOf(query.toString().toLowerCase()) > -1);
     }
   },
   watch: {
@@ -99,7 +82,6 @@ export default {
     },
     value(items) {
       if (!items || this.model.length > 0) return;
-
       this.model = items.map(item => {
         return {
           text: item,
@@ -110,7 +92,6 @@ export default {
     },
     model(val, prev) {
       if (val.length === prev.length) return;
-
       this.model = val.map(v => {
         if (typeof v === "string") {
           v = {
@@ -120,7 +101,6 @@ export default {
           this.nonce++;
           this.items.push(v);
         }
-
         return v;
       });
       var txts = this.model.map(item => item.text);

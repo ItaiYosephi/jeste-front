@@ -38,71 +38,71 @@
 
 <script>
 import {
-	FILTER_GET,
-	JESTES_LOAD,
-	JESTE_CATEGORIES_GET,
-	UPDATE_TXT_FILTER,
-	UPDATE_CATEGORY_FILTER,
-	UPDATE_MAXPRICE_FILTER,
-	UPDATE_MAXDISTANCE_FILTER
-} from '@/modules/JesteModule';
+  FILTER_GET,
+  JESTES_LOAD,
+  JESTE_CATEGORIES_GET,
+  UPDATE_TXT_FILTER,
+  UPDATE_CATEGORY_FILTER,
+  UPDATE_MAXPRICE_FILTER,
+  UPDATE_MAXDISTANCE_FILTER
+} from "@/modules/JesteModule";
 
 export default {
-	name: 'jesteFIlter',
-	data() {
-		return {
-			categories: this.$store.getters[JESTE_CATEGORIES_GET]
-		};
-	},
-	methods: {
-		filterJestes() {
-			this.$store.dispatch({ type: JESTES_LOAD });
-		}
-	},
-	computed: {
-		filter() {
-			return this.$store.getters[FILTER_GET];
-		},
-		txt: {
-			get: function() {
-				return this.filter.txt;
-			},
-			set: function(txt) {
-				this.$store.commit({ type: UPDATE_TXT_FILTER, txt });
-			}
-		},
-		category: {
-			get: function() {
-				return this.filter.category;
-			},
-			set: function(val) {
-				this.$store.commit({ type: UPDATE_CATEGORY_FILTER, val });
-			}
-		},
-		maxPrice: {
-			get: function() {
-				return this.filter.maxPrice;
-			},
-			set: function(val) {
-				this.$store.commit({ type: UPDATE_MAXPRICE_FILTER, val });
-			}
-		},
-		maxDistance: {
-			get: function() {
-				return this.filter.maxDistance / 1000;
-			},
-			set: function(val) {
-				val *=1000
-				this.$store.commit({ type: UPDATE_MAXDISTANCE_FILTER, val });
-			}
-		}
-	}
+  name: "jesteFIlter",
+  data() {
+    return {
+      categories: this.$store.getters[JESTE_CATEGORIES_GET]
+    };
+  },
+  methods: {
+    filterJestes() {
+      this.$store.dispatch({ type: JESTES_LOAD });
+    }
+  },
+  computed: {
+    filter() {
+      return this.$store.getters[FILTER_GET];
+    },
+    txt: {
+      get: function() {
+        return this.filter.txt;
+      },
+      set: function(txt) {
+        this.$store.commit({ type: UPDATE_TXT_FILTER, txt });
+      }
+    },
+    category: {
+      get: function() {
+        return this.filter.category;
+      },
+      set: function(val) {
+        this.$store.commit({ type: UPDATE_CATEGORY_FILTER, val });
+      }
+    },
+    maxPrice: {
+      get: function() {
+        return this.filter.maxPrice;
+      },
+      set: function(val) {
+        this.$store.commit({ type: UPDATE_MAXPRICE_FILTER, val });
+      }
+    },
+    maxDistance: {
+      get: function() {
+        return this.filter.maxDistance / 1000;
+      },
+      set: function(val) {
+        val *= 1000;
+        this.$store.commit({ type: UPDATE_MAXDISTANCE_FILTER, val });
+      }
+    }
+  }
 };
 </script>
 
 <style lang="scss" scoped>
-@import '../../assets/styles/_helpers.scss';
+@import "../../assets/styles/_helpers.scss";
 .text-slider {
-	margin-left: 20px;
+  margin-left: 20px;
 }
 </style>
