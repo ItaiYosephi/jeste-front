@@ -135,9 +135,12 @@ export default {
     });
   },
   sockets: {
-    reciveMsg() {
-      alert("recive msg");
-    }
+    jesteResponded(jeste) {
+			EventBus.$emit(SNACK_JESTE_IT, {
+				text: 'got new jeste',
+				link: `/jeste/${jeste._id}`
+			})
+		},
   },
   mounted() {
     EventBus.$on(SNACK_MSG, msg => this.toggleSnackbar(msg));
