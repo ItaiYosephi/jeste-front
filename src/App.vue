@@ -137,7 +137,7 @@ export default {
   },
   sockets: {
     jesteResponded(jeste) {
-      this.$store.commit({type: UPDATE_RES_JESTE, JESTE})
+      this.$store.commit({type: UPDATE_RES_JESTE, jeste})
 			EventBus.$emit(SNACK_JESTE_IT, {
 				text: 'Someone just responded your jeste!',
 				link: `/jeste/${jeste._id}`
