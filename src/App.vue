@@ -96,7 +96,7 @@
       </v-snackbar>
 
       <v-snackbar v-model="jesteSnackDisplay" :top="jesteSnackProps.y === 'top'" :bottom="jesteSnackProps.y === 'bottom'" :left="snackbarProps.x === 'left'" :right="snackbarProps.x === 'right'" :multi-line="snackbarProps.mode === 'multi-line'" :vertical="snackbarProps.mode === 'vertical'" :timeout="jesteSnackProps.timeout" color="purple darken-1">
-        {{ snackbarProps.text }}
+        {{ jesteSnackProps.text }}
         <v-btn flat :color="jesteSnackProps.btnColor" :to="jesteSnackProps.link"@click="jesteSnackDisplay = false">
           Open
         </v-btn>
