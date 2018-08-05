@@ -10,8 +10,8 @@
             <v-card-text>
               <v-text-field box v-model="jesteToSave.title" label="Title" required></v-text-field>
               <v-textarea box v-model="jesteToSave.description" label="Description" hint="Few words about the jeste" required></v-textarea>
-              
               <ComboBox v-model="jesteToSave.keywords"></ComboBox>
+              {{categories}}
               <v-select
                 box
                 v-model="jesteToSave.category"

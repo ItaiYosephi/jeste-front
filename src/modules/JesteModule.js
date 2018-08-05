@@ -32,7 +32,7 @@ import { USER_CONNECTED } from './UserModule';
 export default {
 	state: {
 		jestes: [],
-		categories: ['All', 'Delivery', 'Work', 'Other'],
+		categories: ['All', 'Delivery', 'Work', 'Animal', 'Technology', 'Other'],
 		filterBy: {
 			coords: '',
 			txt: '',

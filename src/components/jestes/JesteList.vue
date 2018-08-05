@@ -1,5 +1,5 @@
 <template>
-  <v-container grid-list-md>
+  <v-container fluid grid-list-md>
     <v-layout row wrap fill-height v-if="jestes">
         <JestePreview
             v-for="jeste in jestes"
@@ -25,5 +25,4 @@ export default {
 <style lang="scss" scoped>
 @import "../../assets/styles/_vars.scss";
 @import "../../assets/styles/_helpers.scss";
-
 </style>
