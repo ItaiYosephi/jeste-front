@@ -18,7 +18,7 @@ export const JESTE_DELETE = 'jeste/jesteDelete';
 
 export const JESTE_GET_BY_ID = 'jeste/actions/getJesteById';
 export const JESTE_UPLOAD_IMG = 'jeste/actions/uploadJesteImg';
-export const GET_CHAT_HISTORY = 'jeste/actions/uploadJesteImg';
+export const GET_CHAT_HISTORY = 'jeste/actions/getChatHistory';
 
 export const JESTE_GET = 'jeste/getters/getJeste';
 export const JESTES_TO_DISPLAY = 'jeste/getters/jestesToDisplay';
@@ -153,7 +153,8 @@ export default {
 		},
 		[JESTE_UPLOAD_IMG](context, { image }) {
 			if (!image) return '';
-			return ImgUploadService.uploadImg(image).then(image => image);
+			return ImgUploadService.uploadImg(image)
+				.then(image => image);
 		},
 		[JESTE_SAVE](context, { jesteToSave }) {
 			// if (!context.getters[IS_ADMIN]) return Promise.reject('No Permissions');

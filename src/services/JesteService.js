@@ -35,7 +35,6 @@ function deleteJeste(jesteId) {
 }
 
 function saveJeste(jeste) {
-
     if (jeste._id) {
         delete jeste.req_user
         return axios.put(`${URL}/${jeste}`, jeste)
@@ -49,6 +48,7 @@ function saveJeste(jeste) {
             .then(res => res.data);
     }
 }
+
 function getChatHistory(jesteId) {
     return axios.get(`${CHAT_URL}/${jesteId}`)
     .then(res => {
@@ -59,7 +59,6 @@ function getChatHistory(jesteId) {
         console.log(err);
         return err;
     });
-
 }
 
 export default {

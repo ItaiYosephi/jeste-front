@@ -19,8 +19,6 @@ export default {
 			if (msg) this.handleReceivedMsg(msg);
 		},
 		isTyping() {
-			console.log('popo');
-
 			if (this.typingTimout) clearTimeout(this.typingTimeout);
 			this.isTyping = true;
 			setTimeout(_ => {
@@ -75,10 +73,9 @@ export default {
 		} else {
 			this.getUser(this.reqUserId);
 		}
-		this.$store
-			.dispatch({ type: GET_CHAT_HISTORY, jesteId: this.jesteId })
+		this.$store.dispatch({ type: GET_CHAT_HISTORY, jesteId: this.jesteId })
 			.then(res => {
-				console.log(res);
+				console.log('chat res:', res);
 
 				var orderHistory = res.reduce((acc, item) => {
 					if (item.msg.authorId === this.userId) {

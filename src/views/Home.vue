@@ -22,7 +22,7 @@
           </div>
         </v-layout>
         <v-layout row wrap justify-center mt-2>
-          <v-btn large color="primary" @click="$vuetify.goTo($refs.list, {easeing: 'easeInQuad', offset: -64, duration: 600})">do a jeste</v-btn>
+          <v-btn large color="primary" @click="$vuetify.goTo($refs.listRecent, {easeing: 'easeInQuad', offset: -100, duration: 600})">do a jeste</v-btn>
           <v-btn large color="primary" to="/jeste/edit">ask for jeste</v-btn>
         </v-layout>
         <v-spacer></v-spacer>
@@ -32,9 +32,9 @@
       <LoadingCmp/>
     </div>
     <h1>Recent Jestes</h1>
-    <JesteList ref="list" :jestes="jestesToDisplay" />
+    <JesteList ref="listRecent" :jestes="jestesToDisplay" />
     <h1>Nearby Jestes</h1>
-    <JesteList ref="list" :jestes="jestesToDisplay" />
+    <JesteList ref="listNearby" :jestes="jestesToDisplay" />
   </section>
 </template>
 

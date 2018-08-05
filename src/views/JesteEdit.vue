@@ -55,14 +55,7 @@
 
 <script>
 import { EventBus, SNACK_MSG } from '@/services/EventBusService';
-import {
-	JESTE_EMPTY,
-	JESTE_GET_BY_ID,
-	JESTE_GET,
-	JESTE_SAVE,
-	JESTE_UPLOAD_IMG,
-	JESTE_CATEGORIES_GET
-} from '@/modules/JesteModule';
+import { JESTE_EMPTY, JESTE_GET_BY_ID, JESTE_GET, JESTE_SAVE, JESTE_UPLOAD_IMG, JESTE_CATEGORIES_GET } from '@/modules/JesteModule';
 import { GET_USER_LOCATION, USER_CONNECTED } from '@/modules/UserModule';
 import PermDialog from '@/components/PermDialog';
 import ComboBox from '@/components/ComboBox';
@@ -149,8 +142,7 @@ export default {
 	},
 	methods: {
 		getJeste(id) {
-			return this.$store
-				.dispatch({ type: JESTE_GET_BY_ID, id })
+			return this.$store.dispatch({ type: JESTE_GET_BY_ID, id })
 				.then(jeste => {
 					this.jesteToSave = JSON.parse(JSON.stringify(jeste));
 					this.imageUrl = this.jesteToSave.img.url;
@@ -161,21 +153,13 @@ export default {
 		},
 		submit() {
 			if (this.$refs.form.validate()) {
-				// Native form submission is not yet supported
-				this.$store
-					.dispatch({ type: JESTE_UPLOAD_IMG, image: this.imageFile })
+        // Native form submission is not yet supported
+				this.$store.dispatch({ type: JESTE_UPLOAD_IMG, image: this.imageFile })
 					.then(img => {
 						if (img) this.jesteToSave.img = img;
-						this.$store
-							.dispatch({
-								type: JESTE_SAVE,
-								jesteToSave: this.jesteToSave
-							})
+						this.$store.dispatch({ type: JESTE_SAVE, jesteToSave: this.jesteToSave })
 							.then(_ => {
-								EventBus.$emit(SNACK_MSG, {
-									text: `Jeste Saved Successfuly`,
-									bgColor: 'success'
-								});
+								EventBus.$emit(SNACK_MSG, { text: `Jeste Saved Successfuly`, bgColor: 'success' });
 								this.$router.push('/jeste');
 							})
 							.catch(err => {

@@ -83,14 +83,11 @@ export default {
 				.then(context.commit(USER_LOGOUT))
 		},
 		[USER_GET_BY_ID](context, {id}) {
-			console.log('id ig fot', id);
-			
 			return UserService.getUserByID(id)
 				.then(user => user[0])
 		},
 		[GET_USER_LOCATION](context) {
-			console.log('getting user location');
-			
+			console.log('Getting User Location');
 			return LocationService.getUserLocation()
 			 .then(loc => {
 				context.commit({type: SET_LOCATION, loc})

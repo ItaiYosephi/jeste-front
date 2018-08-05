@@ -47,7 +47,6 @@ export default {
 			return this.$store.getters[JESTE_IS_LOADING];
 		},
 		jestesToDisplay() {
-			// console.log("jestes", this.$store.getters[JESTES_TO_DISPLAY]);
 			return this.$store.getters[JESTES_TO_DISPLAY];
 		}
 	}
