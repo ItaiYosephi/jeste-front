@@ -188,9 +188,7 @@ export default {
     loadUser() {
       this.$store
         .dispatch(USER_CHECK_LOGIN)
-        .then(_ => {
-          console.log("User Logged in");
-        })
+        .then(_ => console.log("User Logged in"))
         .catch(err => console.log(err));
     },
     loadJestes() {

@@ -161,8 +161,6 @@ export default {
 				});
 		},
 		respond() {
-			console.log('User:', this.user);
-
 			this.jeste.res_user_id = this.user._id;
 			this.$socket.emit('jesteResponded', { jeste: this.jeste });
 		},

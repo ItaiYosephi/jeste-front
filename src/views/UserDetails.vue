@@ -111,13 +111,6 @@ export default {
 				return this.user.img.url;
 			else return 'https://vuetifyjs.com/apple-touch-icon-180x180.png';
 		}
-		// title() {
-		// 	if (this.user) {
-		// 		return `${this.user.details.firstName}`
-		// 	} else {
-		// 		return 'popo'
-		// 	}
-		// }
 	},
 	methods: {
 		getUser() {

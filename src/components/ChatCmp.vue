@@ -1,10 +1,8 @@
 <template>
 	<div>
-		<!-- <button @click="test">test</button> -->
 		<beautiful-chat ref="chat" :colors="color" :agentProfile="agentProfile" :showTypingIndicator="isTyping" :onMessageWasSent="onMessageWasSent" :messageList="messageList" :newMessagesCount="newMessagesCount" :isOpen="isChatOpen" :close="closeChat" :open="openChat" :showEmoji="true" :showFile="true" />
 		</beautiful-chat>
 	</div>
-
 </template>
 
 <script>
@@ -15,7 +13,6 @@ export default {
 	props: ['jesteId', 'userId', 'reqUserId', 'resUserId'],
 	sockets: {
 		receivedMsg({ msg }) {
-			console.log('this message was recived', msg);
 			if (msg) this.handleReceivedMsg(msg);
 		},
 		isTyping() {
@@ -65,24 +62,13 @@ export default {
 		};
 	},
 	created() {
-		console.log('requserid', this.reqUserId);
-		console.log('Res User', this.resUserId);
-
-		if (this.userId === this.reqUserId) {
-			this.getUser(this.resUserId);
-		} else {
-			this.getUser(this.reqUserId);
-		}
+		if (this.userId === this.reqUserId) this.getUser(this.resUserId);
+		else this.getUser(this.reqUserId);
 		this.$store.dispatch({ type: GET_CHAT_HISTORY, jesteId: this.jesteId })
 			.then(res => {
-				console.log('chat res:', res);
-
 				var orderHistory = res.reduce((acc, item) => {
-					if (item.msg.authorId === this.userId) {
-						item.msg.author = 'me';
-					} else {
-						item.msg.author = 'them';
-					}
+					if (item.msg.authorId === this.userId) item.msg.author = 'me';
+					else item.msg.author = 'them';
 					acc.push(item.msg);
 					return acc;
 				}, []);
@@ -92,7 +78,6 @@ export default {
 	mounted() {
 		var txtInput = document.querySelector('.sc-user-input--text');
 		let _this = this;
-
 		txtInput.addEventListener('input', function() {
 			_this.handleTyping();
 		});
@@ -101,22 +86,16 @@ export default {
 		handleReceivedMsg(msg) {
 			msg.author = 'them';
 			if (msg.data.file || msg.data.emoji || msg.data.text.length > 0) {
-				this.newMessagesCount = this.isChatOpen
-					? this.newMessagesCount
-					: this.newMessagesCount + 1;
+				this.newMessagesCount = this.isChatOpen ? this.newMessagesCount : this.newMessagesCount + 1;
 				this.isTyping = false;
 				this.messageList.push(msg);
-				console.log('send');
 			}
 		},
 		onMessageWasSent(msg) {
 			msg.timestamp = Date.now();
 			this.messageList.push(msg);
 			msg.authorId = this.userId;
-
 			this.$socket.emit('sendMsg', { msg, jesteId: this.jesteId });
-
-			console.log('msg', msg);
 		},
 		openChat() {
 			this.isChatOpen = true;
@@ -129,11 +108,8 @@ export default {
 			this.$socket.emit('isTyping', { jesteId: this.jesteId });
 		},
 		getUser(id) {
-			console.log('method id', id);
-
 			this.$store.dispatch({ type: USER_GET_BY_ID, id }).then(user => {
-				this.agentProfile.teamName =
-					user.details.firstName + ' ' + user.details.lastName;
+				this.agentProfile.teamName = user.details.firstName + ' ' + user.details.lastName;
 				this.agentProfile.imageUrl = user.img.url;
 			});
 		}
@@ -141,20 +117,17 @@ export default {
 };
 </script>
 
-
 <style  lang="scss">
 img.sc-header--img {
 	width: 54px !important;
 	height: 54px !important;
 }
 .sc-message--avatar {
-	    background-size: 30px 30px !important;
-	// display: none
+	background-size: 30px 30px !important;
+
 }
 .sc-message--content.received .sc-message--text {
 	    max-width: calc(100% - 120px);
     word-wrap: break-word;
 }
-
-
 </style>
