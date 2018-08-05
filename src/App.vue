@@ -137,7 +137,7 @@ export default {
   sockets: {
     jesteResponded(jeste) {
 			EventBus.$emit(SNACK_JESTE_IT, {
-				text: 'got new jeste',
+				text: 'Someone just responded your jeste!',
 				link: `/jeste/${jeste._id}`
 			})
 		},
