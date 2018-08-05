@@ -6,8 +6,8 @@ import UserModule from '@/modules/UserModule';
 
 Vue.use(Vuex);
 
-export const UPDATE_TITLE = 'store/mutations/updateTtile';
-export const GET_TITLE = 'store/getters/getTitle';
+export const UPDATE_TITLE = 'store/mutations/updateTtile'
+export const GET_TITLE = 'store/getters/getTitle'
 
 export default new Vuex.Store({
 	modules: {
@@ -18,18 +18,15 @@ export default new Vuex.Store({
 		title: 'Jeste'
 	},
 	mutations: {
-		[UPDATE_TITLE](state, { title }) {
-			state.title = title;
+		[UPDATE_TITLE](state, {title}) {
+			state.title = title
+
 		}
 	},
-	actions: {
-		// socket_jesteResponded: (context, message) => {
-		// 	alert('sock from store');
-		// }
-	},
-	getters: {
+	actions: {},
+	getters:{
 		[GET_TITLE](state) {
-			return state.title;
+			return state.title
 		}
-	}
+	},
 });

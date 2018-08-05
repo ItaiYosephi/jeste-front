@@ -129,10 +129,9 @@ export default {
 	},
 	sockets: {
 		jesteResponded(jeste) {
-			console.log('jeste resssss');
 			
 			var title = jeste.title
-			EventBus.$emit(SNACK_MSG, {
+			EventBus.$emit(SNACK_CHAT, {
 				text: 'got new jeste',
 				bgColor: 'success'
 
