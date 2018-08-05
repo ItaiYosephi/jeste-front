@@ -11,6 +11,7 @@ export const UPDATE_TXT_FILTER = 'jeste/mutations/updateTxtFilter';
 export const UPDATE_MAXPRICE_FILTER = 'jeste/mutations/updateMaxPriceFilter';
 export const UPDATE_CATEGORY_FILTER = 'jeste/mutations/updateCategoryFilter';
 export const UPDATE_MAXDISTANCE_FILTER = 'jeste/mutations/updateMaxDistanceFilter';
+export const UPDATE_RES_JESTE = 'jeste/mutations/updateResJeste';
 
 export const JESTES_LOAD = 'jeste/jestesLoad';
 export const JESTE_SAVE = 'jeste/jesteSave';
@@ -86,6 +87,12 @@ export default {
 		},
 		[UPDATE_MAXDISTANCE_FILTER](state, { val }) {
 			state.filterBy.maxDistance = val;
+		},
+		[UPDATE_RES_JESTE](state, {jeste}) {
+			let idx = state.jestes.findIndex(currJeste => {return currJeste._id === jeste._id} )
+			if (idx > -1) {
+				state.jestes.splice(idx, 1 , jeste)
+			}
 		}
 	},
 	getters: {
