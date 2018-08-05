@@ -130,11 +130,11 @@ export default {
 	sockets: {
 		jesteResponded(jeste) {
 			
+			
 			var title = jeste.title
-			EventBus.$emit(SNACK_CHAT, {
+			EventBus.$emit(SNACK_JESTE_IT, {
 				text: 'got new jeste',
-				bgColor: 'success'
-
+				link: `/jeste/${jeste._id}`
 			})
 		},
 		
