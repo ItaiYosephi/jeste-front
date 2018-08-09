@@ -107,8 +107,8 @@ export default {
 	},
 	computed: {
 		imgUrl() {
-			if (this.user && this.user.img && this.user.img.url)
-				return this.user.img.url;
+			if (this.user && this.user.img && this.user.img.secure_url)
+				return this.user.img.secure_url;
 			else return 'https://vuetifyjs.com/apple-touch-icon-180x180.png';
 		}
 	},

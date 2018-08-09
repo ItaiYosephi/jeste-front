@@ -20,7 +20,7 @@
 							<v-flex v-if="reqUser" xs2 ml-4>
 								<router-link :to="`/user/${reqUser._id}`">
 									<v-avatar size="50px" color="grey lighten-4">
-										<img :src="reqUser.img.url" alt="avatar">
+										<img :src="reqUser.img.secure_url" alt="avatar">
 									</v-avatar>
 									<div class="grey--text">{{reqUser.details.firstName}} {{reqUser.details.lastName}}</div>
 								</router-link>
@@ -43,7 +43,7 @@
 					<div class="load-wrapper" v-if="isLoading">
 						<LoadingCmp/>
 					</div>
-					<v-card-media v-else-if="jeste.img" :src="jeste.img.url" height="400px">
+					<v-card-media v-else-if="jeste.img" :src="jeste.img.secure_url" height="400px">
 					</v-card-media>
 				</v-card>
 			</v-flex>

@@ -13,6 +13,7 @@ export const UPDATE_CATEGORY_FILTER = 'jeste/mutations/updateCategoryFilter';
 export const UPDATE_MAXDISTANCE_FILTER = 'jeste/mutations/updateMaxDistanceFilter';
 export const UPDATE_RES_JESTE = 'jeste/mutations/updateResJeste';
 
+export const JESTES_LOAD_STATS = 'jeste/jestesLoadStats';
 export const JESTES_LOAD = 'jeste/jestesLoad';
 export const JESTE_SAVE = 'jeste/jesteSave';
 export const JESTE_DELETE = 'jeste/jesteDelete';
@@ -23,6 +24,7 @@ export const GET_CHAT_HISTORY = 'jeste/actions/getChatHistory';
 
 export const JESTE_GET = 'jeste/getters/getJeste';
 export const JESTES_TO_DISPLAY = 'jeste/getters/jestesToDisplay';
+export const JESTES_STATS = 'jeste/getters/getJestesStats';
 export const JESTE_EMPTY = 'jeste/getters/emptyJeste';
 export const JESTE_CATEGORIES_GET = 'jeste/getters/getJesteCategories';
 export const JESTE_IS_LOADING = 'jeste/getters/loadingJeste';
@@ -33,6 +35,7 @@ import { USER_CONNECTED } from './UserModule';
 export default {
 	state: {
 		jestes: [],
+		jestesStats: [0, 0, 0],
 		categories: ['All', 'Delivery', 'Work', 'Animal', 'Technology', 'Other'],
 		filterBy: {
 			coords: '',
@@ -41,7 +44,7 @@ export default {
 			maxDistance: 50000,
 			maxPrice: 200
 		},
-		isLoading: false
+		isLoading: false,
 	},
 	mutations: {
 		[JESTES_LOAD](state, { jestes }) {
@@ -62,13 +65,14 @@ export default {
 		[FILTER_UPDATE](state, { filter }) {
 			for (let prop in filter) {
 				if (filter[prop]) {
-					if (prop !== 'coords') {
-						state.filterBy[prop] = filter[prop];
-					} else {
-						state.filterBy.coords = `${filter.coords.lat},${filter.coords.lng}`;
-					}
+					if (prop !== 'coords') state.filterBy[prop] = filter[prop];
+					else state.filterBy.coords = `${filter.coords.lat},${filter.coords.lng}`;
 				}
 			}
+		},
+		[JESTES_LOAD_STATS](state, { stats }) {
+			// TODO: Improve the query at backend to get zeros even the status isn't exist
+			stats.forEach(stat => state.jestesStats[stat._id] = stat.count);
 		},
 		[TOGGLE_LOADING](state, { isLoad }) {
 			state.isLoading = isLoad;
@@ -105,6 +109,9 @@ export default {
 		[JESTES_TO_DISPLAY](state) {
 			return state.jestes;
 		},
+		[JESTES_STATS](state) {
+			return state.jestesStats;
+		},
 		[JESTE_GET]: state => id => {
 			return state.jestes.find(jeste => jeste._id === id);
 		},
@@ -140,6 +147,12 @@ export default {
 		}
 	},
 	actions: {
+		[JESTES_LOAD_STATS](context) {
+			return JesteService.getJestesStats().then(stats => {
+				context.commit({ type: JESTES_LOAD_STATS, stats });
+				return stats;
+			});
+		},
 		[JESTES_LOAD](context) {
 			context.commit({ type: TOGGLE_LOADING, isLoad: true });
 			let filterBy = { ...context.state.filterBy };

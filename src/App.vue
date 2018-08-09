@@ -7,7 +7,7 @@
         <v-list class="pa-1">
           <v-list-tile avatar v-if="user">
             <v-list-tile-avatar>
-              <img :src="user.img.url">
+              <img :src="user.img.secure_url">
             </v-list-tile-avatar>
             <v-list-tile-content>
               <v-list-tile-title v-if="user">{{user.details.firstName}} {{user.details.lastName}}</v-list-tile-title>
@@ -109,18 +109,8 @@
 <script>
 import { EventBus, SNACK_MSG, SNACK_JESTE_IT } from "@/services/EventBusService";
 import { GET_TITLE } from "@/store";
-import {
-  JESTES_LOAD,
-  FILTER_UPDATE,
-  TOGGLE_LOADING,
-  UPDATE_RES_JESTE
-} from "@/modules/JesteModule";
-import {
-  USER_CHECK_LOGIN,
-  USER_CONNECTED,
-  USER_LOGOUT,
-  GET_USER_LOCATION
-} from "@/modules/UserModule";
+import { JESTES_LOAD, FILTER_UPDATE, TOGGLE_LOADING, UPDATE_RES_JESTE } from "@/modules/JesteModule";
+import { USER_CHECK_LOGIN, USER_CONNECTED, USER_LOGOUT, GET_USER_LOCATION } from "@/modules/UserModule";
 
 export default {
   name: "app",
