@@ -4,16 +4,16 @@
 			<!-- Side Menu (Mobile) -->
 			<v-navigation-drawer app v-model="drawer" fixed temporary>
 
-				<v-list class="pa-1">
-					<v-list-tile avatar v-if="user">
-						<v-list-tile-avatar>
-							<img :src="user.img.url">
-						</v-list-tile-avatar>
-						<v-list-tile-content>
-							<v-list-tile-title v-if="user">{{user.details.firstName}} {{user.details.lastName}}</v-list-tile-title>
-						</v-list-tile-content>
-					</v-list-tile>
-				</v-list>
+        <v-list class="pa-1">
+          <v-list-tile avatar v-if="user">
+            <v-list-tile-avatar>
+              <img :src="user.img.secure_url">
+            </v-list-tile-avatar>
+            <v-list-tile-content>
+              <v-list-tile-title v-if="user">{{user.details.firstName}} {{user.details.lastName}}</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+        </v-list>
 
 				<v-list class="pt-0">
 					<v-divider></v-divider>

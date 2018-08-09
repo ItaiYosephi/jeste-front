@@ -97,7 +97,6 @@ export default {
 			imageFile: null,
 			imageUrl: null,
 			categories: [...this.$store.getters[JESTE_CATEGORIES_GET]].splice(1),
-			// imageUrl: null,
 			// Location / street
 			google: null,
 			autocomplete: null,

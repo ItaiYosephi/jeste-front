@@ -16,6 +16,16 @@ function query({ txt = '', coords = '', category = '', maxDistance = 10000, maxP
         });
 }
 
+function getJestesStats() {
+    return axios.get(`${URL}/stats`)
+        .then(res => res.data)
+        .catch(err => {
+            console.warn('Had a problem to load jestes stats:');
+            console.log(err);
+            return err;
+        });
+}
+
 function getJesteByID(jesteId) {
     return axios.get(`${URL}/${jesteId}`)
         .then(res => {
@@ -51,18 +61,19 @@ function saveJeste(jeste) {
 
 function getChatHistory(jesteId) {
     return axios.get(`${CHAT_URL}/${jesteId}`)
-    .then(res => {
-        return res.data
-    })
-    .catch(err => {
-        console.warn(`Had a problem to load chat history of jeste ${jesteId}:`);
-        console.log(err);
-        return err;
-    });
+        .then(res => {
+            return res.data
+        })
+        .catch(err => {
+            console.warn(`Had a problem to load chat history of jeste ${jesteId}:`);
+            console.log(err);
+            return err;
+        });
 }
 
 export default {
     query,
+    getJestesStats,
     getJesteByID,
     deleteJeste,
     saveJeste,

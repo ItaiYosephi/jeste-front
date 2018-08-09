@@ -110,7 +110,7 @@ export default {
 		getUser(id) {
 			this.$store.dispatch({ type: USER_GET_BY_ID, id }).then(user => {
 				this.agentProfile.teamName = user.details.firstName + ' ' + user.details.lastName;
-				this.agentProfile.imageUrl = user.img.url;
+				this.agentProfile.imageUrl = user.img.secure_url;
 			});
 		}
 	}
