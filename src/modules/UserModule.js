@@ -7,7 +7,7 @@ import ImgUploadService from '@/services/ImgUploadService';
 
 export const USER_LOAD = 'user/mutations/userLoad';
 export const SET_LOCATION = 'user/mutation/setLocation';
-export const SET_CURR_CHAT = 'user/mutation/setCurrChat';
+// export const SET_CURR_CHAT = 'user/mutation/setCurrChat';
 
 export const USER_LOGOUT = 'user/userLogout';
 
@@ -37,9 +37,9 @@ export default {
 		[SET_LOCATION](state, {loc}) {
 			state.currLocation = loc;
 		},
-		[SET_CURR_CHAT](state, {data}) {
-			state.currChat = {jesteId: data.jesteId, userId: data.from._id}
-		}
+		// [SET_CURR_CHAT](state, {data}) {
+		// 	state.currChat = {jesteId: data.jesteId, userId: data.from._id}
+		// }
 	},
 	getters: {
 		[USER_CONNECTED](state) {

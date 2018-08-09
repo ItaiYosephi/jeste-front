@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 
 import JesteModule from '@/modules/JesteModule';
 import UserModule from '@/modules/UserModule';
+import ChatModule from '@/modules/ChatModule';
 
 Vue.use(Vuex);
 
@@ -12,7 +13,8 @@ export const GET_TITLE = 'store/getters/getTitle'
 export default new Vuex.Store({
 	modules: {
 		JesteModule,
-		UserModule
+		UserModule,
+		ChatModule
 	},
 	state: {
 		title: 'Jeste'

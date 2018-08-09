@@ -37,7 +37,10 @@ function saveUser(user) {
             });
     } else {
         return axios.post(`${URL}`, user)
-            .then(res => res.data)
+            .then(res => {
+                console.log('user saved',res.data)
+                return res.data
+            })
             .catch(err => {
                 console.warn('Failed to add user');
                 console.log(err);

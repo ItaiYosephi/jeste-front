@@ -52,7 +52,7 @@
 				<v-card hover>
 					<v-card-text>
 						<GmapMap :center="position" v-if="jeste.destination_loc" :zoom="15" map-type-id="terrain" style="width: 100%; height: 300px">
-							<GmapMarker :position="position" :clickable="false" :draggable="true" @click="center=position" />
+							<GmapMarker @position_changed="popo" :position="position" :clickable="false" :draggable="true" @click="center=position" />
 						</GmapMap>
 					</v-card-text>
 				</v-card>
@@ -143,6 +143,11 @@ export default {
 		}
 	},
 	methods: {
+		popo(x) {
+			console.log('popo got xlatlng', x);
+
+			
+		},
 		getJeste() {
 			return this.$store
 				.dispatch({ type: JESTE_GET_BY_ID, id: this.$route.params.id })
