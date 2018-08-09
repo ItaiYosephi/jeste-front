@@ -35,7 +35,7 @@ export default {
       return `${distance} km away from you`
     },
     imgUrl() {
-      if (this.jeste.img && this.jeste.img.url) return  this.jeste.img.url
+      if (this.jeste.img && this.jeste.img.secure_url) return  this.jeste.img.secure_url
       else return ''
     }
   },
