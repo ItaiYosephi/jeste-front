@@ -35,7 +35,7 @@ import { USER_CONNECTED } from './UserModule';
 export default {
 	state: {
 		jestes: [],
-		jestesStats: [0, 0, 0],
+		jestesStats: {0 : 0, 1 : 0, 2 : 0},
 		categories: ['All', 'Delivery', 'Work', 'Animal', 'Technology', 'Other'],
 		filterBy: {
 			coords: '',
@@ -72,7 +72,13 @@ export default {
 		},
 		[JESTES_LOAD_STATS](state, { stats }) {
 			// TODO: Improve the query at backend to get zeros even the status isn't exist
-			stats.forEach(stat => state.jestesStats[stat._id] = stat.count);
+			var statsObj = {
+				0: 0,
+				1: 0,
+				2: 0
+			}
+			stats.forEach(stat => statsObj[stat._id] = stat.count);
+			state.jestesStats = statsObj;
 		},
 		[TOGGLE_LOADING](state, { isLoad }) {
 			state.isLoading = isLoad;

@@ -9,9 +9,10 @@ import 'vuetify/dist/vuetify.min.css';
 import Chat from 'vue-beautiful-chat';
 import * as VueGoogleMaps from 'vue2-google-maps';
 const GOOGLE_API_KEY = 'AIzaSyB1XEp2JKq8CAO8EbBSDGEvjrVC264DLPA';
-// const GOOGLE_API_KEY = 'AIzaSyAjxW4ZyD1DTy_4YcxgPzH9wYUTwx4SeI8';
+
+// The KEY for the presenation
 // const GOOGLE_API_KEY = 'AIzaSyCZOyBJ2lwOryc-T9uNmd8oX3ueHMS4Gh4';
-// import VueSocketio from 'vue-socket.io';
+
 import VueSocketio from 'vue-socket.io-extended';
 
 import io from 'socket.io-client';
@@ -20,9 +21,7 @@ import './assets/styles/main.scss'
 // const SOCKET_URL = 'https://tranquil-headland-25582.herokuapp.com'
 const SOCKET_URL = (process.env.NODE_ENV !== 'development') ? '/' : '//localhost:3000';
 
-// Vue.use(VueSocketio, io(SOCKET_URL), store);
 Vue.use(VueSocketio, io(SOCKET_URL), { store });
-
 
 Vue.use(VueGoogleMaps, {
 	load: {
@@ -52,7 +51,7 @@ Vue.config.productionTip = false;
 Vue.directive('title', {
 	inserted: (el, binding) => document.title = binding.value,
 	update: (el, binding) => document.title = binding.value
-  })
+})
 new Vue({
 	router,
 	store,
