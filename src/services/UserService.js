@@ -1,5 +1,6 @@
 import axios from 'axios'
 const URL = (process.env.NODE_ENV !== 'development') ? '/user' : '//localhost:3000/user';
+const NOTIFICATION_URL = (process.env.NODE_ENV !== 'development') ? '/notification' : '//localhost:3000/notification';
 
 function query() {
     return axios.get(`${URL}`)
@@ -47,9 +48,17 @@ function saveUser(user) {
             });
     }
 }
+function LoadNotifications(userId) {
+    return axios.get(`${NOTIFICATION_URL}/${userId}`)
+    .then(res => {
+        console.log('notifications go saved',res.data)
+        return res.data
+    })
 
+}
 export default {
     query,
     getUserByID,
-    saveUser
+    saveUser,
+    LoadNotifications
 }

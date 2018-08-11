@@ -1,9 +1,6 @@
 <template>
 	<v-container fluid grid-list-md>
 		<v-layout row wrap fill-height v-if="jeste">
-			<ChatCmp v-if="showChat" :jeste-id="jeste._id" :req-user-id="jeste.req_user_id" :res-user-id="jeste.res_user_id" :user-id="user._id" class="chat-cmp">
-			</ChatCmp>
-
 			<v-flex xs12 sm6>
 				<div class="load-wrapper" v-if="isLoading">
 					<LoadingCmp/>
@@ -23,7 +20,10 @@
 										<img :src="reqUser.img.secure_url" alt="avatar">
 									</v-avatar>
 									<div class="grey--text">{{reqUser.details.firstName}} {{reqUser.details.lastName}}</div>
+
 								</router-link>
+						
+								<button @click.stop="setChat(reqUser._id)"><v-icon large color="primary">message</v-icon></button>
 							</v-flex>
 						</v-layout>
 					</v-card-title>
@@ -52,7 +52,7 @@
 				<v-card hover>
 					<v-card-text>
 						<GmapMap :center="position" v-if="jeste.destination_loc" :zoom="15" map-type-id="terrain" style="width: 100%; height: 300px">
-							<GmapMarker @position_changed="popo" :position="position" :clickable="false" :draggable="true" @click="center=position" />
+							<GmapMarker @position_changed="" :position="position" :clickable="false" :draggable="true" @click="center=position" />
 						</GmapMap>
 					</v-card-text>
 				</v-card>
@@ -84,7 +84,7 @@
 <script>
 import LoadingCmp from '@/components/LoadingCmp';
 import ChatCmp from '@/components/ChatCmp';
-import { EventBus, SNACK_MSG } from '@/services/EventBusService';
+import { EventBus, SNACK_MSG, SET_CHAT } from '@/services/EventBusService';
 import {
 	JESTE_GET,
 	JESTE_GET_BY_ID,
@@ -133,21 +133,10 @@ export default {
 		user() {
 			return this.$store.getters[USER_CONNECTED];
 		},
-		showChat() {
-			return (
-				!!this.user &&
-				!!this.jeste.res_user_id &&
-				(this.user._id === this.jeste.res_user_id ||
-					this.user._id === this.jeste.req_user_id)
-			);
-		}
+
 	},
 	methods: {
-		popo(x) {
-			console.log('popo got xlatlng', x);
-
-			
-		},
+		popo(x) {},
 		getJeste() {
 			return this.$store
 				.dispatch({ type: JESTE_GET_BY_ID, id: this.$route.params.id })
@@ -167,12 +156,17 @@ export default {
 		},
 		respond() {
 			this.jeste.res_user_id = this.user._id;
-			this.$socket.emit('jesteResponded', { jeste: this.jeste });
+			this.$socket.emit('jesteResponded', { jeste: this.jeste, user: this.user });
 		},
 		getUser() {
 			this.$store
 				.dispatch({ type: USER_GET_BY_ID, id: this.jeste.req_user_id })
 				.then(user => (this.reqUser = user));
+		},
+				setChat(userId) {
+
+
+			EventBus.$emit(SET_CHAT, userId);
 		}
 	}
 };
@@ -192,9 +186,7 @@ a {
 	flex-direction: column;
 	justify-content: space-between;
 }
-.chat-cmp {
-	z-index: 10;
-}
+
 .load-wrapper {
 	height: 100%;
 	display: flex;
