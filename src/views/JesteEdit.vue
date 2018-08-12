@@ -144,7 +144,7 @@ export default {
 			return this.$store.dispatch({ type: JESTE_GET_BY_ID, id })
 				.then(jeste => {
 					this.jesteToSave = JSON.parse(JSON.stringify(jeste));
-					this.imageUrl = this.jesteToSave.img.url;
+					this.imageUrl = this.jesteToSave.img.secure_url;
 					this.currPlace = {
 						formatted_address: jeste.formatted_address
 					};

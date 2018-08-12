@@ -448,6 +448,7 @@ export default {
 
 @media (min-width: 650px) {
 	.alerts {
+		bottom: 30%;
 		right: 200px;
 		left: unset;
 		transform: translateX(0);

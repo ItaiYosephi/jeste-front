@@ -58,29 +58,9 @@ export default {
 .not-read {
 	background: #edf2fa;
 }
-/* .chat-list {
-	background: white;
-	position: fixed;
-	top: 100%;
-	left: 50%;
-	transform: translateX(-50%);
-	max-width: 100%;
-	overflow-y: scroll;
-} */
+
 .not-read {
 	background: #edf2fa;
 }
-/* @media (min-width: 350px) {
-	.chat-list {
-		min-width: 350px;
-	}
-}
 
-@media (min-width: 650px) {
-	.chat-list {
-		right: 200px;
-		left: unset;
-		transform: translateX(0);
-	}
-} */
 </style>
