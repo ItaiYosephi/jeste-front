@@ -12,7 +12,7 @@
       <LoadingCmp/>
     </div>
     <JesteList v-else :jestes="jestesToDisplay" />
-    <v-btn fixed fab bottom right ripple color="secondary" to="/jeste/edit">
+    <v-btn fixed fab bottom  ripple color="secondary" class="add-btn" to="/jeste/edit">
       <v-icon>add</v-icon>
     </v-btn>
   </section>
@@ -63,4 +63,6 @@ export default {
 		text-transform: uppercase;
 	}
 }
+.add-btn {
+    right: 80px;}
 </style>

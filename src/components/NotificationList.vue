@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<v-list twp-line>
+		<v-list two-line>
 			<v-subheader>
 				Notifications
 			</v-subheader>

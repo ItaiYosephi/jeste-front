@@ -435,14 +435,14 @@ export default {
 	bottom: 0;
 	overflow-y: auto;
 	overflow-x: hidden;
-	max-width: 100%;
+	width: 100%;
 	z-index: 1;
 	box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
 		0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
 }
 @media (min-width: 400px) {
 	.alerts {
-		min-width: 400px;
+		width: 400px;
 	}
 }
 

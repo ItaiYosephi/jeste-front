@@ -143,7 +143,7 @@ img.sc-header--img {
 }
 .sc-launcher,
 .sc-launcher .sc-open-icon, .sc-launcher .sc-closed-icon {
-	right: 80px !important;
+	right: 16px !important;
 	bottom: 16px !important;
 	height: 56px !important;
 	width: 56px !important;

@@ -1,5 +1,5 @@
 <template>
-	<v-list three-line>
+	<v-list two-line>
 		<v-subheader>
 			Chats
 		</v-subheader>

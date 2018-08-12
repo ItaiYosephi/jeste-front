@@ -139,6 +139,8 @@ export default {
 			state.isChatOpen = isOpen;
 		},
 		[CHAT_MARK_READ](state) {
+			console.log('commit mark read');
+			
 			state.currChat.unReadCount = 0;
 			state.currMessageList.forEach(msg => {
 				if (!msg.isRead && msg.fromUserId === state.currUserId) {
@@ -147,6 +149,9 @@ export default {
 			});
 		},
 		[ADD_MSG](state, { msg}) {
+
+			console.log('adding msg');
+
 			
 			if (state.currUserId === msg.fromUserId) {
 
@@ -167,12 +172,17 @@ export default {
 				var chatItem = state.chatList.find(
 					item => item.friendId === msg.fromUserId
 				);
+				console.log('adding msg fount chatitem' ,chatItem);
+
 				chatItem.timestamp = msg.timestamp;
 				chatItem.unReadCount++;
 				chatItem.txt = msg.data.text
 					? msg.data.text.substring(0, 100)
 					: msg.data.emoji;
-				if (msg.timestamp > chatItem.messageList[chatItem.messageList.length -1]) {
+
+				if (msg.timestamp > chatItem.messageList[chatItem.messageList.length -1].timestamp || chatItem.messageList.length === 0) {
+					console.log('inside if');
+					
 					chatItem.messageList.push(msg);
 
 				}
@@ -201,7 +211,7 @@ export default {
 			});
 			state.currChat = chatItem;
 			
-
+			state.isChatOpen = true;
 			state.currMessageList = chatItem.messageList;
 		},
 
@@ -249,9 +259,11 @@ export default {
 				return context
 					.dispatch({ type: GET_CHAT_ITEM, userId })
 					.then(_ => {
+
 						
 						
 						context.commit({ type: SET_CURR_CHAT, userId });
+						context.dispatch(CHAT_MARK_READ)
 						// context.commit(SET_CURR_MESSAGE_LIST); //done
 					});
 			}
@@ -261,7 +273,11 @@ export default {
 			if (chatItem) {
 				if (!chatItem.messageList) {
 					return context.dispatch({ type: SET_MESSAGE_LIST, userId });
-				} else return chatItem;
+				} else{
+					console.log('got chat item');
+					
+					 return chatItem;
+					}
 			} else {
 
 				return UserService.getUserByID(userId).then(user => {
@@ -297,15 +313,20 @@ export default {
 		},
 
 		[CHAT_MARK_READ](context) {
+			console.log('mark read');
+			
 			var messageList = context.state.currMessageList;
 			var currUserId = context.state.currUserId;
 
 			var ids = messageList.reduce((acc, msg) => {
+				
 				if (msg.fromUserId === currUserId && !msg.isRead) {
 					acc.push(msg._id);
 				}
 				return acc;
 			}, []);
+			console.log('these are ids', ids);
+
 			if (ids.length > 0) {
 				ChatService.markRead(
 					ids,
@@ -335,6 +356,7 @@ export default {
 				});			
 				context.dispatch({type: GET_CHAT_ITEM, userId : msg.fromUserId})
 				.then(_ => {
+					
 					context.commit({ type: ADD_MSG, msg });
 
 				})
