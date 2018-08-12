@@ -52,7 +52,7 @@
 				<v-card hover>
 					<v-card-text>
 						<GmapMap :center="position" v-if="jeste.destination_loc" :zoom="15" map-type-id="terrain" style="width: 100%; height: 300px">
-							<GmapMarker @position_changed="" :position="position" :clickable="false" :draggable="true" @click="center=position" />
+							<GmapMarker :position="position" :clickable="false" :draggable="true" @click="center=position" />
 						</GmapMap>
 					</v-card-text>
 				</v-card>

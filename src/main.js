@@ -7,6 +7,7 @@ import axios from 'axios';
 import Vuetify from 'vuetify';
 import 'vuetify/dist/vuetify.min.css';
 import Chat from 'vue-beautiful-chat';
+import 'default-passive-events';
 import * as VueGoogleMaps from 'vue2-google-maps';
 const GOOGLE_API_KEY = 'AIzaSyB1XEp2JKq8CAO8EbBSDGEvjrVC264DLPA';
 
