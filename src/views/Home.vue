@@ -9,15 +9,15 @@
         <v-spacer></v-spacer>
         <v-layout row wrap justify-center class="stats">
           <div class="stat">
-            <div>{{jestesStats[0] + jestesStats[1] + jestesStats[2]}}</div>
+            <div>{{jestesStats[0] + jestesStats[1] + jestesStats[2] + jestesStats[3]}}</div>
             <div class="desc">total jestes</div>
           </div>
           <div class="stat">
-            <div>{{jestesStats[2]}}</div>
-            <div class="desc">made jestes</div>
+            <div>{{jestesStats[3]}}</div>
+            <div class="desc">completed jestes</div>
           </div>
           <div class="stat">
-            <div>{{jestesStats[0]}}</div>
+            <div>{{jestesStats[0] + jestesStats[1] + jestesStats[2]}}</div>
             <div class="desc">active jestes</div>
           </div>
         </v-layout>
