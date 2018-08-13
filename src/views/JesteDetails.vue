@@ -186,6 +186,15 @@ export default {
 		setChat(userId) {
 			EventBus.$emit(SET_CHAT, userId);
 		}
+	},
+	sockets: {
+		receivedNotification(notification) {
+			if (notification.jesteId === this.jeste_id) {
+				this.$router.go(this.$router.currentRoute)
+
+			}
+
+		}
 	}
 };
 </script>
