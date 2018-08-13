@@ -22,7 +22,6 @@ export const LOAD_CHAT_LIST = 'chat/actions/loadChatList';
 export const GET_CHAT_ITEM = 'chat/actions/getChatItem';
 export const SET_CHAT_HISTORY = 'chat/actions/setChatHistory';
 
-
 export const GET_MESSAGE_LIST = 'chat/getters/getMessageList';
 export const GET_AGENT_PROFILE = 'chat/getters/getAgentProfile';
 export const GET_CURR_USER_ID = 'chat/getters/getCurrUserId';
@@ -49,19 +48,14 @@ export default {
 	},
 	getters: {
 		[GET_CHAT_TOTAL_UNREAD] (state) {
-			var count = 0
-			
-			if (state.chatList) {
-				
+			let count = 0;
+			if (state.chatList) {	
 				count = state.chatList.reduce((acc, item) => {
-					acc += item.unReadCount
-					return acc
+					acc += item.unReadCount;
+					return acc;
 				},0)
-
 			}
-			
-
-			return count
+			return count;
 		},
 		[GET_CHAT_LIST](state) {
 			let chatList = [];
@@ -70,7 +64,6 @@ export default {
 					return b.timestamp - a.timestamp;
 				});
 			}
-
 			return chatList;
 		},
 		[GET_MESSAGE_LIST](state) {
@@ -80,10 +73,7 @@ export default {
 			var count = 0;
 			let messageList = state.currMessageList;
 			for (let i = 0; i < messageList.length; i++) {
-				if (
-					messageList[i].fromUserId === state.currUserId &&
-					!messageList[i].isRead
-				) {
+				if ( messageList[i].fromUserId === state.currUserId && !messageList[i].isRead ) {
 					count++;
 				}
 			}
@@ -108,7 +98,6 @@ export default {
 					map[item.friendId] = item;
 				});
 			}
-
 			return map;
 		},
 		[GET_AGENT_PROFILE](state) {
@@ -119,10 +108,8 @@ export default {
 					teamName: `${chatUser.details.firstName} ${chatUser.details.lastName}`,
 					imageUrl: chatUser.img.secure_url
 				}
-
 			}
-			
-			return agentProfile
+			return agentProfile;
 		}
 	},
 	mutations: {
@@ -140,7 +127,6 @@ export default {
 		},
 		[CHAT_MARK_READ](state) {
 			console.log('commit mark read');
-			
 			state.currChat.unReadCount = 0;
 			state.currMessageList.forEach(msg => {
 				if (!msg.isRead && msg.fromUserId === state.currUserId) {
@@ -149,44 +135,26 @@ export default {
 			});
 		},
 		[ADD_MSG](state, { msg}) {
-
 			console.log('adding msg');
 
-			
 			if (state.currUserId === msg.fromUserId) {
-
 				state.currChat.timestamp = msg.timestamp;
-				state.currChat.txt = msg.data.text
-					? msg.data.text.substring(0, 100)
-					: msg.data.emoji;
+				state.currChat.txt = msg.data.text ? msg.data.text.substring(0, 100) : msg.data.emoji;
 				clearTimeout(state.typingTimeout);
 				state.isTyping = false;
 				state.currMessageList.push(msg);
-				if (!state.isChatOpen) {
-					state.currChat.unReadCount++;
-
-				}
-				
-				
+				if (!state.isChatOpen) state.currChat.unReadCount++;	
 			} else { 
-				var chatItem = state.chatList.find(
-					item => item.friendId === msg.fromUserId
-				);
+				var chatItem = state.chatList.find(item => item.friendId === msg.fromUserId);
 				console.log('adding msg fount chatitem' ,chatItem);
 
 				chatItem.timestamp = msg.timestamp;
 				chatItem.unReadCount++;
-				chatItem.txt = msg.data.text
-					? msg.data.text.substring(0, 100)
-					: msg.data.emoji;
-
+				chatItem.txt = msg.data.text ? msg.data.text.substring(0, 100) : msg.data.emoji;
 				if (msg.timestamp > chatItem.messageList[chatItem.messageList.length -1].timestamp || chatItem.messageList.length === 0) {
 					console.log('inside if');
-					
 					chatItem.messageList.push(msg);
-
 				}
-
 			}
 		},
 		[CLOSE_CHAT](state) {
@@ -198,30 +166,21 @@ export default {
 		[SEND_MSG](state, { msg }) {
 			state.currMessageList.push(msg);
 			state.currChat.timestamp = msg.timestamp;
-			state.currChat.txt = msg.data.text
-				? msg.data.text.substring(0, 100)
-				: msg.data.emoji;
+			state.currChat.txt = msg.data.text ? msg.data.text.substring(0, 100) : msg.data.emoji;
 		},
 		[SET_CURR_CHAT](state, { userId }) {
-	
-
 			var chatItem = state.chatList.find(item => {
-				
 				return item.friendId === userId;
 			});
-			state.currChat = chatItem;
-			
+			state.currChat = chatItem;	
 			state.isChatOpen = true;
 			state.currMessageList = chatItem.messageList;
 		},
-
 		[ADD_TO_CHAT_LIST](state, { chatItem }) {
 			state.chatList.push(chatItem);
 		},
 		[SET_MESSAGE_LIST](state, { userId, messageList }) {
-			var chatItem = state.chatList.find(
-				item => item.friendId === userId
-			);
+			var chatItem = state.chatList.find(item => item.friendId === userId);
 			var fixedMessageList = messageList.reduce((acc, item) => {
 				if (item.fromUserId === userId) item.author = 'them';
 				else item.author = 'me';
@@ -231,7 +190,7 @@ export default {
 			chatItem.messageList = fixedMessageList;
 		},
 		SOCKET_CONNECT(state) {
-			console.log('socket connected');
+			console.log('Socket Connected');
 		},
 		SOCKET_ISTYPING(state, { fromUserId }) {
 			if (fromUserId === state.currUserId) {
@@ -246,22 +205,16 @@ export default {
 	actions: {
 		[LOAD_CHAT_LIST](context) {
 			var thisUserId = context.getters[USER_CONNECTED]._id;
-
 			ChatService.loadChatList(thisUserId).then(chatList =>
 				context.commit({ type: LOAD_CHAT_LIST, chatList })
 			);
 		},
 		[SET_CHAT_USER](context, { userId }) {
-			if (userId === context.state.currUserId) {
-				context.commit(CLOSE_CHAT);
-			} else {
+			if (userId === context.state.currUserId) context.commit(CLOSE_CHAT);
+			else {
 				context.commit({ type: SET_CHAT, userId });
-				return context
-					.dispatch({ type: GET_CHAT_ITEM, userId })
-					.then(_ => {
-
-						
-						
+				return context.dispatch({ type: GET_CHAT_ITEM, userId })
+					.then(_ => {		
 						context.commit({ type: SET_CURR_CHAT, userId });
 						context.dispatch(CHAT_MARK_READ)
 						// context.commit(SET_CURR_MESSAGE_LIST); //done
@@ -273,13 +226,11 @@ export default {
 			if (chatItem) {
 				if (!chatItem.messageList) {
 					return context.dispatch({ type: SET_MESSAGE_LIST, userId });
-				} else{
+				} else {
 					console.log('got chat item');
-					
-					 return chatItem;
+					return chatItem;
 					}
 			} else {
-
 				return UserService.getUserByID(userId).then(user => {
 					user = user[0];
 					var chatItem = {
@@ -289,8 +240,6 @@ export default {
 						messageList: null,
 						friendId: user._id
 					};
-					
-
 					context.commit({ type: ADD_TO_CHAT_LIST, chatItem });
 					return context.dispatch({ type: SET_MESSAGE_LIST, userId });
 				});
@@ -305,36 +254,24 @@ export default {
 						userId,
 						messageList
 					});
-					
-
 					return messageList;
 				})
 				.catch(err => err);
 		},
-
 		[CHAT_MARK_READ](context) {
 			console.log('mark read');
-			
 			var messageList = context.state.currMessageList;
 			var currUserId = context.state.currUserId;
-
 			var ids = messageList.reduce((acc, msg) => {
-				
-				if (msg.fromUserId === currUserId && !msg.isRead) {
-					acc.push(msg._id);
-				}
+				if (msg.fromUserId === currUserId && !msg.isRead) acc.push(msg._id);
 				return acc;
 			}, []);
-			console.log('these are ids', ids);
-
+			console.log('These are ids', ids);
 			if (ids.length > 0) {
-				ChatService.markRead(
-					ids,
-					context.getters[USER_CONNECTED]._id,
-					context.state.currUserId
-				).then(_ => {
-					context.commit({ type: CHAT_MARK_READ });
-				});
+				ChatService.markRead(ids, context.getters[USER_CONNECTED]._id, context.state.currUserId)
+					.then(_ => {
+						context.commit({ type: CHAT_MARK_READ });
+					});
 			}
 		},
 		socket_receivedMsg(context, msg) {
@@ -342,11 +279,7 @@ export default {
 			if (context.state.currUserId === msg.fromUserId) {
 				if (context.state.isChatOpen) {
 					msg.isRead = true;
-					ChatService.markRead(
-						[msg._id],
-						context.getters[USER_CONNECTED]._id,
-						context.state.currUserId
-					);
+					ChatService.markRead([msg._id], context.getters[USER_CONNECTED]._id, context.state.currUserId);
 				}
 				context.commit({ type: ADD_MSG, msg });
 			} else {
@@ -355,13 +288,10 @@ export default {
 					// bgColor: '#000'
 				});			
 				context.dispatch({type: GET_CHAT_ITEM, userId : msg.fromUserId})
-				.then(_ => {
-					
-					context.commit({ type: ADD_MSG, msg });
-
-				})
+					.then(_ => {
+						context.commit({ type: ADD_MSG, msg });
+					})
 			}
 		}
 	}
 };
-

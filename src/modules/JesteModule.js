@@ -71,7 +71,6 @@ export default {
 			}
 		},
 		[JESTES_LOAD_STATS](state, { stats }) {
-			// TODO: Improve the query at backend to get zeros even the status isn't exist
 			var statsObj = {
 				0: 0,
 				1: 0,
@@ -100,9 +99,7 @@ export default {
 		},
 		[UPDATE_RES_JESTE](state, {jeste}) {
 			let idx = state.jestes.findIndex(currJeste => {return currJeste._id === jeste._id} )
-			if (idx > -1) {
-				state.jestes.splice(idx, 1 , jeste)
-			}
+			if (idx > -1) state.jestes.splice(idx, 1 , jeste);
 		}
 	},
 	getters: {
@@ -166,7 +163,6 @@ export default {
 			return JesteService.query(filterBy).then(jestes => {
 				context.commit({ type: JESTES_LOAD, jestes });
 				context.commit({ type: TOGGLE_LOADING, isLoad: false });
-
 				return jestes;
 			});
 		},
@@ -185,8 +181,7 @@ export default {
 		[JESTE_SAVE](context, { jesteToSave }) {
 			// if (!context.getters[IS_ADMIN]) return Promise.reject('No Permissions');
 			const isEdit = !!jesteToSave._id;
-			if (!isEdit)
-				jesteToSave.req_user_id = context.getters[USER_CONNECTED]._id;
+			if (!isEdit) jesteToSave.req_user_id = context.getters[USER_CONNECTED]._id;
 			return JesteService.saveJeste(jesteToSave).then(jeste => {
 				if (isEdit) context.commit({ type: JESTE_UPDATE, jeste });
 				else context.commit({ type: JESTE_ADD, jeste });

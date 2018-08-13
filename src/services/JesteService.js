@@ -1,4 +1,5 @@
 'use strict';
+
 import axios from 'axios'
 
 const URL = (process.env.NODE_ENV !== 'development') ? '/jeste' : '//localhost:3000/jeste';
@@ -28,9 +29,7 @@ function getJestesStats() {
 
 function getJesteByID(jesteId) {
     return axios.get(`${URL}/${jesteId}`)
-        .then(res => {
-            return res.data
-        })
+        .then(res => res.data)
         .catch(err => {
             console.warn(`Had a problem to load jeste ${jesteId}:`);
             console.log(err);
@@ -61,9 +60,7 @@ function saveJeste(jeste) {
 
 function getChatHistory(jesteId) {
     return axios.get(`${CHAT_URL}/${jesteId}`)
-        .then(res => {
-            return res.data
-        })
+        .then(res => res.data)
         .catch(err => {
             console.warn(`Had a problem to load chat history of jeste ${jesteId}:`);
             console.log(err);

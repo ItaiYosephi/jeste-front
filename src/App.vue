@@ -161,6 +161,11 @@ import {
 } from '@/modules/ChatModule';
 export default {
 	name: 'app',
+	components: {
+		ChatCmp,
+		ChatList,
+		NotificationList
+	},
 	created() {
 		console.log('--- Jeste App ---');
 		if (!this.$store.getters.USER_CONNECTED) {
@@ -172,15 +177,6 @@ export default {
 			this.loadJestes();
 		});
 	},
-	sockets: {
-		jesteResponded(jeste) {
-			this.$store.commit({ type: UPDATE_RES_JESTE, jeste });
-			EventBus.$emit(SNACK_JESTE_IT, {
-				text: 'Someone just responded your jeste!',
-				link: `/jeste/${jeste._id}`
-			});
-		}
-	},
 	mounted() {
 		var elNavbar = this.$refs.navbar.$el;
 		this.alertsStyle.top = `${elNavbar.offsetHeight - 2}px`;
@@ -190,6 +186,15 @@ export default {
 		EventBus.$on(SNACK_MSG, msg => this.toggleSnackbar(msg));
 		EventBus.$on(SNACK_JESTE_IT, msg => this.togglejesteSnack(msg));
 		EventBus.$on(SET_CHAT, userId => this.openChat(userId));
+	},
+	sockets: {
+		jesteResponded(jeste) {
+			this.$store.commit({ type: UPDATE_RES_JESTE, jeste });
+			EventBus.$emit(SNACK_JESTE_IT, {
+				text: 'Someone just responded your jeste!',
+				link: `/jeste/${jeste._id}`
+			});
+		}
 	},
 	data() {
 		return {
@@ -274,9 +279,8 @@ export default {
 	},
 	methods: {
 		loadUser() {
-			this.$store
-				.dispatch(USER_CHECK_LOGIN)
-				.then(_ => console.log('User Logged in'))
+			this.$store.dispatch(USER_CHECK_LOGIN)
+				.then(console.log('User Logged in'))
 				.catch(err => console.log(err));
 		},
 		loadJestes() {
@@ -325,10 +329,7 @@ export default {
 				this.$store.dispatch(LOAD_NOTIFICATIONS);
 				this.$socket.emit('userLogged', { userId: this.user._id });
 				this.menuItems[2] = {
-					title:
-						this.user.details.firstName +
-						' ' +
-						this.user.details.lastName,
+					title: this.user.details.firstName + ' ' + this.user.details.lastName,
 					link: '#',
 					icon: 'account_circle'
 				};
@@ -346,11 +347,6 @@ export default {
 				this.snackbarProps.btnColor = 'white';
 			}
 		}
-	},
-	components: {
-		ChatCmp,
-		ChatList,
-		NotificationList
 	}
 };
 </script>

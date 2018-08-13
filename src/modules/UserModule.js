@@ -43,10 +43,7 @@ export default {
 			state.notifications = notifications;
 		},
 		[NOTIFICATION_MARK_READ](state) {
-			state.notifications.forEach(item => {
-				item.isRead = true
-				
-			});
+			state.notifications.forEach(item => item.isRead = true);
 		},
 		SOCKET_RECEIVEDNOTIFICATION(state, notification) {
 			state.notifications.unshift(notification);
@@ -98,22 +95,18 @@ export default {
 			return UserService.saveUser(user).then(user => user);
 		},
 		[LOAD_NOTIFICATIONS](context) {
-			return NotificationService.query(context.state.user._id).then(
-				notifications =>
-					context.commit({ type: LOAD_NOTIFICATIONS, notifications })
-			);
+			return NotificationService.query(context.state.user._id)
+				.then(notifications => context.commit({ type: LOAD_NOTIFICATIONS, notifications }))
 			// receivedNotification
 		},
-		[NOTIFICATION_MARK_READ](context, {id}) {
+		[NOTIFICATION_MARK_READ](context, { id }) {
 			console.log('got to id', id);
-			
-			var ids = [id]
+
+			let ids = [id];
 			NotificationService.markRead(ids).then(_ => {
 				context.commit({ type: NOTIFICATION_MARK_READ });
 			});
-
-			var notifications = context.state.notifications;
-
+			let notifications = context.state.notifications;
 			// var ids = notifications.reduce((acc, item) => {
 			// 	if (!item.isRead) {
 			// 		acc.push(item._id);
