@@ -169,7 +169,7 @@ export default {
 				.then(user => this.reqUser = user)
 		},
 		getResUser() {
-			if (!this.canEdit) return;
+			if (!this.canEdit || !this.jeste.res_user_id) return;
 			console.log('resUser', this.jeste.res_user_id);
 			
 			return this.$store.dispatch({ type: USER_GET_BY_ID, id: this.jeste.res_user_id })
