@@ -35,7 +35,7 @@ import { USER_CONNECTED } from './UserModule';
 export default {
 	state: {
 		jestes: [],
-		jestesStats: {0 : 0, 1 : 0, 2 : 0},
+		jestesStats: {0 : 0, 1 : 0, 2 : 0, 3: 0},
 		categories: ['All', 'Delivery', 'Work', 'Animal', 'Technology', 'Other'],
 		filterBy: {
 			coords: '',
@@ -74,7 +74,8 @@ export default {
 			var statsObj = {
 				0: 0,
 				1: 0,
-				2: 0
+				2: 0,
+				3: 0
 			}
 			stats.forEach(stat => statsObj[stat._id] = stat.count);
 			state.jestesStats = statsObj;
