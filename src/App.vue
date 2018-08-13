@@ -182,6 +182,8 @@ export default {
 		}
 	},
 	mounted() {
+		console.log('state', this.$store);
+		
 		var elNavbar = this.$refs.navbar.$el;
 		this.alertsStyle.top = `${elNavbar.offsetHeight - 2}px`;
 		window.addEventListener('resize', x => {
