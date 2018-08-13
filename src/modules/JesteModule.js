@@ -14,6 +14,7 @@ export const UPDATE_MAXDISTANCE_FILTER = 'jeste/mutations/updateMaxDistanceFilte
 export const UPDATE_RES_JESTE = 'jeste/mutations/updateResJeste';
 
 export const JESTES_LOAD_STATS = 'jeste/jestesLoadStats';
+export const JESTES_LOAD_RECENT = 'jeste/jestesLoadRecent';
 export const JESTES_LOAD = 'jeste/jestesLoad';
 export const JESTE_SAVE = 'jeste/jesteSave';
 export const JESTE_DELETE = 'jeste/jesteDelete';
@@ -24,6 +25,7 @@ export const GET_CHAT_HISTORY = 'jeste/actions/getChatHistory';
 
 export const JESTE_GET = 'jeste/getters/getJeste';
 export const JESTES_TO_DISPLAY = 'jeste/getters/jestesToDisplay';
+export const JESTES_RECENT_TO_DISPLAY = 'jeste/getters/jestesRecentToDisplay';
 export const JESTES_STATS = 'jeste/getters/getJestesStats';
 export const JESTE_EMPTY = 'jeste/getters/emptyJeste';
 export const JESTE_CATEGORIES_GET = 'jeste/getters/getJesteCategories';
@@ -35,6 +37,7 @@ import { USER_CONNECTED } from './UserModule';
 export default {
 	state: {
 		jestes: [],
+		jestesRecent: [],
 		jestesStats: {0 : 0, 1 : 0, 2 : 0, 3: 0},
 		categories: ['All', 'Delivery', 'Work', 'Animal', 'Technology', 'Other'],
 		filterBy: {
@@ -49,6 +52,9 @@ export default {
 	mutations: {
 		[JESTES_LOAD](state, { jestes }) {
 			state.jestes = jestes;
+		},
+		[JESTES_LOAD_RECENT](state, { jestes }) {
+			state.jestesRecent = jestes;
 		},
 		[JESTE_ADD](state, { jeste }) {
 			state.jestes.push(jeste);
@@ -113,6 +119,9 @@ export default {
 		[JESTES_TO_DISPLAY](state) {
 			return state.jestes;
 		},
+		[JESTES_RECENT_TO_DISPLAY](state) {
+			return state.jestesRecent;
+		},
 		[JESTES_STATS](state) {
 			return state.jestesStats;
 		},
@@ -163,6 +172,16 @@ export default {
 			// filterBy.coords = context.rootState.UserModule.state.currLocation
 			return JesteService.query(filterBy).then(jestes => {
 				context.commit({ type: JESTES_LOAD, jestes });
+				context.commit({ type: TOGGLE_LOADING, isLoad: false });
+				return jestes;
+			});
+		},
+		[JESTES_LOAD_RECENT](context) {
+			context.commit({ type: TOGGLE_LOADING, isLoad: true });
+			let filterBy = { ...context.state.filterBy, sortBy: 'created_at' };
+			// filterBy.coords = context.rootState.UserModule.state.currLocation
+			return JesteService.query(filterBy).then(jestes => {
+				context.commit({ type: JESTES_LOAD_RECENT, jestes });
 				context.commit({ type: TOGGLE_LOADING, isLoad: false });
 				return jestes;
 			});

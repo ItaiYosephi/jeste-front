@@ -32,7 +32,7 @@
 		<div class="load-wrapper" v-if="isLoading">
       <LoadingCmp/>
     </div>
-    <JesteList v-else ref="listRecent" :jestes="jestesToDisplay" />
+    <JesteList v-else ref="listRecent" :jestes="jestesToDisplayRecent" />
     <h1>Nearby Jestes</h1>
 		<div class="load-wrapper" v-if="isLoading">
       <LoadingCmp/>
@@ -47,7 +47,7 @@ import * as easings from 'vuetify/es5/util/easing-patterns';
 import LoadingCmp from '@/components/LoadingCmp';
 import JesteList from '@/components/jestes/JesteList';
 import JesteFilter from '@/components/jestes/JesteFilter';
-import { JESTES_LOAD, JESTES_TO_DISPLAY, JESTE_IS_LOADING, JESTES_LOAD_STATS, JESTES_STATS } from '@/modules/JesteModule';
+import { JESTES_LOAD, JESTES_TO_DISPLAY, JESTE_IS_LOADING, JESTES_LOAD_STATS, JESTES_STATS, JESTES_RECENT_TO_DISPLAY, JESTES_LOAD_RECENT } from '@/modules/JesteModule';
 import { UPDATE_TITLE } from '@/store';
 
 export default {
@@ -65,12 +65,20 @@ export default {
 		jestesToDisplay() {
 			return this.$store.getters[JESTES_TO_DISPLAY];
 		},
+		jestesToDisplayRecent() {
+			return this.$store.getters[JESTES_RECENT_TO_DISPLAY];
+		},
 		isLoading() {
 			return this.$store.getters[JESTE_IS_LOADING];
 		},
 		jestesStats() {
 			return this.$store.getters[JESTES_STATS]
 		}
+	},
+	methods: {
+		loadRecentJestes() {
+			this.$store.dispatch(JESTES_LOAD_RECENT);
+		},
 	}
 };
 </script>

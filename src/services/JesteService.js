@@ -5,9 +5,9 @@ import axios from 'axios'
 const URL = (process.env.NODE_ENV !== 'development') ? '/jeste' : '//localhost:3000/jeste';
 const CHAT_URL = (process.env.NODE_ENV !== 'development') ? '/chat' : '//localhost:3000/chat';
 
-function query({ txt = '', coords = '', category = '', maxDistance = 10000, maxPrice = 200 }) {
+function query({ txt = '', coords = '', category = '', maxDistance = 10000, maxPrice = 200, sortBy = '' }) {
 
-    const query = `?q=${txt}&coords=${coords}&category=${category}&maxDistance=${maxDistance}&maxPrice=${maxPrice}`;
+    const query = `?q=${txt}&coords=${coords}&category=${category}&maxDistance=${maxDistance}&maxPrice=${maxPrice}&sortBy=${sortBy}`;
     return axios.get(`${URL}/${query}`)
         .then(res => res.data)
         .catch(err => {

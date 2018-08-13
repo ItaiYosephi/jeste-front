@@ -140,6 +140,7 @@ import {
 import { GET_TITLE } from '@/store';
 import {
 	JESTES_LOAD,
+	JESTES_LOAD_RECENT,
 	FILTER_UPDATE,
 	TOGGLE_LOADING,
 	UPDATE_RES_JESTE
@@ -255,13 +256,6 @@ export default {
 		notifications() {
 			return this.$store.getters[GET_NOTIFICATIONS];
 		},
-		// test() {
-		// 	var test = [];
-		// 	for (var i = 0; i < 100; i++) {
-		// 		test.push(this.notifications[0]);
-		// 	}
-		// 	return test;
-		// },
 		notificationsUnReadCount() {
 			let count = 0;
 			this.notifications.forEach(item => {
@@ -269,15 +263,6 @@ export default {
 			});
 			return count;
 		}
-		// alertsStyle() {
-		// 	let height = 48;
-		// 	if (this.$refs.navbar) {
-		// 		height = this.$refs.navbar.$el.offsetHeight;
-		// 	}
-		// 	return {
-		// 		top: `${height}px`
-		// 	};
-		// }
 	},
 	methods: {
 		loadUser() {
@@ -287,22 +272,19 @@ export default {
 		},
 		loadJestes() {
 			this.$store.dispatch({ type: JESTES_LOAD });
+			this.$store.dispatch(JESTES_LOAD_RECENT);
 		},
 		pushToLink(link) {
 			this.$router.push(link);
 		},
 		toggleSnackbar(msg) {
 			this.snackbarProps.text = msg.text;
-			this.snackbarProps.bgColor = msg.bgColor
-				? msg.bgColor
-				: this.snackbarProps.bgColor;
+			this.snackbarProps.bgColor = msg.bgColor ? msg.bgColor : this.snackbarProps.bgColor;
 			this.snackbarDisplay = true;
 		},
 		togglejesteSnack(msg) {
 			this.jesteSnackProps.text = msg.text;
-			this.jesteSnackProps.bgColor = msg.bgColor
-				? msg.bgColor
-				: this.jesteSnackProps.bgColor;
+			this.jesteSnackProps.bgColor = msg.bgColor ? msg.bgColor : this.jesteSnackProps.bgColor;
 			this.jesteSnackProps.link = msg.link;
 			this.jesteSnackDisplay = true;
 		},
