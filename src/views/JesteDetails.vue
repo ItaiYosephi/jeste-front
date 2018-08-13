@@ -24,9 +24,8 @@
 
 							</template>
 
-							<v-btn color="success" small @click="" v-if="jeste.status === 2">
-								completed
-								<v-icon></v-icon>
+							<v-btn color="success" small @click="completeJeste" v-if="jeste.status === 2">
+								<v-icon>done_outline</v-icon>
 							</v-btn>
 						</div>
 					</v-card-text>
@@ -224,8 +223,9 @@ export default {
 		setChat(userId) {
 			EventBus.$emit(SET_CHAT, userId);
 		},
-		completed() {
+		completeJeste() {
 			this.jeste.status = 3;
+			this.jeste.ended_at = Date.now();
 			this.$socket.emit('jesteCompleted', { jeste: this.jeste });
 		}
 	},
