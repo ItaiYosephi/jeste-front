@@ -40,7 +40,7 @@ export default {
 		currMessageList: [],
 		isChatOpen: false,
 		isTyping: false,
-		isChat: true,
+		isChat: false,
 		currUserId: null,
 		typingTimeout: null,
 		chatList: null,

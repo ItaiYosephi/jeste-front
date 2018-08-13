@@ -1,19 +1,33 @@
 <template>
 	<v-container fluid grid-list-md>
 		<v-layout row wrap fill-height v-if="jeste">
-			
-			<v-flex xs12 v-if="canEdit && jeste.status === 1 && jeste.res_user_id && resUser ">
+
+			<v-flex xs12 v-if="canEdit && jeste.status >= 1 && jeste.res_user_id && resUser ">
 				<v-card hover>
 					<v-toolbar color="primary" class="white--text" flat>
-            			<v-toolbar-title>Confirm Respond</v-toolbar-title>
-        			</v-toolbar>
+						<v-toolbar-title>Confirm Respond</v-toolbar-title>
+					</v-toolbar>
 					<v-card-text>
-						<Profile :user="resUser"/>
+						<Profile :user="resUser" />
 						<v-spacer></v-spacer>
 						<div class="btn-wrapper">
-							<v-btn color="info" small @click="setChat(resUser._id)"><v-icon>message</v-icon></v-btn>
-							<v-btn color="error" small @click="rejectRespond"><v-icon>close</v-icon></v-btn>
-							<v-btn color="success" small @click="acceptRespond"><v-icon>done</v-icon></v-btn>
+							<v-btn color="info" small @click="setChat(resUser._id)">
+								<v-icon>message</v-icon>
+							</v-btn>
+							<template v-if="jeste.status === 1">
+								<v-btn color="error" small @click="rejectRespond">
+									<v-icon>close</v-icon>
+								</v-btn>
+								<v-btn color="success" small @click="acceptRespond">
+									<v-icon>done</v-icon>
+								</v-btn>
+
+							</template>
+
+							<v-btn color="success" small @click="" v-if="jeste.status === 2">
+								completed
+								<v-icon></v-icon>
+							</v-btn>
 						</div>
 					</v-card-text>
 					<v-divider></v-divider>
@@ -21,7 +35,7 @@
 			</v-flex>
 
 			<v-flex xs12 sm6>
-				
+
 				<v-card height="100%" class="jeste-details-card" hover>
 					<div class="load-wrapper" v-if="isLoading">
 						<LoadingCmp/>
@@ -34,8 +48,10 @@
 								<div class="desc">{{jeste.description}}</div>
 							</v-flex>
 							<v-flex v-if="reqUser" xs2 ml-4>
-								<Profile :user="reqUser"/>
-								<button @click.stop="setChat(reqUser._id)"><v-icon large color="primary">message</v-icon></button>
+								<Profile :user="reqUser" />
+								<button @click.stop="setChat(reqUser._id)">
+									<v-icon large color="primary">message</v-icon>
+								</button>
 							</v-flex>
 						</v-layout>
 					</v-card-title>
@@ -93,38 +109,49 @@
 </template>
 
 <script>
-import ChatCmp from "@/components/ChatCmp";
-import Profile from "@/components/users/Profile";
-import LoadingCmp from "@/components/LoadingCmp";
+import ChatCmp from '@/components/ChatCmp';
+import Profile from '@/components/users/Profile';
+import LoadingCmp from '@/components/LoadingCmp';
 
-import { EventBus, SNACK_MSG, SET_CHAT } from "@/services/EventBusService";
-import { JESTE_GET, JESTE_GET_BY_ID, JESTE_DELETE, JESTE_IS_LOADING } from "@/modules/JesteModule";
-import { USER_CONNECTED, USER_GET_BY_ID, GET_NOTIFICATIONS } from "@/modules/UserModule";
-import { UPDATE_TITLE } from "@/store";
+import { EventBus, SNACK_MSG, SET_CHAT } from '@/services/EventBusService';
+import {
+	JESTE_GET,
+	JESTE_GET_BY_ID,
+	JESTE_DELETE,
+	JESTE_IS_LOADING
+} from '@/modules/JesteModule';
+import {
+	USER_CONNECTED,
+	USER_GET_BY_ID,
+	GET_NOTIFICATIONS
+} from '@/modules/UserModule';
+import { UPDATE_TITLE } from '@/store';
 
 export default {
-  	name: "jesteDetails",
-  	components: {
+	name: 'jesteDetails',
+	components: {
 		ChatCmp,
 		Profile,
-    	LoadingCmp
-  	},
-  	created() {
-		this.getJeste().then(this.getReqUser).then(this.getResUser)
-		this.$store.commit({ type: UPDATE_TITLE, title: "Jeste - Details" });
-  	},
-  	data() {
+		LoadingCmp
+	},
+	created() {
+		this.getJeste()
+			.then(this.getReqUser)
+			.then(this.getResUser);
+		this.$store.commit({ type: UPDATE_TITLE, title: 'Jeste - Details' });
+	},
+	data() {
 		return {
 			jeste: {},
 			dialog: false,
 			reqUser: null,
 			resUser: null
 		};
-  	},
-  	computed: {
-    	isLoading() {
+	},
+	computed: {
+		isLoading() {
 			return this.$store.getters[JESTE_IS_LOADING];
-    	},
+		},
 		position() {
 			if (this.jeste.destination_loc) {
 				return {
@@ -134,7 +161,11 @@ export default {
 			}
 		},
 		canEdit() {
-			return (!this.jeste.ended_at && this.user && this.user._id === this.jeste.req_user_id );
+			return (
+				!this.jeste.ended_at &&
+				this.user &&
+				this.user._id === this.jeste.req_user_id
+			);
 		},
 		user() {
 			return this.$store.getters[USER_CONNECTED];
@@ -142,38 +173,45 @@ export default {
 		notifications() {
 			return this.$store.getters[GET_NOTIFICATIONS];
 		}
-  	},
-  	methods: {
+	},
+	methods: {
 		getJeste() {
-			return this.$store.dispatch({ type: JESTE_GET_BY_ID, id: this.$route.params.id })
+			return this.$store
+				.dispatch({ type: JESTE_GET_BY_ID, id: this.$route.params.id })
 				.then(jeste => (this.jeste = jeste));
 		},
 		deleteJeste() {
 			this.dialog = false;
-			this.$store.dispatch({ type: JESTE_DELETE, id: this.jeste._id })
+			this.$store
+				.dispatch({ type: JESTE_DELETE, id: this.jeste._id })
 				.then(_ => {
 					EventBus.$emit(SNACK_MSG, {
 						text: `Jeste Deleted Successfully`,
-						bgColor: "success"
+						bgColor: 'success'
 					});
-					this.$router.push("/");
+					this.$router.push('/');
 				});
 		},
 		respond() {
 			this.jeste.status = 1;
 			this.jeste.res_user_id = this.user._id;
-			this.$socket.emit("jesteResponded", { jeste: this.jeste, user: this.user });
+			this.$socket.emit('jesteResponded', {
+				jeste: this.jeste,
+				user: this.user
+			});
 		},
 		getReqUser() {
-			return this.$store.dispatch({ type: USER_GET_BY_ID, id: this.jeste.req_user_id })
-				.then(user => this.reqUser = user)
+			return this.$store
+				.dispatch({ type: USER_GET_BY_ID, id: this.jeste.req_user_id })
+				.then(user => (this.reqUser = user));
 		},
 		getResUser() {
 			if (!this.canEdit || !this.jeste.res_user_id) return;
 			console.log('resUser', this.jeste.res_user_id);
-			
-			return this.$store.dispatch({ type: USER_GET_BY_ID, id: this.jeste.res_user_id })
-				.then(user => this.resUser = user)
+
+			return this.$store
+				.dispatch({ type: USER_GET_BY_ID, id: this.jeste.res_user_id })
+				.then(user => (this.resUser = user));
 		},
 		acceptRespond() {
 			this.jeste.status = 2;
@@ -181,48 +219,52 @@ export default {
 		},
 		rejectRespond() {
 			this.jeste.status = 0;
-			this.$socket.emit('rejectRespond', { jeste: this.jeste});
+			this.$socket.emit('rejectRespond', { jeste: this.jeste });
 		},
 		setChat(userId) {
 			EventBus.$emit(SET_CHAT, userId);
+		},
+		completed() {
+			this.jeste.status = 3;
+			this.$socket.emit('jesteCompleted', { jeste: this.jeste });
 		}
 	},
 	sockets: {
 		receivedNotification(notification) {
-			if (notification.jesteId === this.jeste_id) {
-				this.$router.go(this.$router.currentRoute)
+			console.log('recieved not', notification);
 
+			if (notification.jesteId === this.jeste._id) {
+				this.$router.go(this.$router.currentRoute);
 			}
-
 		}
 	}
 };
 </script>
 
 <style lang="scss" scoped>
-@import "../assets/styles/_vars.scss";
+@import '../assets/styles/_vars.scss';
 
 a {
-  text-decoration: none;
+	text-decoration: none;
 }
 .v-card--hover {
-  cursor: default;
+	cursor: default;
 }
 .jeste-details-card {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
 }
 
 .load-wrapper {
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 10px;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 10px;
 }
 
-.v-card__actions .v-btn+.v-btn {
+.v-card__actions .v-btn + .v-btn {
 	margin-left: 0;
 }
 
@@ -236,5 +278,4 @@ a {
 		flex-direction: row;
 	}
 }
-
 </style>
