@@ -12,7 +12,6 @@
       <v-card-actions class="actions">
         <v-spacer></v-spacer>
         <v-btn flat color="primary" :to="'/jeste/' + jeste._id" >details</v-btn>
-        <!-- <v-btn outline color="primary" @click.prevent="">Jeste It!</v-btn> -->
       </v-card-actions>
     </v-card>
   </v-flex>
