@@ -10,7 +10,9 @@
 				<v-select color="secondary" :items="categories" v-model="category" label="Categories">
 				</v-select>
 			</v-flex>
-			<v-flex xs8 sm4>
+
+      <!-- Price filter. Need improvment or to delete it -->
+			<!-- <v-flex xs8 sm4>
 				<v-slider color="secondary" v-model="maxPrice" label="Price" :max="200">
 				</v-slider>
 			</v-flex>
@@ -19,7 +21,8 @@
 				<v-text-field color="secondary" v-model="maxPrice" class="mt-0" type="number">
 				</v-text-field>
 			</v-flex>
-			<v-spacer></v-spacer>
+			<v-spacer></v-spacer> -->
+
 			<v-flex xs8 sm4>
 				<v-slider color="secondary" v-model="maxDistance" label="Distance (km)" :max="100">
 				</v-slider>
@@ -37,15 +40,7 @@
 </template>
 
 <script>
-import {
-  FILTER_GET,
-  JESTES_LOAD,
-  JESTE_CATEGORIES_GET,
-  UPDATE_TXT_FILTER,
-  UPDATE_CATEGORY_FILTER,
-  UPDATE_MAXPRICE_FILTER,
-  UPDATE_MAXDISTANCE_FILTER
-} from "@/modules/JesteModule";
+import { FILTER_GET, JESTES_LOAD, JESTE_CATEGORIES_GET, UPDATE_TXT_FILTER, UPDATE_CATEGORY_FILTER, UPDATE_MAXPRICE_FILTER, UPDATE_MAXDISTANCE_FILTER } from "@/modules/JesteModule";
 
 export default {
   name: "jesteFIlter",

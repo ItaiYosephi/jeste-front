@@ -17,14 +17,3 @@ export default {
 	props: ['jestes']
 };
 </script>
-
-<style lang="scss" scoped>
-@import '../../assets/styles/_vars.scss';
-@import '../../assets/styles/_helpers.scss';
-
-// @media (max-width: 600px) {
-// 	.list-container {
-// 		padding: 10px 0;
-// 	}
-// }
-</style>

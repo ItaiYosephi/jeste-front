@@ -27,7 +27,6 @@ export default {
   name: "login",
   data() {
     return {
-      // Login
       validLogin: true,
       user: { email: "", password: "" },
       emailRules: [

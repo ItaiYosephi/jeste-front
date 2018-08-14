@@ -1,44 +1,53 @@
 <template>
-  <section class="home">
-    <section class="back-img">
-      <v-layout column wrap justify-center align-center class="main-content">
-        <div class="header">jeste</div>
-        <div class="sub-header">help others | get help</div>
-        <v-spacer></v-spacer>
-        <div class="about">JESTE is a new way to help your communiuty in small works or jobs, and in return get help when you need it</div>
-        <v-spacer></v-spacer>
-        <v-layout row wrap justify-center class="stats">
-          <div class="stat">
-            <div>{{jestesStats[0] + jestesStats[1] + jestesStats[2] + jestesStats[3]}}</div>
-            <div class="desc">total jestes</div>
-          </div>
-          <div class="stat">
-            <div>{{jestesStats[3]}}</div>
-            <div class="desc">completed jestes</div>
-          </div>
-          <div class="stat">
-            <div>{{jestesStats[0] + jestesStats[1] + jestesStats[2]}}</div>
-            <div class="desc">active jestes</div>
-          </div>
-        </v-layout>
-        <v-layout row wrap justify-center mt-2>
-          <v-btn large color="primary" @click="$vuetify.goTo($refs.listRecent, {easeing: 'easeInQuad', offset: -100, duration: 600})">do a jeste</v-btn>
-          <v-btn large color="primary" to="/jeste/edit">ask for jeste</v-btn>
-        </v-layout>
-        <v-spacer></v-spacer>
-      </v-layout>
+    <section class="home">
+
+        <v-carousel hide-controls hide-delimiters interval="5000" class="back-img">
+            <v-carousel-item v-for="(img, i) in bgImages" :key="i" :src="img" reverse-transition="fade" transition="fade">
+                <section class="back-img">
+                    <v-layout column wrap justify-center align-center class="main-content">
+                        <div class="header">jeste</div>
+                        <div class="sub-header">help others | get help</div>
+                        <v-spacer></v-spacer>
+                        <div class="about">JESTE is a new way to help your communiuty in small works or jobs, and in return
+                            get help when you need it</div>
+                        <v-spacer></v-spacer>
+                        <v-layout row wrap justify-center class="stats">
+                            <div class="stat">
+                                <div>{{jestesStats[0] + jestesStats[1] + jestesStats[2] + jestesStats[3]}}</div>
+                                <div class="desc">total jestes</div>
+                            </div>
+                            <div class="stat">
+                                <div>{{jestesStats[3]}}</div>
+                                <div class="desc">completed jestes</div>
+                            </div>
+                            <div class="stat">
+                                <div>{{jestesStats[0] + jestesStats[1] + jestesStats[2]}}</div>
+                                <div class="desc">active jestes</div>
+                            </div>
+                        </v-layout>
+                        <v-layout row wrap justify-center mt-2>
+                            <v-btn large color="primary" @click="$vuetify.goTo($refs.listRecent, {easeing: 'easeInQuad', offset: -100, duration: 600})">do
+                                a jeste</v-btn>
+                            <v-btn large color="primary" to="/jeste/edit">ask for jeste</v-btn>
+                        </v-layout>
+                        <v-spacer></v-spacer>
+                    </v-layout>
+                </section>
+            </v-carousel-item>
+        </v-carousel>
+
+        <h1>Recent Jestes</h1>
+        <div class="load-wrapper" v-if="isLoading">
+            <LoadingCmp/>
+        </div>
+        <JesteList v-else ref="listRecent" :jestes="jestesToDisplayRecent" />
+        <h1>Nearby Jestes</h1>
+        <div class="load-wrapper" v-if="isLoading">
+            <LoadingCmp/>
+        </div>
+        <JesteList v-else ref="listNearby" :jestes="jestesToDisplay" />
     </section>
-    <h1>Recent Jestes</h1>
-		<div class="load-wrapper" v-if="isLoading">
-      <LoadingCmp/>
-    </div>
-    <JesteList v-else ref="listRecent" :jestes="jestesToDisplayRecent" />
-    <h1>Nearby Jestes</h1>
-		<div class="load-wrapper" v-if="isLoading">
-      <LoadingCmp/>
-    </div>
-    <JesteList v-else ref="listNearby" :jestes="jestesToDisplay" />
-  </section>
+    
 </template>
 
 <script>
@@ -60,6 +69,11 @@ export default {
 	created() {
 		this.$store.commit({ type: UPDATE_TITLE, title: 'Jeste - Home' });
 		this.$store.dispatch(JESTES_LOAD_STATS);
+	},
+	data() {
+		return {
+			bgImages: ['https://images.pexels.com/photos/248797/pexels-photo-248797.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940', 'https://cdn.pixabay.com/photo/2016/10/27/22/53/heart-1776746_960_720.jpg', 'https://media.gettyimages.com/vectors/medical-ideas-sharing-vector-id924330338']
+		}
 	},
 	computed: {
 		jestesToDisplay() {
@@ -85,6 +99,19 @@ export default {
 
 <style lang="scss" scoped>
 @import '../assets/styles/_vars.scss';
+
+.fade {
+	&-enter-active, &-leave-active, &-leave-to {
+		transition: .8s ease-out;
+    position: absolute;
+    top: 0;
+    left: 0;
+	}
+	&-enter, &-leave, &-leave-to {
+		opacity: 0;
+	}
+}
+
 .load-wrapper {
 	height: 100%;
 	padding: 50px;
@@ -95,12 +122,11 @@ export default {
 .back-img {
 	width: 100%;
 	height: calc(100vh - 48px);
-	background: url(/img/main_bg.png) no-repeat center center fixed;
-	background-size: cover;
 	@media (min-width: 960px) {
 		height: calc(100vh - 64px);
 	}
 }
+
 h1 {
 	margin-top: 10px;
 	padding: 0 20px;
@@ -111,7 +137,6 @@ h1 {
 
 .main-content {
 	height: 100%;
-	// padding: 5px;
 	color: white;
 	background: rgba(3, 20, 36, 0.5);
 	.header {
