@@ -72,7 +72,7 @@ export default {
 	},
 	data() {
 		return {
-			bgImages: ['https://images.pexels.com/photos/248797/pexels-photo-248797.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940', 'https://cdn.pixabay.com/photo/2016/10/27/22/53/heart-1776746_960_720.jpg', 'https://media.gettyimages.com/vectors/medical-ideas-sharing-vector-id924330338']
+			bgImages: ['/img/bg-main-1.jpg', '/img/bg-main-2.jpg', '/img/bg-main-3.jpg', '/img/bg-main-4.jpg']
 		}
 	},
 	computed: {
