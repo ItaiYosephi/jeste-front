@@ -25,7 +25,6 @@
 </template>
 
 <script>
-import moment from 'moment';
 
 import { EventBus, SET_CHAT } from '@/services/EventBusService';
 export default {
@@ -37,12 +36,6 @@ export default {
 		setChat(userId) {
 			this.$emit('close-list');
 			EventBus.$emit(SET_CHAT, userId);
-		}
-	},
-	filters: {
-		dateFormat(timestamp) {
-			if (!timestamp) return ''
-			return moment(timestamp).fromNow(); // 6 years ago
 		}
 	}
 };

@@ -25,7 +25,6 @@
 </template>
 
 <script>
-import moment from 'moment';
 
 import { EventBus, SET_CHAT } from '@/services/EventBusService';
 
@@ -45,12 +44,6 @@ export default {
 			this.$router.push(`/jeste/${jesteId}`);
 		}
 	},
-	filters: {
-		dateFormat(timestamp) {
-			if (!timestamp) return '';
-			return moment(timestamp).fromNow(); // 6 years ago
-		}
-	}
 };
 </script>
 
