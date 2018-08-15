@@ -54,7 +54,7 @@
 			</v-navigation-drawer>
 
 			<!-- Top Menu Toolbar -->
-			<v-toolbar ref="navbar" app flat color="primary" class="white--text">
+			<v-toolbar ref="navbar" app flat color="primary" class="white--text nav-navbar">
 				<v-toolbar-side-icon class="hidden-sm-and-up" @click.stop="drawer = !drawer" dark>
 				</v-toolbar-side-icon>
 				<v-toolbar-title class="title-logo" @click="$router.push('/')">jeste</v-toolbar-title>
@@ -438,6 +438,9 @@ export default {
 	z-index: 1;
 	box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
 		0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+}
+.nav-navbar {
+  transition: background-color 0.3s ease !important;
 }
 @media (min-width: 400px) {
 	.alerts {
