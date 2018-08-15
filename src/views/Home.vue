@@ -3,19 +3,19 @@
 
 		<agile :arrows="false" :speed="800" :timing="'linear'" :fade="true" :autoplay="true" :pauseOnHover="false" ref="agile">
 			<div class="slide slide--1">
-				<JesteFrontSection :jestesStats="jestesStats" />
+				<JesteFrontSection :scroll-list="scrollList" :jestesStats="jestesStats" />
 			</div>
 			<div class="slide slide--2">
-				<JesteFrontSection :jestesStats="jestesStats" />
+				<JesteFrontSection :scroll-list="scrollList" :jestesStats="jestesStats" />
 			</div>
 			<div class="slide slide--3">
-				<JesteFrontSection :jestesStats="jestesStats" />
+				<JesteFrontSection :scroll-list="scrollList" :jestesStats="jestesStats" />
 			</div>
 			<div class="slide slide--4">
-				<JesteFrontSection :jestesStats="jestesStats" />
+				<JesteFrontSection :scroll-list="scrollList" :jestesStats="jestesStats" />
 			</div>
 			<div class="slide slide--5">
-				<JesteFrontSection :jestesStats="jestesStats" />
+				<JesteFrontSection :scroll-list="scrollList" :jestesStats="jestesStats" />
 			</div>
 		</agile>
 
@@ -107,6 +107,9 @@ export default {
 			} else {
 				this.$emit('toggle-nav', 'trans');
 			}
+		},
+		scrollList() {
+			this.$vuetify.goTo($refs.listRecent, {easeing: 'easeInQuad', offset: -100, duration: 600});
 		}
 	}
 };

@@ -22,7 +22,7 @@
                 </div>
             </v-layout>
             <v-layout row wrap justify-center mt-2>
-                <v-btn large color="primary" @click="$vuetify.goTo($refs.listRecent, {easeing: 'easeInQuad', offset: -100, duration: 600})">do
+                <v-btn large color="primary" @click.prevent="$emit('scroll-list')">do
                     a jeste</v-btn>
                 <v-btn large color="primary" to="/jeste/edit">ask for jeste</v-btn>
             </v-layout>
