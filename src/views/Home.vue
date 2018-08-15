@@ -102,7 +102,7 @@ export default {
 			this.$store.dispatch(JESTES_LOAD_RECENT);
 		},
 		onScroll() {
-			if (window.pageYOffset > this.$refs.agile.$el.scrollHeight -64) {
+			if (window.pageYOffset > 64) {
 				this.$emit('toggle-nav', 'solid');
 			} else {
 				this.$emit('toggle-nav', 'trans');
