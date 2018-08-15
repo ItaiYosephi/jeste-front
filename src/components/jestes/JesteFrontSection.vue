@@ -4,8 +4,8 @@
             <div class="header">jeste</div>
             <div class="sub-header">help others | get help</div>
             <v-spacer></v-spacer>
-            <div class="about">JESTE is a new way to help your communiuty in small works or jobs, and in return
-                get help when you need it</div>
+            <!-- <div class="about">JESTE is a new way to help your communiuty in small works or jobs, and in return
+                get help when you need it</div> -->
             <v-spacer></v-spacer>
             <v-layout row wrap justify-center class="stats">
                 <div class="stat">
@@ -46,10 +46,7 @@ export default {
 }
 
 .content-wrapper {
-    height: calc(100vh - 48px);
-	@media (min-width: 960px) {
-		height: calc(100vh - 64px);
-	}
+    height: 100%;
 	background: rgba(3, 20, 36, 0.5);
 }
 

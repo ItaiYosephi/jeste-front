@@ -116,10 +116,10 @@ export default {
 @import '../assets/styles/_vars.scss';
 
 .slide {
-	height: calc(100vh - 48px);
-	@media (min-width: 960px) {
-		height: calc(100vh - 64px);
-	}
+	height: 100vh;
+	// @media (min-width: 960px) {
+	// 	height: calc(100vh - 64px);
+	// }
 	background: {
 		position: center;
 		size: cover;
