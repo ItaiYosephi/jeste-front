@@ -5,7 +5,8 @@
 			<v-flex xs12 v-if="jeste.status === 3">
 				<v-card hover>
 					<v-toolbar color="success" class="white--text" flat>
-						<v-toolbar-title> <v-icon class="white--text">done</v-icon> Jeste Completed!</v-toolbar-title>
+						<v-toolbar-title>
+							<v-icon class="white--text">done</v-icon> Jeste Completed!</v-toolbar-title>
 					</v-toolbar>
 				</v-card>
 			</v-flex>
@@ -52,15 +53,18 @@
 					<v-card-title v-if="!isLoading" primary-title>
 						<v-layout row justify-space-between>
 							<v-flex>
-								<div class="secondary--text">{{jeste.formatted_address}}</div>
 								<div class="secondary--text mb-2">{{jeste.created_at | dateFormat}}</div>
 								<div class="desc">{{jeste.description}}</div>
+								
 							</v-flex>
 							<v-flex v-if="reqUser" xs2 ml-4>
 								<Profile :user="reqUser" />
 							</v-flex>
 						</v-layout>
+														<div class="secondary--text">{{jeste.formatted_address}}</div>
+
 					</v-card-title>
+					
 					<v-card-actions v-if="!isLoading" class="actions">
 						<v-btn v-if="canEdit" flat color="green" :to="`/jeste/${jeste._id}/edit`">Edit</v-btn>
 						<v-btn v-if="canEdit" flat color="error" @click.stop="dialog = true">Delete</v-btn>
@@ -123,8 +127,17 @@ import Profile from '@/components/users/Profile';
 import LoadingCmp from '@/components/LoadingCmp';
 
 import { EventBus, SNACK_MSG, SET_CHAT } from '@/services/EventBusService';
-import { JESTE_GET, JESTE_GET_BY_ID, JESTE_DELETE, JESTE_IS_LOADING } from '@/modules/JesteModule';
-import { USER_CONNECTED, USER_GET_BY_ID, GET_NOTIFICATIONS } from '@/modules/UserModule';
+import {
+	JESTE_GET,
+	JESTE_GET_BY_ID,
+	JESTE_DELETE,
+	JESTE_IS_LOADING
+} from '@/modules/JesteModule';
+import {
+	USER_CONNECTED,
+	USER_GET_BY_ID,
+	GET_NOTIFICATIONS
+} from '@/modules/UserModule';
 import { UPDATE_TITLE } from '@/store';
 
 export default {
@@ -161,7 +174,11 @@ export default {
 			}
 		},
 		canEdit() {
-			return ( !this.jeste.ended_at && this.user && this.user._id === this.jeste.req_user_id );
+			return (
+				!this.jeste.ended_at &&
+				this.user &&
+				this.user._id === this.jeste.req_user_id
+			);
 		},
 		user() {
 			return this.$store.getters[USER_CONNECTED];
@@ -172,12 +189,14 @@ export default {
 	},
 	methods: {
 		getJeste() {
-			return this.$store.dispatch({ type: JESTE_GET_BY_ID, id: this.$route.params.id })
+			return this.$store
+				.dispatch({ type: JESTE_GET_BY_ID, id: this.$route.params.id })
 				.then(jeste => (this.jeste = jeste));
 		},
 		deleteJeste() {
 			this.dialog = false;
-			this.$store.dispatch({ type: JESTE_DELETE, id: this.jeste._id })
+			this.$store
+				.dispatch({ type: JESTE_DELETE, id: this.jeste._id })
 				.then(_ => {
 					EventBus.$emit(SNACK_MSG, {
 						text: `Jeste Deleted Successfully`,
@@ -189,24 +208,35 @@ export default {
 		respond() {
 			this.jeste.status = 1;
 			this.jeste.res_user_id = this.user._id;
-			this.$socket.emit('jesteResponded', { jeste: this.jeste, user: this.user });
+			this.$socket.emit('jesteResponded', {
+				jeste: this.jeste,
+				user: this.user
+			});
 		},
 		getReqUser() {
-			return this.$store.dispatch({ type: USER_GET_BY_ID, id: this.jeste.req_user_id })
+			return this.$store
+				.dispatch({ type: USER_GET_BY_ID, id: this.jeste.req_user_id })
 				.then(user => (this.reqUser = user));
 		},
 		getResUser() {
 			if (!this.canEdit || !this.jeste.res_user_id) return;
-			return this.$store.dispatch({ type: USER_GET_BY_ID, id: this.jeste.res_user_id })
+			return this.$store
+				.dispatch({ type: USER_GET_BY_ID, id: this.jeste.res_user_id })
 				.then(user => (this.resUser = user));
 		},
 		acceptRespond() {
 			this.jeste.status = 2;
-			this.$socket.emit('acceptRespond', { jeste: this.jeste, user: this.user });
+			this.$socket.emit('acceptRespond', {
+				jeste: this.jeste,
+				user: this.user
+			});
 		},
 		rejectRespond() {
 			this.jeste.status = 0;
-			this.$socket.emit('rejectRespond', { jeste: this.jeste, user: this.user });
+			this.$socket.emit('rejectRespond', {
+				jeste: this.jeste,
+				user: this.user
+			});
 		},
 		setChat(userId) {
 			EventBus.$emit(SET_CHAT, userId);
@@ -214,7 +244,10 @@ export default {
 		completeJeste() {
 			this.jeste.status = 3;
 			this.jeste.ended_at = Date.now();
-			this.$socket.emit('jesteCompleted', { jeste: this.jeste, user: this.user });
+			this.$socket.emit('jesteCompleted', {
+				jeste: this.jeste,
+				user: this.user
+			});
 		}
 	},
 	sockets: {
@@ -229,6 +262,10 @@ export default {
 
 <style lang="scss" scoped>
 @import '../assets/styles/_vars.scss';
+.desc {
+	white-space: pre-line;
+	text-indent: 0;
+}
 
 a {
 	text-decoration: none;
@@ -268,7 +305,7 @@ a {
 .btn-wrapper {
 	display: flex;
 	flex-direction: row;
- 	flex-wrap: wrap;
+	flex-wrap: wrap;
 	justify-content: space-around;
 	button {
 		margin: 3px;
