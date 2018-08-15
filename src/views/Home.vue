@@ -1,7 +1,7 @@
 <template>
     <section class="home">
 
-		<agile :arrows="false" :speed="800" :timing="'linear'" :fade="true" :autoplay="true" :pauseOnHover="false">
+		<agile @click.stop :arrows="false" :speed="800" :timing="'linear'" :fade="true" :autoplay="true" :pauseOnHover="false">
 			<div class="slide slide--1">
 				<JesteFrontSection :jestesStats="jestesStats"/>
 			</div>

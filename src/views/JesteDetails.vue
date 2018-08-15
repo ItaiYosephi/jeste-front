@@ -16,7 +16,7 @@
 						<v-toolbar-title v-if="jeste.status === 1">Confirm Respond</v-toolbar-title>
 						<v-toolbar-title v-if="jeste.status === 2">Awaiting Completion</v-toolbar-title>
 					</v-toolbar>
-					<v-card-text>
+					<v-card-text class="confirm-text-wrapper">
 						<Profile :user="resUser" />
 						<v-spacer></v-spacer>
 						<div class="btn-wrapper">
@@ -30,9 +30,7 @@
 								<v-btn color="success" small @click="acceptRespond">
 									<v-icon>done</v-icon>
 								</v-btn>
-
 							</template>
-
 							<v-btn color="success" small @click="completeJeste" v-if="jeste.status === 2">
 								<v-icon>done_outline</v-icon>
 							</v-btn>
@@ -54,7 +52,8 @@
 					<v-card-title v-if="!isLoading" primary-title>
 						<v-layout row justify-space-between>
 							<v-flex>
-								<div class="grey--text mb-2">{{jeste.formatted_address}}</div>
+								<div class="secondary--text">{{jeste.formatted_address}}</div>
+								<div class="secondary--text mb-2">{{jeste.created_at | dateFormat}}</div>
 								<div class="desc">{{jeste.description}}</div>
 							</v-flex>
 							<v-flex v-if="reqUser" xs2 ml-4>
@@ -62,14 +61,14 @@
 							</v-flex>
 						</v-layout>
 					</v-card-title>
-					<v-card-actions v-if="!isLoading">
+					<v-card-actions v-if="!isLoading" class="actions">
 						<v-btn v-if="canEdit" flat color="green" :to="`/jeste/${jeste._id}/edit`">Edit</v-btn>
 						<v-btn v-if="canEdit" flat color="error" @click.stop="dialog = true">Delete</v-btn>
 						<v-btn v-if="user && user._id !== jeste.req_user_id" flat color="info" @click.stop="setChat(reqUser._id)">
 							Send Message
 						</v-btn>
 						<v-spacer></v-spacer>
-						<v-btn v-if="!canEdit && user && !jeste.res_user_id" flat color="blue" @click.prevent="respond">Jeste It!</v-btn>
+						<v-btn v-if="!canEdit && user && !jeste.res_user_id" outline color="blue" @click.prevent="respond">Jeste It!</v-btn>
 					</v-card-actions>
 
 				</v-card>
@@ -197,10 +196,7 @@ export default {
 				.then(user => (this.reqUser = user));
 		},
 		getResUser() {
-			console.log('test');
 			if (!this.canEdit || !this.jeste.res_user_id) return;
-			console.log('test2');
-			
 			return this.$store.dispatch({ type: USER_GET_BY_ID, id: this.jeste.res_user_id })
 				.then(user => (this.resUser = user));
 		},
@@ -243,7 +239,6 @@ a {
 .jeste-details-card {
 	display: flex;
 	flex-direction: column;
-	justify-content: space-between;
 }
 
 .load-wrapper {
@@ -254,18 +249,34 @@ a {
 	padding: 10px;
 }
 
+.v-card__actions {
+	margin-top: auto;
+}
 .v-card__actions .v-btn + .v-btn {
 	margin-left: 0;
 }
 
+.confirm-text-wrapper {
+	display: flex;
+	flex-flow: column wrap;
+	justify-content: space-between;
+	@media (min-width: 800px) {
+		flex-flow: row wrap;
+	}
+}
+
 .btn-wrapper {
 	display: flex;
-	flex-direction: column;
+	flex-direction: row;
+ 	flex-wrap: wrap;
+	justify-content: space-around;
 	button {
 		margin: 3px;
+		max-width: 80px;
 	}
 	@media (min-width: 800px) {
-		flex-direction: row;
+		justify-content: center;
+		flex-direction: column;
 	}
 }
 </style>

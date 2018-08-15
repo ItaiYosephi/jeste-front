@@ -5,8 +5,9 @@
             <v-card-title primary-title>
                 <div>
                     <h3 class="headline mb-0">{{jeste.title}}</h3>
-                    <span class="grey--text">{{distance}}</span>
-                    <div class="block-with-text" ref="desc">{{jeste.description}}</div>
+                    <span class="grey--text">{{distance}}, </span>
+                    <span class="grey--text">{{jeste.created_at | dateFormat}}</span>
+                    <div class="block-with-text mt-1" ref="desc">{{jeste.description}}</div>
                 </div>
             </v-card-title>
             <v-card-actions class="actions">
@@ -39,13 +40,6 @@ export default {
       else return ''
     }
   },
-  filters: {
-    dateFormat(timestamp) {
-      return (
-        moment(+timestamp).fromNow() +", (" +moment(+timestamp).format("HH:mm:ss, DD/MM/YYYY") +")"
-      );
-    }
-  }
 };
 </script>
 
