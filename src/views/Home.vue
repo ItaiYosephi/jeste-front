@@ -156,6 +156,13 @@ h1 {
 	font-weight: 500;
 }
 .home {
-	margin-top: -64px;
+	margin-top: -56px;
+	@media (min-width: 600px) and (max-width: 960px) {
+		margin-top: -48px;
+	}
+	@media (min-width: 960px) {
+		margin-top: -64px;
+	}
+
 }
 </style>

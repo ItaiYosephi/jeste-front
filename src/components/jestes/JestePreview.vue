@@ -11,7 +11,7 @@
                 </div>
             </v-card-title>
             <v-card-actions class="actions">
-				<span>by {{reqUser.firstName}} {{reqUser.lastName}}</span>
+				        <span class="grey--text">by {{reqUser.firstName}} {{reqUser.lastName}}</span>
                 <v-spacer></v-spacer>
                 <v-btn flat color="primary" :to="'/jeste/' + jeste._id">details</v-btn>
             </v-card-actions>
