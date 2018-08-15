@@ -11,7 +11,7 @@
 				</v-select>
 			</v-flex>
 
-      <!-- Price filter. Need improvment or to delete it -->
+      <!-- Price filter. Need to decide if to implement this feature. if so, need improvment -->
 			<!-- <v-flex xs8 sm4>
 				<v-slider color="secondary" v-model="maxPrice" label="Price" :max="200">
 				</v-slider>
@@ -74,14 +74,14 @@ export default {
         this.$store.commit({ type: UPDATE_CATEGORY_FILTER, val });
       }
     },
-    maxPrice: {
-      get: function() {
-        return this.filter.maxPrice;
-      },
-      set: function(val) {
-        this.$store.commit({ type: UPDATE_MAXPRICE_FILTER, val });
-      }
-    },
+    // maxPrice: {
+    //   get: function() {
+    //     return this.filter.maxPrice;
+    //   },
+    //   set: function(val) {
+    //     this.$store.commit({ type: UPDATE_MAXPRICE_FILTER, val });
+    //   }
+    // },
     maxDistance: {
       get: function() {
         return this.filter.maxDistance / 1000;

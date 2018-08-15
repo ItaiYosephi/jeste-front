@@ -1,4 +1,7 @@
-import axios from 'axios'
+'use strict';
+
+import axios from 'axios';
+
 const URL = (process.env.NODE_ENV !== 'development') ? '/user' : '//localhost:3000/user';
 const NOTIFICATION_URL = (process.env.NODE_ENV !== 'development') ? '/notification' : '//localhost:3000/notification';
 
@@ -38,10 +41,7 @@ function saveUser(user) {
             });
     } else {
         return axios.post(`${URL}`, user)
-            .then(res => {
-                console.log('user saved',res.data)
-                return res.data
-            })
+            .then(res => res.data)
             .catch(err => {
                 console.warn('Failed to add user');
                 console.log(err);

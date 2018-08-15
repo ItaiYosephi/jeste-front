@@ -1,6 +1,6 @@
 'use strict';
 
-import axios from 'axios'
+import axios from 'axios';
 
 const URL = (process.env.NODE_ENV !== 'development') ? '/jeste' : '//localhost:3000/jeste';
 const CHAT_URL = (process.env.NODE_ENV !== 'development') ? '/chat' : '//localhost:3000/chat';

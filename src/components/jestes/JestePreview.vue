@@ -32,14 +32,15 @@ export default {
       return this.jeste.req_user.details;
     },
     distance() {
-      let distance = (this.jeste.destination_loc.calculated / 1000).toFixed(2)
-      return `${distance} km away from you`
+      let distance = (this.jeste.destination_loc.calculated / 1000).toFixed(2);
+      return `${distance} km away from you`;
     },
     imgUrl() {
-      if (this.jeste.img && this.jeste.img.secure_url) return  this.jeste.img.secure_url
-      else return ''
+      if (this.jeste.img && this.jeste.img.secure_url)
+        return this.jeste.img.secure_url;
+      else return "";
     }
-  },
+  }
 };
 </script>
 
@@ -82,14 +83,11 @@ export default {
     $bgColor: white
   );
 }
-
 .jeste-card {
   display: flex;
   flex-direction: column;
 }
-
 .actions {
   margin-top: auto;
 }
-
 </style>

@@ -117,9 +117,6 @@ export default {
 
 .slide {
 	height: 100vh;
-	// @media (min-width: 960px) {
-	// 	height: calc(100vh - 64px);
-	// }
 	background: {
 		position: center;
 		size: cover;

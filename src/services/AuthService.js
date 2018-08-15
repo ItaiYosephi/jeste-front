@@ -1,4 +1,7 @@
-import axios from 'axios'
+'use strict';
+
+import axios from 'axios';
+
 const URL = (process.env.NODE_ENV !== 'development') ? '' : '//localhost:3000';
 
 function login(user) {

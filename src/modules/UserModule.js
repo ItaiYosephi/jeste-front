@@ -48,8 +48,6 @@ export default {
 			});
 		},
 		SOCKET_RECEIVEDNOTIFICATION(state, notification) {
-			console.log('recved store');
-
 			state.notifications.unshift(notification);
 		}
 	},
@@ -103,27 +101,12 @@ export default {
 				notifications =>
 					context.commit({ type: LOAD_NOTIFICATIONS, notifications })
 			);
-			// receivedNotification
 		},
 		[NOTIFICATION_MARK_READ](context, { id }) {
-			console.log('got to id', id);
-
 			let ids = [id];
 			NotificationService.markRead(ids).then(_ => {
 				context.commit({ type: NOTIFICATION_MARK_READ, id });
 			});
-			let notifications = context.state.notifications;
-			// var ids = notifications.reduce((acc, item) => {
-			// 	if (!item.isRead) {
-			// 		acc.push(item._id);
-			// 	}
-			// 	return acc;
-			// }, []);
-			// if (ids.length > 0) {
-			// 	NotificationService.markRead(ids).then(_ => {
-			// 		context.commit({ type: NOTIFICATION_MARK_READ });
-			// 	});
-			// }
 		}
 	}
 };
