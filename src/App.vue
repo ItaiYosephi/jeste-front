@@ -415,7 +415,7 @@ export default {
 }
 .beeper-nub {
 	right: 69px;
-	background-image: url('https://static.xx.fbcdn.net/rsrc.php/v3/ya/r/VEYrpQldm-s.png');
+	background-image: url('/img/icons/icons.png');
 	background-repeat: no-repeat;
 	background-size: 26px 580px;
 	background-position: 0 -234px;
