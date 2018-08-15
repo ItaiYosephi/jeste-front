@@ -1,20 +1,21 @@
 <template>
-  <v-flex class="jeste-card-wrapper" xs12 sm4 md3>
-    <v-card class="jeste-card" tile hover :to="'/jeste/' + jeste._id" height="400px">
-      <v-card-media :src="imgUrl" height="200px"></v-card-media>
-      <v-card-title primary-title>
-        <div>
-          <h3 class="headline mb-0">{{jeste.title}}</h3>
-          <span class="grey--text">{{distance}}</span>
-          <div class="block-with-text" ref="desc">{{jeste.description}}</div>
-        </div>
-      </v-card-title>
-      <v-card-actions class="actions">
-        <v-spacer></v-spacer>
-        <v-btn flat color="primary" :to="'/jeste/' + jeste._id" >details</v-btn>
-      </v-card-actions>
-    </v-card>
-  </v-flex>
+    <v-flex class="jeste-card-wrapper" xs12 sm4 md3>
+        <v-card class="jeste-card" tile hover :to="'/jeste/' + jeste._id" height="400px">
+            <v-card-media :src="imgUrl" height="200px"></v-card-media>
+            <v-card-title primary-title>
+                <div>
+                    <h3 class="headline mb-0">{{jeste.title}}</h3>
+                    <span class="grey--text">{{distance}}</span>
+                    <div class="block-with-text" ref="desc">{{jeste.description}}</div>
+                </div>
+            </v-card-title>
+            <v-card-actions class="actions">
+				<span>by {{reqUser.firstName}} {{reqUser.lastName}}</span>
+                <v-spacer></v-spacer>
+                <v-btn flat color="primary" :to="'/jeste/' + jeste._id">details</v-btn>
+            </v-card-actions>
+        </v-card>
+    </v-flex>
 </template>
 
 <script>

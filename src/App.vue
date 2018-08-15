@@ -62,19 +62,16 @@
 				<!-- Top Menu Links -->
 				<v-spacer></v-spacer>
 				<v-toolbar-items v-if="user">
-					<v-btn flat class="relative" @click="setAlertsMode('chat')">
+					<v-btn flat class="white--text" @click="setAlertsMode('chat')">
 						<div class="notify" v-if="chatUnReadCount > 0">{{chatUnReadCount}}</div>
-						<v-icon large color="white">message</v-icon>
+						<v-icon medium >message</v-icon>
 						<div class="beeper-nub" v-if="alertsMode === 'chat'"></div>
-
 					</v-btn>
-					<v-btn flat class="relative" @click="setAlertsMode('notifications')">
+					<v-btn flat class="white--text" @click="setAlertsMode('notifications')">
 						<div class="notify" v-if="notificationsUnReadCount > 0">{{notificationsUnReadCount}}</div>
-						<v-icon large color="white">notifications</v-icon>
+						<v-icon medium >notifications</v-icon>
 						<div class="beeper-nub" v-if="alertsMode === 'notifications'"></div>
-
 					</v-btn>
-
 				</v-toolbar-items>
 				<v-toolbar-items class="hidden-xs-only btns-wrapper">
 					<v-menu mx-2 open-on-hover bottom offset-y v-for="(item, index) in menuItems" :key="index">
@@ -131,35 +128,11 @@ import ChatCmp from '@/components/ChatChatCmp';
 import ChatList from '@/components/ChatListCmp';
 import NotificationList from '@/components/NotificationList';
 
-import {
-	EventBus,
-	SNACK_MSG,
-	SNACK_JESTE_IT,
-	SET_CHAT
-} from '@/services/EventBusService';
+import { EventBus, SNACK_MSG, SNACK_JESTE_IT, SET_CHAT } from '@/services/EventBusService';
 import { GET_TITLE } from '@/store';
-import {
-	JESTES_LOAD,
-	JESTES_LOAD_RECENT,
-	FILTER_UPDATE,
-	TOGGLE_LOADING,
-	UPDATE_RES_JESTE
-} from '@/modules/JesteModule';
-import {
-	USER_CHECK_LOGIN,
-	USER_CONNECTED,
-	USER_LOGOUT,
-	GET_USER_LOCATION,
-	LOAD_NOTIFICATIONS,
-	GET_NOTIFICATIONS
-} from '@/modules/UserModule';
-import {
-	IS_CHAT,
-	SET_CHAT_USER,
-	LOAD_CHAT_LIST,
-	GET_CHAT_LIST,
-	GET_CHAT_TOTAL_UNREAD
-} from '@/modules/ChatModule';
+import { JESTES_LOAD, JESTES_LOAD_RECENT, FILTER_UPDATE, TOGGLE_LOADING, UPDATE_RES_JESTE } from '@/modules/JesteModule';
+import { USER_CHECK_LOGIN, USER_CONNECTED, USER_LOGOUT, GET_USER_LOCATION, LOAD_NOTIFICATIONS, GET_NOTIFICATIONS } from '@/modules/UserModule';
+import { IS_CHAT, SET_CHAT_USER, LOAD_CHAT_LIST, GET_CHAT_LIST, GET_CHAT_TOTAL_UNREAD } from '@/modules/ChatModule';
 export default {
 	name: 'app',
 	components: {
@@ -169,9 +142,7 @@ export default {
 	},
 	created() {
 		console.log('--- Jeste App ---');
-		if (!this.$store.getters.USER_CONNECTED) {
-			this.loadUser();
-		}
+		if (!this.$store.getters.USER_CONNECTED) this.loadUser();
 		this.$store.commit({ type: TOGGLE_LOADING, isLoad: true });
 		this.$store.dispatch(GET_USER_LOCATION).then(coords => {
 			this.$store.commit({ type: FILTER_UPDATE, filter: { coords } });
@@ -179,8 +150,6 @@ export default {
 		});
 	},
 	mounted() {
-		console.log('state', this.$store);
-		
 		var elNavbar = this.$refs.navbar.$el;
 		this.alertsStyle.top = `${elNavbar.offsetHeight - 2}px`;
 		window.addEventListener('resize', x => {
@@ -206,11 +175,7 @@ export default {
 			menuItems: [
 				{ title: 'Home', icon: 'home', link: '/' },
 				{ title: 'Jeste', icon: 'assistant', link: '/jeste' },
-				{
-					title: 'Signup | Login',
-					icon: 'swap_horizontal_circle',
-					link: '/login'
-				},
+				{ title: 'Signup \\ Login', icon: 'swap_horizontal_circle', link: '/login' },
 				{ title: 'About', icon: 'info', link: '/about' }
 			],
 			snackbarDisplay: false,
@@ -318,11 +283,7 @@ export default {
 					icon: 'account_circle'
 				};
 			} else {
-				this.menuItems[2] = {
-					title: 'Signup \\ Login',
-					link: '/login',
-					icon: 'swap_horizontal_circle'
-				};
+				this.menuItems[2] = { title: 'Signup \\ Login', link: '/login', icon: 'swap_horizontal_circle' };
 			}
 		},
 		snackbarDisplay() {
@@ -336,6 +297,7 @@ export default {
 </script>
 
 <style lang="scss">
+
 .notify {
 	background: red;
 	color: white;
@@ -345,6 +307,7 @@ export default {
 	right: 10%;
 	border-radius: 5px;
 }
+
 .content {
 	background: rgba(3, 20, 37, 0.2);
 }

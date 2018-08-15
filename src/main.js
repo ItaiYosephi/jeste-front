@@ -11,6 +11,10 @@ import 'default-passive-events';
 import * as VueGoogleMaps from 'vue2-google-maps';
 import moment from 'moment';
 
+import VueAgile from 'vue-agile'
+
+Vue.use(VueAgile)
+
 // const GOOGLE_API_KEY = 'AIzaSyB1XEp2JKq8CAO8EbBSDGEvjrVC264DLPA';
 
 // The KEY for the presenation
@@ -22,8 +26,7 @@ import io from 'socket.io-client';
 import './assets/styles/main.scss';
 
 // const SOCKET_URL = 'https://tranquil-headland-25582.herokuapp.com'
-const SOCKET_URL =
-	process.env.NODE_ENV !== 'development' ? '/' : '//localhost:3000';
+const SOCKET_URL = process.env.NODE_ENV !== 'development' ? '/' : '//localhost:3000';
 
 Vue.use(VueSocketio, io(SOCKET_URL), { store });
 

@@ -2,10 +2,19 @@
 	<v-container fluid grid-list-md>
 		<v-layout row wrap fill-height v-if="jeste">
 
-			<v-flex xs12 v-if="canEdit && jeste.status >= 1 && jeste.res_user_id && resUser ">
+			<v-flex xs12 v-if="jeste.status === 3">
+				<v-card hover>
+					<v-toolbar color="success" class="white--text" flat>
+						<v-toolbar-title> <v-icon class="white--text">done</v-icon> Jeste Completed!</v-toolbar-title>
+					</v-toolbar>
+				</v-card>
+			</v-flex>
+
+			<v-flex xs12 v-if="user && canEdit && jeste.status >= 1 && jeste.res_user_id && resUser ">
 				<v-card hover>
 					<v-toolbar color="primary" class="white--text" flat>
-						<v-toolbar-title>Confirm Respond</v-toolbar-title>
+						<v-toolbar-title v-if="jeste.status === 1">Confirm Respond</v-toolbar-title>
+						<v-toolbar-title v-if="jeste.status === 2">Awaiting Completion</v-toolbar-title>
 					</v-toolbar>
 					<v-card-text>
 						<Profile :user="resUser" />
@@ -39,24 +48,26 @@
 					<div class="load-wrapper" v-if="isLoading">
 						<LoadingCmp/>
 					</div>
+					<v-toolbar v-if="!isLoading" color="primary" class="white--text" flat>
+						<v-toolbar-title>{{jeste.title}}</v-toolbar-title>
+					</v-toolbar>
 					<v-card-title v-if="!isLoading" primary-title>
 						<v-layout row justify-space-between>
 							<v-flex>
-								<div class="headline mb-2">{{jeste.title}}</div>
 								<div class="grey--text mb-2">{{jeste.formatted_address}}</div>
 								<div class="desc">{{jeste.description}}</div>
 							</v-flex>
 							<v-flex v-if="reqUser" xs2 ml-4>
 								<Profile :user="reqUser" />
-								<button @click.stop="setChat(reqUser._id)">
-									<v-icon large color="primary">message</v-icon>
-								</button>
 							</v-flex>
 						</v-layout>
 					</v-card-title>
 					<v-card-actions v-if="!isLoading">
 						<v-btn v-if="canEdit" flat color="green" :to="`/jeste/${jeste._id}/edit`">Edit</v-btn>
 						<v-btn v-if="canEdit" flat color="error" @click.stop="dialog = true">Delete</v-btn>
+						<v-btn v-if="user && user._id !== jeste.req_user_id" flat color="info" @click.stop="setChat(reqUser._id)">
+							Send Message
+						</v-btn>
 						<v-spacer></v-spacer>
 						<v-btn v-if="!canEdit && user && !jeste.res_user_id" flat color="blue" @click.prevent="respond">Jeste It!</v-btn>
 					</v-card-actions>
@@ -113,17 +124,8 @@ import Profile from '@/components/users/Profile';
 import LoadingCmp from '@/components/LoadingCmp';
 
 import { EventBus, SNACK_MSG, SET_CHAT } from '@/services/EventBusService';
-import {
-	JESTE_GET,
-	JESTE_GET_BY_ID,
-	JESTE_DELETE,
-	JESTE_IS_LOADING
-} from '@/modules/JesteModule';
-import {
-	USER_CONNECTED,
-	USER_GET_BY_ID,
-	GET_NOTIFICATIONS
-} from '@/modules/UserModule';
+import { JESTE_GET, JESTE_GET_BY_ID, JESTE_DELETE, JESTE_IS_LOADING } from '@/modules/JesteModule';
+import { USER_CONNECTED, USER_GET_BY_ID, GET_NOTIFICATIONS } from '@/modules/UserModule';
 import { UPDATE_TITLE } from '@/store';
 
 export default {
@@ -160,11 +162,7 @@ export default {
 			}
 		},
 		canEdit() {
-			return (
-				!this.jeste.ended_at &&
-				this.user &&
-				this.user._id === this.jeste.req_user_id
-			);
+			return ( !this.jeste.ended_at && this.user && this.user._id === this.jeste.req_user_id );
 		},
 		user() {
 			return this.$store.getters[USER_CONNECTED];
@@ -175,14 +173,12 @@ export default {
 	},
 	methods: {
 		getJeste() {
-			return this.$store
-				.dispatch({ type: JESTE_GET_BY_ID, id: this.$route.params.id })
+			return this.$store.dispatch({ type: JESTE_GET_BY_ID, id: this.$route.params.id })
 				.then(jeste => (this.jeste = jeste));
 		},
 		deleteJeste() {
 			this.dialog = false;
-			this.$store
-				.dispatch({ type: JESTE_DELETE, id: this.jeste._id })
+			this.$store.dispatch({ type: JESTE_DELETE, id: this.jeste._id })
 				.then(_ => {
 					EventBus.$emit(SNACK_MSG, {
 						text: `Jeste Deleted Successfully`,
@@ -194,31 +190,27 @@ export default {
 		respond() {
 			this.jeste.status = 1;
 			this.jeste.res_user_id = this.user._id;
-			this.$socket.emit('jesteResponded', {
-				jeste: this.jeste,
-				user: this.user
-			});
+			this.$socket.emit('jesteResponded', { jeste: this.jeste, user: this.user });
 		},
 		getReqUser() {
-			return this.$store
-				.dispatch({ type: USER_GET_BY_ID, id: this.jeste.req_user_id })
+			return this.$store.dispatch({ type: USER_GET_BY_ID, id: this.jeste.req_user_id })
 				.then(user => (this.reqUser = user));
 		},
 		getResUser() {
+			console.log('test');
 			if (!this.canEdit || !this.jeste.res_user_id) return;
-			console.log('resUser', this.jeste.res_user_id);
-
-			return this.$store
-				.dispatch({ type: USER_GET_BY_ID, id: this.jeste.res_user_id })
+			console.log('test2');
+			
+			return this.$store.dispatch({ type: USER_GET_BY_ID, id: this.jeste.res_user_id })
 				.then(user => (this.resUser = user));
 		},
 		acceptRespond() {
 			this.jeste.status = 2;
-			this.$socket.emit('acceptRespond', { jeste: this.jeste });
+			this.$socket.emit('acceptRespond', { jeste: this.jeste, user: this.user });
 		},
 		rejectRespond() {
 			this.jeste.status = 0;
-			this.$socket.emit('rejectRespond', { jeste: this.jeste });
+			this.$socket.emit('rejectRespond', { jeste: this.jeste, user: this.user });
 		},
 		setChat(userId) {
 			EventBus.$emit(SET_CHAT, userId);
@@ -226,13 +218,11 @@ export default {
 		completeJeste() {
 			this.jeste.status = 3;
 			this.jeste.ended_at = Date.now();
-			this.$socket.emit('jesteCompleted', { jeste: this.jeste });
+			this.$socket.emit('jesteCompleted', { jeste: this.jeste, user: this.user });
 		}
 	},
 	sockets: {
 		receivedNotification(notification) {
-			console.log('recieved not', notification);
-
 			if (notification.jesteId === this.jeste._id) {
 				this.$router.go(this.$router.currentRoute);
 			}
