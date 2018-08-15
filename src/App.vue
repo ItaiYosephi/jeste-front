@@ -64,12 +64,12 @@
 				<v-toolbar-items v-if="user">
 					<v-btn flat class="white--text" @click="setAlertsMode('chat')">
 						<div class="notify" v-if="chatUnReadCount > 0">{{chatUnReadCount}}</div>
-						<v-icon medium >message</v-icon>
+						<v-icon medium>message</v-icon>
 						<div class="beeper-nub" v-if="alertsMode === 'chat'"></div>
 					</v-btn>
 					<v-btn flat class="white--text" @click="setAlertsMode('notifications')">
 						<div class="notify" v-if="notificationsUnReadCount > 0">{{notificationsUnReadCount}}</div>
-						<v-icon medium >notifications</v-icon>
+						<v-icon medium>notifications</v-icon>
 						<div class="beeper-nub" v-if="alertsMode === 'notifications'"></div>
 					</v-btn>
 				</v-toolbar-items>
@@ -96,7 +96,7 @@
 			<v-content class="content">
 				<!-- <v-container fluid> -->
 				<transition name="moveInUp">
-					<router-view v-title="title"></router-view>
+					<router-view @toggle-nav="toggleNav" v-title="title"></router-view>
 				</transition>
 				<!-- </v-container> -->
 			</v-content>
@@ -128,11 +128,35 @@ import ChatCmp from '@/components/ChatChatCmp';
 import ChatList from '@/components/ChatListCmp';
 import NotificationList from '@/components/NotificationList';
 
-import { EventBus, SNACK_MSG, SNACK_JESTE_IT, SET_CHAT } from '@/services/EventBusService';
+import {
+	EventBus,
+	SNACK_MSG,
+	SNACK_JESTE_IT,
+	SET_CHAT
+} from '@/services/EventBusService';
 import { GET_TITLE } from '@/store';
-import { JESTES_LOAD, JESTES_LOAD_RECENT, FILTER_UPDATE, TOGGLE_LOADING, UPDATE_RES_JESTE } from '@/modules/JesteModule';
-import { USER_CHECK_LOGIN, USER_CONNECTED, USER_LOGOUT, GET_USER_LOCATION, LOAD_NOTIFICATIONS, GET_NOTIFICATIONS } from '@/modules/UserModule';
-import { IS_CHAT, SET_CHAT_USER, LOAD_CHAT_LIST, GET_CHAT_LIST, GET_CHAT_TOTAL_UNREAD } from '@/modules/ChatModule';
+import {
+	JESTES_LOAD,
+	JESTES_LOAD_RECENT,
+	FILTER_UPDATE,
+	TOGGLE_LOADING,
+	UPDATE_RES_JESTE
+} from '@/modules/JesteModule';
+import {
+	USER_CHECK_LOGIN,
+	USER_CONNECTED,
+	USER_LOGOUT,
+	GET_USER_LOCATION,
+	LOAD_NOTIFICATIONS,
+	GET_NOTIFICATIONS
+} from '@/modules/UserModule';
+import {
+	IS_CHAT,
+	SET_CHAT_USER,
+	LOAD_CHAT_LIST,
+	GET_CHAT_LIST,
+	GET_CHAT_TOTAL_UNREAD
+} from '@/modules/ChatModule';
 export default {
 	name: 'app',
 	components: {
@@ -175,7 +199,11 @@ export default {
 			menuItems: [
 				{ title: 'Home', icon: 'home', link: '/' },
 				{ title: 'Jeste', icon: 'assistant', link: '/jeste' },
-				{ title: 'Signup \\ Login', icon: 'swap_horizontal_circle', link: '/login' },
+				{
+					title: 'Signup \\ Login',
+					icon: 'swap_horizontal_circle',
+					link: '/login'
+				},
 				{ title: 'About', icon: 'info', link: '/about' }
 			],
 			snackbarDisplay: false,
@@ -230,8 +258,22 @@ export default {
 		}
 	},
 	methods: {
+		toggleNav(state) {
+			var elNavbar = this.$refs.navbar.$el;
+			if (state ==='solid') {
+							elNavbar.classList.add('primary');
+			elNavbar.classList.remove('trans');
+
+			} else {
+							elNavbar.classList.add('trans');
+			elNavbar.classList.remove('primary');
+			}
+
+		},
+
 		loadUser() {
-			this.$store.dispatch(USER_CHECK_LOGIN)
+			this.$store
+				.dispatch(USER_CHECK_LOGIN)
 				.then(console.log('User Logged in'))
 				.catch(err => console.log(err));
 		},
@@ -244,12 +286,16 @@ export default {
 		},
 		toggleSnackbar(msg) {
 			this.snackbarProps.text = msg.text;
-			this.snackbarProps.bgColor = msg.bgColor ? msg.bgColor : this.snackbarProps.bgColor;
+			this.snackbarProps.bgColor = msg.bgColor
+				? msg.bgColor
+				: this.snackbarProps.bgColor;
 			this.snackbarDisplay = true;
 		},
 		togglejesteSnack(msg) {
 			this.jesteSnackProps.text = msg.text;
-			this.jesteSnackProps.bgColor = msg.bgColor ? msg.bgColor : this.jesteSnackProps.bgColor;
+			this.jesteSnackProps.bgColor = msg.bgColor
+				? msg.bgColor
+				: this.jesteSnackProps.bgColor;
 			this.jesteSnackProps.link = msg.link;
 			this.jesteSnackDisplay = true;
 		},
@@ -278,12 +324,19 @@ export default {
 				this.$store.dispatch(LOAD_NOTIFICATIONS);
 				this.$socket.emit('userLogged', { userId: this.user._id });
 				this.menuItems[2] = {
-					title: this.user.details.firstName + ' ' + this.user.details.lastName,
+					title:
+						this.user.details.firstName +
+						' ' +
+						this.user.details.lastName,
 					link: '#',
 					icon: 'account_circle'
 				};
 			} else {
-				this.menuItems[2] = { title: 'Signup \\ Login', link: '/login', icon: 'swap_horizontal_circle' };
+				this.menuItems[2] = {
+					title: 'Signup \\ Login',
+					link: '/login',
+					icon: 'swap_horizontal_circle'
+				};
 			}
 		},
 		snackbarDisplay() {
@@ -297,7 +350,9 @@ export default {
 </script>
 
 <style lang="scss">
-
+.trans {
+	background-color: transparent !important;
+}
 .notify {
 	background: red;
 	color: white;
