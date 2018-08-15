@@ -19,8 +19,6 @@ export default {
 
 <style lang="scss" scoped>
 
-
-
 .avatar-wrapper {
     display: flex;
     flex-flow: column wrap;

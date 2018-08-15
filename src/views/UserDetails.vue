@@ -49,8 +49,8 @@
 									<v-card>
 										<v-card-title>
 											<div>
-												Address:
-												<div>{{jeste.formatted_address}}</div>
+												<span>{{jeste.formatted_address}},</span>
+												<span>{{jeste.created_at | dateFormat}},</span>
 											</div>
 										</v-card-title>
 										<v-card-text>

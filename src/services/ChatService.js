@@ -15,9 +15,6 @@ function getChatHistory(userId, thisUserId) {
 }
 
 function markRead(ids, userId, friendId) {
-    console.log(userId);
-    console.log(friendId);
-
     return axios.put(`${CHAT_URL}`, { ids, userId, friendId })
         .then(res => res.data)
 }

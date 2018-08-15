@@ -1,21 +1,21 @@
 <template>
-  <section class="jeste-app">
-    <v-jumbotron class="jumbotron" height="375px" dark>
-      <v-container fill-height>
-        <v-layout align-center wrap>
-          <div class="filter-header">do jestes for others.</div>
-          <JesteFilter/>
-        </v-layout>
-      </v-container>
-    </v-jumbotron>
-    <div class="load-wrapper" v-if="isLoading">
-      <LoadingCmp/>
-    </div>
-    <JesteList v-else :jestes="jestesToDisplay" />
-    <v-btn fixed fab bottom  ripple color="secondary" class="add-btn" to="/jeste/edit">
-      <v-icon>add</v-icon>
-    </v-btn>
-  </section>
+    <section class="jeste-app">
+        <v-jumbotron class="jumbotron" height="375px" dark>
+            <v-container fill-height>
+                <v-layout align-center wrap>
+                    <div class="filter-header">do jestes for others.</div>
+                    <JesteFilter/>
+                </v-layout>
+            </v-container>
+        </v-jumbotron>
+        <div class="load-wrapper" v-if="isLoading">
+            <LoadingCmp/>
+        </div>
+        <JesteList v-else :jestes="jestesToDisplay" />
+        <v-btn fixed fab bottom ripple color="secondary" class="add-btn" to="/jeste/edit">
+            <v-icon>add</v-icon>
+        </v-btn>
+    </section>
 </template>
 
 <script>

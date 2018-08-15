@@ -36,8 +36,6 @@ export default {
 	},
 	methods: {
 		handleClick(jesteId, notificationId) {
-			console.log(notificationId);
-			
 			this.$emit('close-list');
 			this.$store.dispatch({type: NOTIFICATION_MARK_READ, id: notificationId})
 

@@ -15,7 +15,9 @@
 							<v-select box v-model="jesteToSave.category" :items="categories" label="Categories" hint="Type of the Jeste">
 							</v-select>
 							<ImageUpload v-model="imageFile" :imgUrl="imageUrl" />
-							<v-layout row wrap>
+							
+							<!-- Price field. Need to decide if to implement this feature -->
+							<!-- <v-layout row wrap>
 								<v-flex xs9>
 									<v-slider v-model="jesteToSave.price" :max="200" thumb-label label="Price">
 									</v-slider>
@@ -25,7 +27,7 @@
 									<v-text-field v-model="jesteToSave.price" class="mt-0" type="number">
 									</v-text-field>
 								</v-flex>
-							</v-layout>
+							</v-layout> -->
 
 							<v-text-field box v-model="jesteToSave.formatted_address" ref="autocomplete" label="Street" @keyup.enter.prevent append-icon="search" :rules="addressRules" required>
 							</v-text-field>
