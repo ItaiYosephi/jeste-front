@@ -124,7 +124,7 @@
 </template>
 
 <script>
-import ChatCmp from '@/components/ChatChatCmp';
+import ChatCmp from '@/components/ChatCmp';
 import ChatList from '@/components/ChatListCmp';
 import NotificationList from '@/components/NotificationList';
 
