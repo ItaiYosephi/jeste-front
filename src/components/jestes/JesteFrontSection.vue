@@ -46,10 +46,7 @@ export default {
 }
 
 .content-wrapper {
-    height: calc(100vh - 48px);
-	@media (min-width: 960px) {
-		height: calc(100vh - 64px);
-	}
+    height: 100%;
 	background: rgba(3, 20, 36, 0.5);
 }
 
