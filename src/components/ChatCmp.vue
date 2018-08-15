@@ -121,13 +121,14 @@ export default {
 img.sc-header--img {
 	width: 54px !important;
 	height: 54px !important;
+	object-fit: cover !important;
 }
 .sc-message--avatar {
 	background-size: 30px 30px !important;
-
+	object-fit: cover !important;
 }
 .sc-message--content.received .sc-message--text {
-	    max-width: calc(100% - 120px);
+	max-width: calc(100% - 120px);
     word-wrap: break-word;
 }
 </style>
