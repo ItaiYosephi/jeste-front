@@ -1,5 +1,5 @@
 <template>
-    <section class="content-wrapper">
+    <section class="content-wrapper jeste-front">
         <v-layout column wrap justify-center align-center class="main-content">
             <div class="header">jeste</div>
             <div class="sub-header">help others | get help</div>
@@ -41,6 +41,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.jeste-front {
+	padding-top: 50px;
+}
 
 .content-wrapper {
     height: calc(100vh - 48px);
